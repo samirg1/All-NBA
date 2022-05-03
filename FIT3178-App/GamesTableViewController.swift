@@ -17,7 +17,6 @@ class GamesTableViewCell: UITableViewCell {
 }
 
 class GamesTableViewController: UITableViewController {
-    
     var selectedDate : String?
     var selectedDateGames = [GameData]()
     
@@ -65,7 +64,7 @@ class GamesTableViewController: UITableViewController {
                     if let games = collection.games {
                         self.selectedDateGames.append(contentsOf: games)
                         self.tableView.reloadData()
-                        self.navigationController?.tabBarItem.badgeValue = self.getBadgeNumber()
+                        self.changeBadgeNumber()
                     }
                 }
                 catch let error { print(error) }
@@ -86,7 +85,14 @@ class GamesTableViewController: UITableViewController {
     // MARK: - Dates, Titles and Menus
     
     @IBAction func changeDateButton(_ sender: Any) {
-        let change = (sender as! UIBarButtonItem).tag
+        var change = 0
+        if let sender = sender as? UIBarButtonItem {
+            change = sender.tag
+        }
+        if let sender = sender as? UISwipeGestureRecognizer {
+            let directionRaw = Int(sender.direction.rawValue)
+            change = directionRaw == 1 ? -1 : 1
+        }
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = defaultDateFormat
         dateFormatter.timeZone = TimeZone.init(abbreviation: USTimeZoneAbbreviation)
@@ -95,6 +101,7 @@ class GamesTableViewController: UITableViewController {
         selectedDate = dateFormatter.string(from: newDate!)
         getGames()
     }
+    
     
     func getNewNavTitle(date: String) -> String {
         let todaysDate = getTodaysDate()
@@ -128,7 +135,6 @@ class GamesTableViewController: UITableViewController {
                     await self.requestGamesOnDate()
                 }
             }
-            
         }
         
         menuButton.menu = UIMenu(children: [
@@ -145,22 +151,16 @@ class GamesTableViewController: UITableViewController {
         return dateFormatter.string(from: today)
     }
     
-    func getBadgeNumber() -> String? {
+    func changeBadgeNumber() {
         var numberOfLiveGames = 0
         if selectedDate == getTodaysDate() {
             for game in selectedDateGames {
-                if game.status! != "Final", !game.status!.hasSuffix("ET") {
-                    numberOfLiveGames += 1
-                }
+                if game.status! != "Final", !game.status!.hasSuffix("ET") { numberOfLiveGames += 1 }
             }
-            if numberOfLiveGames != 0 {
-                return String(describing: numberOfLiveGames)
-            }
-            else {
-                return ""
-            }
+            
+            if numberOfLiveGames != 0 { navigationController?.tabBarItem.badgeValue = String(describing: numberOfLiveGames) }
+            else { navigationController?.tabBarItem.badgeValue = .none }
         }
-        return navigationController?.tabBarItem.badgeValue
     }
     
     // MARK: - Table view data source
@@ -194,6 +194,11 @@ class GamesTableViewController: UITableViewController {
                 cell.homeTeamScore.text = homeAbb
                 cell.timeLabel.text = "@"
                 cell.statusLabel.text = status
+                cell.timeLabel.backgroundColor = UIColor.white
+                cell.homeTeamScore.textColor = UIColor.black
+                cell.awayTeamScore.textColor = UIColor.black
+                cell.awayTeamScore.font = UIFont.systemFont(ofSize: cell.awayTeamScore.font.pointSize)
+                cell.homeTeamScore.font = UIFont.systemFont(ofSize: cell.homeTeamScore.font.pointSize)
             }
             else {
                 cell.awayTeamScore.text = "\(awayAbb) - \(awayScore)"
