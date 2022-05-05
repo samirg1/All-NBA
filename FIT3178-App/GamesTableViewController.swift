@@ -113,8 +113,6 @@ class GamesTableViewController: UITableViewController {
         return date
     }
     
-    @IBOutlet weak var initialSeasonMenuItem: UICommand!
-    @IBOutlet weak var previousSeasonMenuItem: UICommand!
     @IBAction func resetToday(_ sender: Any) {
         selectedDate = getTodaysDate()
         defaultMenuBuild()
