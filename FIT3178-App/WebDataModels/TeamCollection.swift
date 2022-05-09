@@ -7,7 +7,7 @@
 
 import Foundation
 
-class TeamCollection: NSObject, Decodable {
+class TeamCollection: NSObject, Decodable { // used to store a collection of teams from API
     var teams: [TeamData]?
     
     private enum CodingKeys: String, CodingKey {

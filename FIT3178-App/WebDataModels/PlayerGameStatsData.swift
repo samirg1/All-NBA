@@ -7,7 +7,7 @@
 
 import UIKit
 
-class PlayerGameStatsData : NSObject, Decodable {
+class PlayerGameStatsData : NSObject, Decodable { // used to store all player stats from a specific game from the API
     var id: Int
     
     var pts: Int

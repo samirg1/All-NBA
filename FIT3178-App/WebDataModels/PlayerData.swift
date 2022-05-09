@@ -7,7 +7,7 @@
 
 import UIKit
 
-class PlayerData: NSObject, Decodable {
+class PlayerData: NSObject, Decodable { // stores the data for a specific player from API
     var id: Int
     var firstName : String?
     var lastName : String?

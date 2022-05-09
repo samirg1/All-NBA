@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TeamData: NSObject, Decodable {
+class TeamData: NSObject, Decodable { // stores the data for a specific team from API
     var id : Int
     
     var abbreviation : String?

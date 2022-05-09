@@ -7,7 +7,7 @@
 
 import UIKit
 
-class PlayerGameStatsCollectionData: NSObject, Decodable {
+class PlayerGameStatsCollectionData: NSObject, Decodable { // used to store a collection of players' game stats from API
     var playersGameStats : [PlayerGameStatsData]?
     
     private enum CodingKeys: String, CodingKey {

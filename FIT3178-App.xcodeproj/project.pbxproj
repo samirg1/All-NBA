@@ -14,6 +14,9 @@
 		3750ABC2282158C0008B2135 /* StandingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3750ABC1282158C0008B2135 /* StandingsTableViewController.swift */; };
 		3750ABC428223491008B2135 /* TeamSeasonData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3750ABC328223491008B2135 /* TeamSeasonData.swift */; };
 		3750ABC6282249AE008B2135 /* TeamCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3750ABC5282249AE008B2135 /* TeamCollection.swift */; };
+		3750ABC82824F6E5008B2135 /* DetailedTeamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3750ABC72824F6E5008B2135 /* DetailedTeamViewController.swift */; };
+		3750ABCD2827B930008B2135 /* UIViewController-sgup0027.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3750ABCC2827B930008B2135 /* UIViewController-sgup0027.swift */; };
+		3750ABCF2828BAC4008B2135 /* TeamGameData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3750ABCE2828BAC4008B2135 /* TeamGameData.swift */; };
 		377DE88D281A2107009D3BE2 /* PlayersGameStatsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377DE88C281A2107009D3BE2 /* PlayersGameStatsCollectionViewController.swift */; };
 		3794FD5927E821190090BE26 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3794FD5827E821190090BE26 /* AppDelegate.swift */; };
 		3794FD5B27E821190090BE26 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3794FD5A27E821190090BE26 /* SceneDelegate.swift */; };
@@ -34,6 +37,9 @@
 		3750ABC1282158C0008B2135 /* StandingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandingsTableViewController.swift; sourceTree = "<group>"; };
 		3750ABC328223491008B2135 /* TeamSeasonData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamSeasonData.swift; sourceTree = "<group>"; };
 		3750ABC5282249AE008B2135 /* TeamCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamCollection.swift; sourceTree = "<group>"; };
+		3750ABC72824F6E5008B2135 /* DetailedTeamViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedTeamViewController.swift; sourceTree = "<group>"; };
+		3750ABCC2827B930008B2135 /* UIViewController-sgup0027.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController-sgup0027.swift"; sourceTree = "<group>"; };
+		3750ABCE2828BAC4008B2135 /* TeamGameData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamGameData.swift; sourceTree = "<group>"; };
 		377DE88C281A2107009D3BE2 /* PlayersGameStatsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayersGameStatsCollectionViewController.swift; sourceTree = "<group>"; };
 		3794FD5527E821190090BE26 /* FIT3178-App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FIT3178-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3794FD5827E821190090BE26 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -59,6 +65,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3750ABD02828BACC008B2135 /* DataModels */ = {
+			isa = PBXGroup;
+			children = (
+				3750ABC328223491008B2135 /* TeamSeasonData.swift */,
+				3750ABCE2828BAC4008B2135 /* TeamGameData.swift */,
+			);
+			path = DataModels;
+			sourceTree = "<group>";
+		};
 		377DE8892819002E009D3BE2 /* WebDataModels */ = {
 			isa = PBXGroup;
 			children = (
@@ -69,7 +84,6 @@
 				371F1009280EB09A000B1443 /* GameData.swift */,
 				37F6159A28101DA700E3E3F9 /* PlayerGameStatsData.swift */,
 				37F6159C2810228100E3E3F9 /* PlayerGameStatsCollectionData.swift */,
-				3750ABC328223491008B2135 /* TeamSeasonData.swift */,
 			);
 			path = WebDataModels;
 			sourceTree = "<group>";
@@ -93,17 +107,20 @@
 		3794FD5727E821190090BE26 /* FIT3178-App */ = {
 			isa = PBXGroup;
 			children = (
-				3794FD5827E821190090BE26 /* AppDelegate.swift */,
-				3794FD5A27E821190090BE26 /* SceneDelegate.swift */,
-				3794FD5E27E821190090BE26 /* Main.storyboard */,
+				3794FD6627E8211B0090BE26 /* Info.plist */,
 				3794FD6127E8211B0090BE26 /* Assets.xcassets */,
 				3794FD6327E8211B0090BE26 /* LaunchScreen.storyboard */,
-				3794FD6627E8211B0090BE26 /* Info.plist */,
+				3794FD5E27E821190090BE26 /* Main.storyboard */,
+				3750ABCC2827B930008B2135 /* UIViewController-sgup0027.swift */,
+				3794FD5827E821190090BE26 /* AppDelegate.swift */,
+				3794FD5A27E821190090BE26 /* SceneDelegate.swift */,
 				377DE8892819002E009D3BE2 /* WebDataModels */,
+				3750ABD02828BACC008B2135 /* DataModels */,
 				371F1007280E8A68000B1443 /* GamesTableViewController.swift */,
 				37F615962810179200E3E3F9 /* DetailedGameTableViewController.swift */,
 				377DE88C281A2107009D3BE2 /* PlayersGameStatsCollectionViewController.swift */,
 				3750ABC1282158C0008B2135 /* StandingsTableViewController.swift */,
+				3750ABC72824F6E5008B2135 /* DetailedTeamViewController.swift */,
 			);
 			path = "FIT3178-App";
 			sourceTree = "<group>";
@@ -183,6 +200,8 @@
 				371F1008280E8A69000B1443 /* GamesTableViewController.swift in Sources */,
 				371F100E280EC770000B1443 /* GameCollection.swift in Sources */,
 				3794FD5927E821190090BE26 /* AppDelegate.swift in Sources */,
+				3750ABC82824F6E5008B2135 /* DetailedTeamViewController.swift in Sources */,
+				3750ABCF2828BAC4008B2135 /* TeamGameData.swift in Sources */,
 				3750ABC428223491008B2135 /* TeamSeasonData.swift in Sources */,
 				37F615972810179200E3E3F9 /* DetailedGameTableViewController.swift in Sources */,
 				37F6159B28101DA700E3E3F9 /* PlayerGameStatsData.swift in Sources */,
@@ -190,6 +209,7 @@
 				371F100C280EB13C000B1443 /* TeamData.swift in Sources */,
 				377DE88D281A2107009D3BE2 /* PlayersGameStatsCollectionViewController.swift in Sources */,
 				3750ABC6282249AE008B2135 /* TeamCollection.swift in Sources */,
+				3750ABCD2827B930008B2135 /* UIViewController-sgup0027.swift in Sources */,
 				37F6159D2810228100E3E3F9 /* PlayerGameStatsCollectionData.swift in Sources */,
 				3794FD5B27E821190090BE26 /* SceneDelegate.swift in Sources */,
 				3750ABC2282158C0008B2135 /* StandingsTableViewController.swift in Sources */,

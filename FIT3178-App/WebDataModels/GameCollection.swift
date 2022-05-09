@@ -7,7 +7,7 @@
 
 import UIKit
 
-class GameCollection: NSObject, Decodable {
+class GameCollection: NSObject, Decodable { // used to store a collection of games from API
     var games: [GameData]?
     
     private enum CodingKeys: String, CodingKey {

@@ -7,7 +7,7 @@
 
 import Foundation
 
-class TeamSeasonData {
+class TeamSeasonData { // used to calculate a teams season data
     let team: TeamData
     var played = 0
     var wins = 0
@@ -23,13 +23,13 @@ class TeamSeasonData {
         self.team = withTeam
     }
     
-    func addGame(game: GameData?){
-        guard let game = game, let homeTeam = game.homeTeam, let awayTeam = game.awayTeam, let homeScore = game.homeScore, let awayScore = game.awayScore else {
+    func addGame(game: GameData?){ // get each game and determine if the game was a win or not and update statistics
+        guard let game = game else {
             fatalError("Game passed into TeamSeasonData is invalid")
         }
         
-        if homeTeam.abbreviation == team.abbreviation {
-            if homeScore > awayScore {
+        if game.homeTeam.abbreviation == team.abbreviation {
+            if game.homeScore > game.awayScore {
                 wins += 1
                 homeWins += 1
                 seasonScore += 0.5
@@ -40,8 +40,8 @@ class TeamSeasonData {
                 seasonScore -= 0.5
             }
         }
-        else if awayTeam.abbreviation == team.abbreviation {
-            if awayScore > homeScore {
+        else if game.awayTeam.abbreviation == team.abbreviation {
+            if game.awayScore > game.homeScore {
                 wins += 1
                 awayWins += 1
                 seasonScore += 0.5
@@ -58,6 +58,6 @@ class TeamSeasonData {
         
         played += 1
         let rawPct = Double(wins)/Double(played)
-        pct = round(rawPct * 1000) / 1000.0
+        pct = round(rawPct * 1000) / 1000.0 // round to 3 d.p.
     }
 }

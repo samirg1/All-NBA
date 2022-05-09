@@ -7,13 +7,13 @@
 
 import UIKit
 
-class GameData: NSObject, Decodable {
+class GameData: NSObject, Decodable { // used to store a specific game's data from the API
     var id: Int
     
-    var homeTeam : TeamData?
-    var awayTeam : TeamData?
-    var homeScore : Int?
-    var awayScore : Int?
+    var homeTeam : TeamData
+    var awayTeam : TeamData
+    var homeScore : Int
+    var awayScore : Int
    
     var period : Int?
     var time : String?

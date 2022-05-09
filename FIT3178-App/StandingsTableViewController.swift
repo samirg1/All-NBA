@@ -52,10 +52,9 @@ class StandingsTeamCell: UITableViewCell {
 
 class StandingsTableViewController: UITableViewController {
     
-    let GAMES_IN_SEASON = "82"
+    let MAX_GAMES_IN_SEASON = "82"
     var season = Season2021_2022.self
     var teamFilter: TeamFilter = TeamFilter.LEAGUE
-    
     var teamsData: [TeamSeasonData] = []
     
     var divisionTeams: [String: [TeamSeasonData]] = [
@@ -72,16 +71,35 @@ class StandingsTableViewController: UITableViewController {
         Conferences.WEST.rawValue: []
     ]
     
+    var selectedTeam: TeamSeasonData?
+    
+    let gamesFileManagerExtension = "-seasonGamesData"
+    let allTeamsFileManagerExtension = "-all_teams"
+    lazy var cacheDirectoryPath: URL = {
+        let cacheDirectoryPaths = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
+        return cacheDirectoryPaths[0]
+    }()
+    
+    lazy var indicator: UIActivityIndicatorView = {
+        var indicator = UIActivityIndicatorView()
+        indicator.style = UIActivityIndicatorView.Style.large
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(indicator)
+        NSLayoutConstraint.activate([
+            indicator.centerXAnchor.constraint(equalTo: tableView.centerXAnchor),
+            indicator.centerYAnchor.constraint(equalTo: tableView.centerYAnchor)
+        ])
+        return indicator
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         buildFilterMenu()
-        Task {
-            await getAllTeams()
-        }
+        getTeams(reload: false)
     }
 
     @IBOutlet weak var teamFilterMenu: UIButton!
-    func buildFilterMenu() {
+    func buildFilterMenu() { // build the team filter menu
         let optionsClosure = { (action: UIAction) in
             self.teamFilter = TeamFilter(rawValue: action.title)!
             self.tableView.reloadData()
@@ -94,12 +112,7 @@ class StandingsTableViewController: UITableViewController {
         ])
     }
     
-    func requestTeamGames(team: TeamData) async {
-        guard let division = team.division, let conference = team.conference else {
-            print("Couldn't find team division and/or conference")
-            return
-        }
-        
+    func requestTeamGames(team: TeamData) async { //
         var gamesURL = URLComponents()
         gamesURL.scheme = "https"
         gamesURL.host = "www.balldontlie.io"
@@ -107,7 +120,7 @@ class StandingsTableViewController: UITableViewController {
         gamesURL.queryItems = [
             URLQueryItem(name: "team_ids[]", value: "\(team.id)"),
             URLQueryItem(name: "seasons[]", value: season.YEAR.rawValue),
-            URLQueryItem(name: "per_page", value: GAMES_IN_SEASON),
+            URLQueryItem(name: "per_page", value: MAX_GAMES_IN_SEASON),
             URLQueryItem(name: "start_date", value: season.START.rawValue),
             URLQueryItem(name: "end_date", value: season.END.rawValue)
         ]
@@ -121,35 +134,16 @@ class StandingsTableViewController: UITableViewController {
         do {
             let (data, _) = try await URLSession.shared.data(for: urlRequest)
             DispatchQueue.main.async {
-                do {
-                    let decoder = JSONDecoder()
-                    let collection = try decoder.decode(GameCollection.self, from: data)
-                    if let games = collection.games {
-                        let teamData = TeamSeasonData(withTeam: team)
-                        for game in games {
-                            teamData.addGame(game: game)
-                        }
-                        self.divisionTeams[division]!.append(teamData)
-                        self.conferenceTeams[conference]!.append(teamData)
-                        self.teamsData.append(teamData)
-                        self.teamsData.sort(){ $0.pct > $1.pct }
-                        for (divi, div_teams) in self.divisionTeams {
-                            self.divisionTeams[divi] = div_teams.sorted() { $0.pct > $1.pct }
-                        }
-                        for (conf, conf_teams) in self.conferenceTeams {
-                            self.conferenceTeams[conf] = conf_teams.sorted() { $0.pct > $1.pct }
-                        }
-                        self.tableView.reloadData()
-                        
-                    }
-                }
-                catch let error { print(error) }
+                self.decodeTeamGames(data: data, team: team)
+                let fileName = "\(team.id)" + self.gamesFileManagerExtension
+                let localURL = self.cacheDirectoryPath.appendingPathComponent(fileName)
+                FileManager.default.createFile(atPath: localURL.path, contents: data, attributes: [:])
             }
         }
         catch let error { print(error) }
     }
                             
-    func getAllTeams() async {
+    func getAllTeams(reload: Bool) async {
         var gamesURL = URLComponents()
         gamesURL.scheme = "https"
         gamesURL.host = "www.balldontlie.io"
@@ -164,18 +158,104 @@ class StandingsTableViewController: UITableViewController {
         do {
             let (data, _) = try await URLSession.shared.data(for: urlRequest)
             DispatchQueue.main.async {
-                do {
-                    let decoder = JSONDecoder()
-                    let collection = try decoder.decode(TeamCollection.self, from: data)
-                    if let teams = collection.teams {
-                        for team in teams {
-                            Task {
-                                await self.requestTeamGames(team: team)
-                            }
-                        }
-                    }
+                self.decodeTeams(data: data, reload: reload)
+                let fileName = self.season.YEAR.rawValue + self.allTeamsFileManagerExtension
+                let localURL = self.cacheDirectoryPath.appendingPathComponent(fileName)
+                FileManager.default.createFile(atPath: localURL.path, contents: data, attributes: [:])
+            }
+        }
+        catch let error { print(error) }
+    }
+    
+    func getTeams(reload: Bool) {
+        teamsData.removeAll()
+        for (_, var teams) in divisionTeams {
+            teams.removeAll()
+        }
+        for (_, var teams) in conferenceTeams {
+            teams.removeAll()
+        }
+        
+        let fileName = season.YEAR.rawValue + allTeamsFileManagerExtension
+        let localURL = cacheDirectoryPath.appendingPathComponent(fileName)
+        if FileManager.default.fileExists(atPath: localURL.path) && !reload {
+            let data = FileManager.default.contents(atPath: localURL.path)
+            if let data = data {
+                self.decodeTeams(data: data, reload: reload)
+            }
+            else {
+                displayMessage_sgup0027(title: "An error occured fetching teams", message: "FileManager data is invalid")
+            }
+        }
+        else {
+            indicator.startAnimating()
+            Task {
+                await getAllTeams(reload: reload)
+                indicator.stopAnimating()
+            }
+        }
+        
+        
+    }
+    
+    func decodeTeams(data: Data, reload: Bool) {
+        do {
+            let decoder = JSONDecoder()
+            let collection = try decoder.decode(TeamCollection.self, from: data)
+            if let teams = collection.teams {
+                for team in teams {
+                    getTeamsGames(team: team, reload: reload)
                 }
-                catch let error { print(error) }
+            }
+        }
+        catch let error { print(error) }
+    }
+    
+    func getTeamsGames(team: TeamData, reload: Bool){
+        let fileName = "\(team.id)" + gamesFileManagerExtension
+        let localURL = cacheDirectoryPath.appendingPathComponent(fileName)
+        if FileManager.default.fileExists(atPath: localURL.path) && !reload {
+            let data = FileManager.default.contents(atPath: localURL.path)
+            if let data = data {
+                self.decodeTeamGames(data: data, team: team)
+            }
+            else {
+                displayMessage_sgup0027(title: "An error occured fetching team games", message: "FileManager data is invalid")
+            }
+        }
+        else {
+            Task {
+                await self.requestTeamGames(team: team)
+            }
+        }
+        
+    }
+    
+    func decodeTeamGames(data: Data, team: TeamData) {
+        guard let division = team.division, let conference = team.conference else {
+            print("Couldn't find team division and/or conference")
+            return
+        }
+        do {
+            let decoder = JSONDecoder()
+            let collection = try decoder.decode(GameCollection.self, from: data)
+            if let games = collection.games {
+                let teamData = TeamSeasonData(withTeam: team)
+                for game in games {
+                    teamData.addGame(game: game)
+                }
+                self.divisionTeams[division]!.append(teamData)
+                self.conferenceTeams[conference]!.append(teamData)
+                self.teamsData.append(teamData)
+                self.teamsData.sort(){ $0.pct > $1.pct }
+                for (divi, div_teams) in self.divisionTeams {
+                    self.divisionTeams[divi] = div_teams.sorted() { $0.pct > $1.pct }
+                }
+                for (conf, conf_teams) in self.conferenceTeams {
+                    self.conferenceTeams[conf] = conf_teams.sorted() { $0.pct > $1.pct }
+                }
+                self.tableView.reloadData()
+                
             }
         }
         catch let error { print(error) }
@@ -266,15 +346,56 @@ class StandingsTableViewController: UITableViewController {
             return "League"
         }
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if teamFilter == TeamFilter.CONFERENCE {
+            selectedTeam = conferenceTeams[Array(conferenceTeams.keys)[indexPath.section]]![indexPath.row]
+        }
+        else if teamFilter == TeamFilter.DIVISION {
+            selectedTeam = divisionTeams[Array(divisionTeams.keys)[indexPath.section]]![indexPath.row]
+        }
+        else if teamFilter == TeamFilter.LEAGUE {
+            selectedTeam = teamsData[indexPath.row]
+        }
+        performSegue(withIdentifier: "detailedTeamSegue", sender: self)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
-    */
 
+    // MARK: - Navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "detailedTeamSegue" {
+            let destination = segue.destination as! DetailedTeamViewController
+            destination.selectedTeam = selectedTeam
+            destination.positions = findPositions(teamToFind: selectedTeam!)
+        }
+    }
+    
+    func findPositions(teamToFind: TeamSeasonData) -> [String: Int]{
+        var div = 0
+        var conf = 0
+        var league = 0
+        for i in 0..<teamsData.count {
+            if teamsData[i].team.abbreviation == teamToFind.team.abbreviation {
+                league = i+1
+                break
+            }
+        }
+        for (_, divTeam) in divisionTeams {
+            for i in 0..<divTeam.count {
+                if divTeam[i].team.abbreviation == teamToFind.team.abbreviation {
+                    div = i+1
+                    break
+                }
+            }
+        }
+        for (_, confTeam) in conferenceTeams {
+            for i in 0..<confTeam.count {
+                if confTeam[i].team.abbreviation == teamToFind.team.abbreviation {
+                    conf = i+1
+                    break
+                }
+            }
+        }
+        return [TeamFilter.DIVISION.rawValue: div, TeamFilter.CONFERENCE.rawValue: conf, TeamFilter.LEAGUE.rawValue: league]
+    }
 }

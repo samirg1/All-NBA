@@ -17,7 +17,7 @@ class GamesTableViewCell: UITableViewCell {
 }
 
 class GamesTableViewController: UITableViewController {
-    var selectedDate : String?
+    var selectedDate = String()
     var selectedDateGames = [GameData]()
     
     var selectedGame : GameData?
@@ -31,8 +31,28 @@ class GamesTableViewController: UITableViewController {
     let USTimeZoneAbbreviation = "MDT"
     let defaultDateFormat = "yyyy-MM-dd"
     
+    let fileManagerNamingExtension = "-gameCollection"
+    
     @IBOutlet weak var menuButton: UIButton!
     @IBOutlet weak var todayButtonOutlet: UIBarButtonItem!
+    @IBOutlet weak var refreshToolbar: UIToolbar!
+    
+    lazy var cacheDirectoryPath: URL = {
+        let cacheDirectoryPaths = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
+        return cacheDirectoryPaths[0]
+    }()
+    
+    lazy var indicator: UIActivityIndicatorView = {
+        var indicator = UIActivityIndicatorView()
+        indicator.style = UIActivityIndicatorView.Style.large
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        self.refreshToolbar.addSubview(indicator)
+        NSLayoutConstraint.activate([
+            indicator.centerXAnchor.constraint(equalTo: refreshToolbar.centerXAnchor),
+            indicator.centerYAnchor.constraint(equalTo: refreshToolbar.centerYAnchor)
+        ])
+        return indicator
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,7 +62,7 @@ class GamesTableViewController: UITableViewController {
     
     // MARK: - Retrieving Data
     
-    func requestGamesOnDate() async {
+    func requestGamesOnDate() async { // API call to get all games on specific date stored in 'selectedDate'
         var gamesURL = URLComponents()
         gamesURL.scheme = "https"
         gamesURL.host = "www.balldontlie.io"
@@ -50,7 +70,7 @@ class GamesTableViewController: UITableViewController {
         gamesURL.queryItems = [URLQueryItem(name: "dates[]", value: selectedDate)]
         
         guard let requestURL = gamesURL.url else {
-            print("Invalid URL")
+            displayMessage_sgup0027(title: "Unable to retrieve games", message: "Invalid API URL")
             return
         }
         
@@ -58,52 +78,76 @@ class GamesTableViewController: UITableViewController {
         do {
             let (data, _) = try await URLSession.shared.data(for: urlRequest)
             DispatchQueue.main.async {
-                do {
-                    let decoder = JSONDecoder()
-                    let collection = try decoder.decode(GameCollection.self, from: data)
-                    if let games = collection.games {
-                        self.selectedDateGames.append(contentsOf: games)
-                        self.tableView.reloadData()
-                        self.changeBadgeNumber()
-                    }
-                }
-                catch let error { print(error) }
+                self.decodeJSONforSelectedDateGames(data: data)
+                let fileName = self.selectedDate + self.fileManagerNamingExtension
+                let localURL = self.cacheDirectoryPath.appendingPathComponent(fileName)
+                FileManager.default.createFile(atPath: localURL.path, contents: data, attributes: [:])
             }
         }
-        catch let error { print(error) }
+        catch let error { displayMessage_sgup0027(title: "An error occured whilst retrieving games", message: error.localizedDescription) }
     }
     
-    func getGames() {
-        navigationItem.title = getNewNavTitle(date: selectedDate!)
+    func getGames(reload: Bool) { // gets data of all games on date
+        navigationItem.title = getNewNavTitle(date: selectedDate)
         selectedDateGames.removeAll()
-        Task {
-            URLSession.shared.invalidateAndCancel()
-            await requestGamesOnDate()
+        
+        let fileName = selectedDate + fileManagerNamingExtension
+        let localURL = cacheDirectoryPath.appendingPathComponent(fileName)
+        if FileManager.default.fileExists(atPath: localURL.path) && !reload
+        {
+            let data = FileManager.default.contents(atPath: localURL.path)
+            if let data = data {
+                self.decodeJSONforSelectedDateGames(data: data)
+            }
+            else {
+                displayMessage_sgup0027(title: "An error occured fetching games", message: "FileManager data is invalid")
+            }
         }
+        else {
+            indicator.startAnimating()
+            Task {
+                URLSession.shared.invalidateAndCancel()
+                await requestGamesOnDate()
+            }
+        }
+    }
+    
+    func decodeJSONforSelectedDateGames(data: Data){ // decodes data of all games and updates view
+        do {
+            let decoder = JSONDecoder()
+            let collection = try decoder.decode(GameCollection.self, from: data)
+            if let games = collection.games {
+                self.selectedDateGames.append(contentsOf: games)
+                self.tableView.reloadData()
+                self.changeBadgeNumber()
+                indicator.stopAnimating()
+            }
+        }
+        catch let error { displayMessage_sgup0027(title: "Unable to decode data", message: error.localizedDescription) }
     }
     
     // MARK: - Dates, Titles and Menus
     
-    @IBAction func changeDateButton(_ sender: Any) {
+    @IBAction func changeDateButton(_ sender: Any) { // changes the sepcific date of viewable games
         var change = 0
-        if let sender = sender as? UIBarButtonItem {
+        if let sender = sender as? UIBarButtonItem { // if user changes date using the buttons
             change = sender.tag
         }
-        if let sender = sender as? UISwipeGestureRecognizer {
+        if let sender = sender as? UISwipeGestureRecognizer { // if user changes date using gestures
             let directionRaw = Int(sender.direction.rawValue)
             change = directionRaw == 1 ? -1 : 1
         }
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = defaultDateFormat
         dateFormatter.timeZone = TimeZone.init(abbreviation: USTimeZoneAbbreviation)
-        let oldDate = dateFormatter.date(from: selectedDate!)!
+        let oldDate = dateFormatter.date(from: selectedDate)!
         let newDate = Calendar.current.date(byAdding: .day, value: change, to: oldDate)
         selectedDate = dateFormatter.string(from: newDate!)
-        getGames()
+        getGames(reload: false)
     }
     
     
-    func getNewNavTitle(date: String) -> String {
+    func getNewNavTitle(date: String) -> String { // gets the new navigation title of the view based on the 'selectedDate'
         let todaysDate = getTodaysDate()
         if todaysDate == date {
             todayButtonOutlet.isEnabled = false
@@ -113,25 +157,25 @@ class GamesTableViewController: UITableViewController {
         return date
     }
     
-    @IBAction func resetToday(_ sender: Any) {
+    @IBAction func resetToday(_ sender: Any) { // resets the view to the current day
         selectedDate = getTodaysDate()
         defaultMenuBuild()
-        getGames()
+        getGames(reload: false)
     }
     
-    func defaultMenuBuild() {
+    @IBAction func manualRefreshGames(_ sender: Any) { // manually refresh the current games
+        getGames(reload: true)
+    }
+    
+    
+    func defaultMenuBuild() { // builds the menu for changing the season
         let optionsClosure = { (action: UIAction) in
             let year = Int.init(action.title.split(separator: "/")[0])! + 1
-            let selectedDateSplit = self.selectedDate?.split(separator: "-")
-            let oldYear = Int.init(selectedDateSplit![0])
+            let selectedDateSplit = self.selectedDate.split(separator: "-")
+            let oldYear = Int.init(selectedDateSplit[0])
             if year != oldYear {
-                self.selectedDate = "\(year)-\(selectedDateSplit![1])-\(selectedDateSplit![2])"
-                self.selectedDateGames.removeAll()
-                self.navigationItem.title = self.getNewNavTitle(date: self.selectedDate!)
-                Task {
-                    URLSession.shared.invalidateAndCancel()
-                    await self.requestGamesOnDate()
-                }
+                self.selectedDate = "\(year)-\(selectedDateSplit[1])-\(selectedDateSplit[2])"
+                self.getGames(reload: false)
             }
         }
         
@@ -141,7 +185,7 @@ class GamesTableViewController: UITableViewController {
         ])
     }
     
-    func getTodaysDate() -> String {
+    func getTodaysDate() -> String { // gets todays date as a string
         let today = Date()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = defaultDateFormat
@@ -149,15 +193,19 @@ class GamesTableViewController: UITableViewController {
         return dateFormatter.string(from: today)
     }
     
-    func changeBadgeNumber() {
+    func changeBadgeNumber() { // changes the badge number of the tab to represent how many live games there are
         var numberOfLiveGames = 0
         if selectedDate == getTodaysDate() {
             for game in selectedDateGames {
                 if game.status! != "Final", !game.status!.hasSuffix("ET") { numberOfLiveGames += 1 }
             }
             
-            if numberOfLiveGames != 0 { navigationController?.tabBarItem.badgeValue = String(describing: numberOfLiveGames) }
-            else { navigationController?.tabBarItem.badgeValue = .none }
+            if numberOfLiveGames != 0 {
+                navigationController?.tabBarItem.badgeValue = String(describing: numberOfLiveGames)
+            }
+            else {
+                navigationController?.tabBarItem.badgeValue = .none
+            }
         }
     }
     
@@ -184,10 +232,10 @@ class GamesTableViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: GAME_CELL_IDENTIFIER, for: indexPath) as! GamesTableViewCell
             let game = selectedDateGames[indexPath.row]
             
-            guard let time = game.time, let status = game.status, let awayScore = game.awayScore, let homeScore = game.homeScore else { return cell }
-            guard let homeTeam = game.homeTeam, let awayTeam = game.awayTeam, let awayAbb = awayTeam.abbreviation, let homeAbb = homeTeam.abbreviation else { return cell }
+            guard let time = game.time, let status = game.status  else { return cell }
+            guard let awayAbb = game.awayTeam.abbreviation, let homeAbb = game.homeTeam.abbreviation else { return cell }
             
-            if time == "" && status.hasSuffix("T"){
+            if time == "" && status.hasSuffix("T"){ // if game has not started yet
                 cell.awayTeamScore.text = awayAbb
                 cell.homeTeamScore.text = homeAbb
                 cell.timeLabel.text = "@"
@@ -199,31 +247,31 @@ class GamesTableViewController: UITableViewController {
                 cell.homeTeamScore.font = UIFont.systemFont(ofSize: cell.homeTeamScore.font.pointSize)
             }
             else {
-                cell.awayTeamScore.text = "\(awayAbb) - \(awayScore)"
-                cell.homeTeamScore.text = "\(homeScore) - \(homeAbb)"
-                if homeScore > awayScore {
+                cell.awayTeamScore.text = "\(awayAbb) - \(game.awayScore)"
+                cell.homeTeamScore.text = "\(game.homeScore) - \(homeAbb)"
+                if game.homeScore > game.awayScore { // if home team is winnning
                     cell.homeTeamScore.font = UIFont.boldSystemFont(ofSize: cell.homeTeamScore.font.pointSize)
                     cell.homeTeamScore.textColor = UIColor.systemBlue
                     cell.awayTeamScore.font = UIFont.systemFont(ofSize: cell.awayTeamScore.font.pointSize)
                     cell.awayTeamScore.textColor = UIColor.black
                 }
-                else if awayScore > homeScore {
+                else if game.awayScore > game.homeScore { // if away team is winning
                     cell.awayTeamScore.font = UIFont.boldSystemFont(ofSize: cell.homeTeamScore.font.pointSize)
                     cell.awayTeamScore.textColor = UIColor.systemBlue
                     cell.homeTeamScore.font = UIFont.systemFont(ofSize: cell.homeTeamScore.font.pointSize)
                     cell.homeTeamScore.textColor = UIColor.black
                 }
-                else {
+                else { // if it is currently a draw
                     cell.awayTeamScore.font = UIFont.systemFont(ofSize: cell.awayTeamScore.font.pointSize)
                     cell.homeTeamScore.font = UIFont.systemFont(ofSize: cell.homeTeamScore.font.pointSize)
                     cell.homeTeamScore.textColor = UIColor.black
                     cell.awayTeamScore.textColor = UIColor.black
                 }
-                if time == "" && status.hasSuffix("Qtr") {
-                    if awayScore == 0 && homeScore == 0 {
+                if time == "" && status.hasSuffix("Qtr") { // if the game is at the start/end of a quarter
+                    if game.awayScore == 0 && game.homeScore == 0 { // if game is at start of first quarter
                         cell.timeLabel.text = "Start"
                     }
-                    else {
+                    else { // otherwise game is at end of quater
                         cell.timeLabel.text = "End"
                     }
                     
@@ -251,7 +299,7 @@ class GamesTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let game = selectedDateGames[indexPath.row]
         selectedGame = game
-        selectedGameTitle = game.awayTeam!.abbreviation! + " vs " + game.homeTeam!.abbreviation!
+        selectedGameTitle = game.awayTeam.abbreviation! + " vs " + game.homeTeam.abbreviation!
         performSegue(withIdentifier: "gameSelectSegue", sender: self)
     }
     
