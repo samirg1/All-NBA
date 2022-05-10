@@ -10,7 +10,31 @@ import UIKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
+    let API_URL_SCHEME = "https"
+    let API_URL_HOST = "www.balldontlie.io"
+    let API_URL_PATH = "/api/v1/"
+    let API_URL_PATH_STATS = "stats"
+    let API_URL_PATH_GAMES = "games"
+    let API_URL_PATH_TEAMS = "teams"
+    let API_QUERY_GAME_ID = "game_ids[]"
+    let API_QUERY_PER_PAGE = "per_page"
+    let API_QUERY_DATES = "dates[]"
+    let API_QUERY_START_DATE = "start_date"
+    let API_QUERY_END_DATE = "end_date"
+    let API_QUERY_SEASONS = "seasons[]"
+    let API_QUERY_TEAM_ID = "team_ids[]"
+    
+    let URL_CONVERSION_ERROR_TITLE = "Unable to retrieve information"
+    let URL_CONVERSION_ERROR_MESSAGE = "Invalid URL"
+    let API_ERROR_TITLE = "An error occured whilst retrieving data"
+    let FILE_MANAGER_DATA_ERROR_TITLE = "An error occured fetching data"
+    let FILE_MANAGER_DATA_ERROR_MESSAGE = "Stored file data is invalid"
+    let JSON_DECODER_ERROR_TITLE = "Error decoding API data"
+    
+    lazy var cacheDirectoryPath: URL = {
+        let cacheDirectoryPaths = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
+        return cacheDirectoryPaths[0]
+    }()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.

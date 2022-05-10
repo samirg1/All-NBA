@@ -4,10 +4,17 @@
 //
 //  Created by Samir Gupta on 19/4/22.
 //
+//  The initial view controller which allows users to view the games on the current (or any) day.
+//  The scores are limited by the API as not up-to-date as the API only updates every 10 or so minutes.
 
 import UIKit
 
-class GamesTableViewCell: UITableViewCell {
+enum GestureDateChanges: Int { // deals with how much to change the date (in days) once a gesture is recognised
+    case left = 1
+    case right = -1
+}
+
+class GamesTableViewCell: UITableViewCell { // cell that shows the main game info
     @IBOutlet weak var awayTeamImage: UIImageView!
     @IBOutlet weak var awayTeamScore: UILabel!
     @IBOutlet weak var homeTeamImage: UIImageView!
@@ -17,11 +24,15 @@ class GamesTableViewCell: UITableViewCell {
 }
 
 class GamesTableViewController: UITableViewController {
+    
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    let fileManagerNamingExtension = "-gameCollection"
+    
     var selectedDate = String()
     var selectedDateGames = [GameData]()
-    
     var selectedGame : GameData?
     var selectedGameTitle : String?
+    var selectedGameSegue = "gameSelectSegue"
     
     let GAME_CELL_IDENTIFIER = "gamesCell"
     let INFO_CELL_IDENTIFIER = "infoCell"
@@ -31,17 +42,11 @@ class GamesTableViewController: UITableViewController {
     let USTimeZoneAbbreviation = "MDT"
     let defaultDateFormat = "yyyy-MM-dd"
     
-    let fileManagerNamingExtension = "-gameCollection"
-    
     @IBOutlet weak var menuButton: UIButton!
     @IBOutlet weak var todayButtonOutlet: UIBarButtonItem!
     @IBOutlet weak var refreshToolbar: UIToolbar!
     
-    lazy var cacheDirectoryPath: URL = {
-        let cacheDirectoryPaths = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
-        return cacheDirectoryPaths[0]
-    }()
-    
+    // displays the indicator when data is loading from API in the centre of the toolbar
     lazy var indicator: UIActivityIndicatorView = {
         var indicator = UIActivityIndicatorView()
         indicator.style = UIActivityIndicatorView.Style.large
@@ -56,21 +61,23 @@ class GamesTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        todayButtonOutlet.isEnabled = false
-        resetToday(self)
+        todayButtonOutlet.isEnabled = false // as initial screen is "Today", disable the button
+        resetToday(self) // retrieve the required data from today
     }
     
-    // MARK: - Retrieving Data
+    // MARK: - Retrieving and Decoding Data
     
     func requestGamesOnDate() async { // API call to get all games on specific date stored in 'selectedDate'
         var gamesURL = URLComponents()
-        gamesURL.scheme = "https"
-        gamesURL.host = "www.balldontlie.io"
-        gamesURL.path = "/api/v1/games"
-        gamesURL.queryItems = [URLQueryItem(name: "dates[]", value: selectedDate)]
+        gamesURL.scheme = appDelegate.API_URL_SCHEME
+        gamesURL.host = appDelegate.API_URL_HOST
+        gamesURL.path = appDelegate.API_URL_PATH + appDelegate.API_URL_PATH_GAMES
+        gamesURL.queryItems = [
+            URLQueryItem(name: appDelegate.API_QUERY_DATES, value: selectedDate)
+        ]
         
         guard let requestURL = gamesURL.url else {
-            displayMessage_sgup0027(title: "Unable to retrieve games", message: "Invalid API URL")
+            displayMessage_sgup0027(title: appDelegate.URL_CONVERSION_ERROR_TITLE, message: appDelegate.URL_CONVERSION_ERROR_MESSAGE)
             return
         }
         
@@ -78,32 +85,40 @@ class GamesTableViewController: UITableViewController {
         do {
             let (data, _) = try await URLSession.shared.data(for: urlRequest)
             DispatchQueue.main.async {
+                
+                // decode the data and update view(s)
                 self.decodeJSONforSelectedDateGames(data: data)
+                
+                // update/create a file to persistently store the data retrieved
                 let fileName = self.selectedDate + self.fileManagerNamingExtension
-                let localURL = self.cacheDirectoryPath.appendingPathComponent(fileName)
+                let localURL = self.appDelegate.cacheDirectoryPath.appendingPathComponent(fileName)
                 FileManager.default.createFile(atPath: localURL.path, contents: data, attributes: [:])
             }
         }
-        catch let error { displayMessage_sgup0027(title: "An error occured whilst retrieving games", message: error.localizedDescription) }
+        catch let error { displayMessage_sgup0027(title: appDelegate.API_ERROR_TITLE, message: error.localizedDescription) }
     }
     
     func getGames(reload: Bool) { // gets data of all games on date
         navigationItem.title = getNewNavTitle(date: selectedDate)
         selectedDateGames.removeAll()
         
+        // determines whether file exists or whether the user has selected to reload
         let fileName = selectedDate + fileManagerNamingExtension
-        let localURL = cacheDirectoryPath.appendingPathComponent(fileName)
+        let localURL = appDelegate.cacheDirectoryPath.appendingPathComponent(fileName)
         if FileManager.default.fileExists(atPath: localURL.path) && !reload
         {
+            // if file exists (and user hasn't reloaded) retrieve data, decode it and update views
             let data = FileManager.default.contents(atPath: localURL.path)
             if let data = data {
                 self.decodeJSONforSelectedDateGames(data: data)
             }
             else {
-                displayMessage_sgup0027(title: "An error occured fetching games", message: "FileManager data is invalid")
+                displayMessage_sgup0027(title: appDelegate.FILE_MANAGER_DATA_ERROR_TITLE, message: appDelegate.FILE_MANAGER_DATA_ERROR_MESSAGE)
             }
         }
         else {
+            
+            // otherwise start the indicator and call the API
             indicator.startAnimating()
             Task {
                 URLSession.shared.invalidateAndCancel()
@@ -120,10 +135,20 @@ class GamesTableViewController: UITableViewController {
                 self.selectedDateGames.append(contentsOf: games)
                 self.tableView.reloadData()
                 self.changeBadgeNumber()
-                indicator.stopAnimating()
+                indicator.stopAnimating() // stop the indicator if it is active
             }
         }
-        catch let error { displayMessage_sgup0027(title: "Unable to decode data", message: error.localizedDescription) }
+        catch let error { displayMessage_sgup0027(title: appDelegate.JSON_DECODER_ERROR_TITLE, message: error.localizedDescription) }
+    }
+    
+    @IBAction func manualRefreshGames(_ sender: Any) { // manually refresh the current games
+        getGames(reload: true)
+    }
+    
+    @IBAction func resetToday(_ sender: Any) { // resets the view to the current day
+        selectedDate = getTodaysDate()
+        defaultMenuBuild()
+        getGames(reload: false)
     }
     
     // MARK: - Dates, Titles and Menus
@@ -133,10 +158,16 @@ class GamesTableViewController: UITableViewController {
         if let sender = sender as? UIBarButtonItem { // if user changes date using the buttons
             change = sender.tag
         }
-        if let sender = sender as? UISwipeGestureRecognizer { // if user changes date using gestures
-            let directionRaw = Int(sender.direction.rawValue)
-            change = directionRaw == 1 ? -1 : 1
+        else if let sender = sender as? UISwipeGestureRecognizer { // if user changes date using gestures
+            if sender.direction == .left {
+                change = GestureDateChanges.left.rawValue
+            }
+            else if sender.direction == .right {
+                change = GestureDateChanges.right.rawValue
+            }
         }
+        
+        // get the current date, edit it and update the view accordingly
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = defaultDateFormat
         dateFormatter.timeZone = TimeZone.init(abbreviation: USTimeZoneAbbreviation)
@@ -145,7 +176,6 @@ class GamesTableViewController: UITableViewController {
         selectedDate = dateFormatter.string(from: newDate!)
         getGames(reload: false)
     }
-    
     
     func getNewNavTitle(date: String) -> String { // gets the new navigation title of the view based on the 'selectedDate'
         let todaysDate = getTodaysDate()
@@ -156,17 +186,6 @@ class GamesTableViewController: UITableViewController {
         todayButtonOutlet.isEnabled = true
         return date
     }
-    
-    @IBAction func resetToday(_ sender: Any) { // resets the view to the current day
-        selectedDate = getTodaysDate()
-        defaultMenuBuild()
-        getGames(reload: false)
-    }
-    
-    @IBAction func manualRefreshGames(_ sender: Any) { // manually refresh the current games
-        getGames(reload: true)
-    }
-    
     
     func defaultMenuBuild() { // builds the menu for changing the season
         let optionsClosure = { (action: UIAction) in
@@ -300,14 +319,13 @@ class GamesTableViewController: UITableViewController {
         let game = selectedDateGames[indexPath.row]
         selectedGame = game
         selectedGameTitle = game.awayTeam.abbreviation! + " vs " + game.homeTeam.abbreviation!
-        performSegue(withIdentifier: "gameSelectSegue", sender: self)
+        performSegue(withIdentifier: selectedGameSegue , sender: self)
     }
     
-
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "gameSelectSegue" {
+        if segue.identifier == selectedGameSegue {
             let destination = segue.destination as! DetailedGameTableViewController
             destination.game = selectedGame
             destination.gameTitle = selectedGameTitle

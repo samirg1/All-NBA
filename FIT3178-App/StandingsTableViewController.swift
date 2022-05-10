@@ -4,21 +4,24 @@
 //
 //  Created by Samir Gupta on 3/5/22.
 //
+//  This view displays the NBA's current standings.
+//  This page is limited by the API, as the API does not provide standings information
+//  Instead separate API calls to each of the teams' games from the season is made to determine their win-loss record
 
 import UIKit
 
-enum TeamFilter: String {
+enum TeamFilter: String { // stores the team filters for standings
     case CONFERENCE = "Conference"
     case DIVISION = "Division"
     case LEAGUE = "League"
 }
 
-enum Conferences: String {
+enum Conferences: String { // stores the conferences of the NBA
     case EAST = "East"
     case WEST = "West"
 }
 
-enum Divisions: String {
+enum Divisions: String { // stores the divisions of the NBA
     case ATLANTIC = "Atlantic"
     case CENTRAL = "Central"
     case SOUTHEAST = "Southeast"
@@ -27,19 +30,19 @@ enum Divisions: String {
     case SOUTHWEST = "Southwest"
 }
 
-enum Season2021_2022: String {
+enum Season2021_2022: String { // stores the 2021/22 season info
     case YEAR = "2021"
     case START = "2021-10-19"
     case END = "2022-04-10"
 }
 
-enum Season2020_2021: String {
+enum Season2020_2021: String { // stores the 2020/21 season info
     case YEAR = "2020"
     case START = "2020-12-22"
     case END = "2020-05-16"
 }
 
-class StandingsTeamCell: UITableViewCell {
+class StandingsTeamCell: UITableViewCell { // cell depicting a team's info
     @IBOutlet weak var teamImage: UIImageView!
     @IBOutlet weak var numberLabel: UILabel!
     @IBOutlet weak var abbreviationLabel: UILabel!
@@ -52,33 +55,33 @@ class StandingsTeamCell: UITableViewCell {
 
 class StandingsTableViewController: UITableViewController {
     
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    let gamesFileManagerExtension = "-seasonGamesData"
+    let allTeamsFileManagerExtension = "-all_teams"
+    
     let MAX_GAMES_IN_SEASON = "82"
     var season = Season2021_2022.self
     var teamFilter: TeamFilter = TeamFilter.LEAGUE
     var teamsData: [TeamSeasonData] = []
+    let teamCellIdentifier = "teamCell"
     
-    var divisionTeams: [String: [TeamSeasonData]] = [
-        Divisions.ATLANTIC.rawValue: [],
-        Divisions.CENTRAL.rawValue: [],
-        Divisions.SOUTHEAST.rawValue: [],
-        Divisions.NORTHWEST.rawValue: [],
-        Divisions.PACIFIC.rawValue: [],
-        Divisions.SOUTHWEST.rawValue: []
+    var divisionTeams: [Divisions: [TeamSeasonData]] = [
+        Divisions.ATLANTIC: [],
+        Divisions.CENTRAL: [],
+        Divisions.SOUTHEAST: [],
+        Divisions.NORTHWEST: [],
+        Divisions.PACIFIC: [],
+        Divisions.SOUTHWEST: []
     ]
     
-    var conferenceTeams: [String: [TeamSeasonData]] = [
-        Conferences.EAST.rawValue: [],
-        Conferences.WEST.rawValue: []
+    var conferenceTeams: [Conferences: [TeamSeasonData]] = [
+        Conferences.EAST: [],
+        Conferences.WEST: []
     ]
     
     var selectedTeam: TeamSeasonData?
     
-    let gamesFileManagerExtension = "-seasonGamesData"
-    let allTeamsFileManagerExtension = "-all_teams"
-    lazy var cacheDirectoryPath: URL = {
-        let cacheDirectoryPaths = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
-        return cacheDirectoryPaths[0]
-    }()
+   
     
     lazy var indicator: UIActivityIndicatorView = {
         var indicator = UIActivityIndicatorView()
@@ -112,21 +115,24 @@ class StandingsTableViewController: UITableViewController {
         ])
     }
     
-    func requestTeamGames(team: TeamData) async { //
+    
+    // MARK: Retrieving Data from API
+    
+    func requestTeamGames(team: TeamData) async { // gets a specifc teams season games from API
         var gamesURL = URLComponents()
-        gamesURL.scheme = "https"
-        gamesURL.host = "www.balldontlie.io"
-        gamesURL.path = "/api/v1/games"
+        gamesURL.scheme = appDelegate.API_URL_SCHEME
+        gamesURL.host = appDelegate.API_URL_HOST
+        gamesURL.path = appDelegate.API_URL_PATH + appDelegate.API_URL_PATH_GAMES
         gamesURL.queryItems = [
-            URLQueryItem(name: "team_ids[]", value: "\(team.id)"),
-            URLQueryItem(name: "seasons[]", value: season.YEAR.rawValue),
-            URLQueryItem(name: "per_page", value: MAX_GAMES_IN_SEASON),
-            URLQueryItem(name: "start_date", value: season.START.rawValue),
-            URLQueryItem(name: "end_date", value: season.END.rawValue)
+            URLQueryItem(name: appDelegate.API_QUERY_TEAM_ID, value: "\(team.id)"),
+            URLQueryItem(name: appDelegate.API_QUERY_SEASONS, value: season.YEAR.rawValue),
+            URLQueryItem(name: appDelegate.API_QUERY_PER_PAGE, value: MAX_GAMES_IN_SEASON),
+            URLQueryItem(name: appDelegate.API_QUERY_START_DATE, value: season.START.rawValue),
+            URLQueryItem(name: appDelegate.API_QUERY_END_DATE, value: season.END.rawValue)
         ]
         
         guard let requestURL = gamesURL.url else {
-            print("Invalid URL")
+            displayMessage_sgup0027(title: appDelegate.URL_CONVERSION_ERROR_TITLE, message: appDelegate.URL_CONVERSION_ERROR_MESSAGE)
             return
         }
         
@@ -136,21 +142,21 @@ class StandingsTableViewController: UITableViewController {
             DispatchQueue.main.async {
                 self.decodeTeamGames(data: data, team: team)
                 let fileName = "\(team.id)" + self.gamesFileManagerExtension
-                let localURL = self.cacheDirectoryPath.appendingPathComponent(fileName)
+                let localURL = self.appDelegate.cacheDirectoryPath.appendingPathComponent(fileName)
                 FileManager.default.createFile(atPath: localURL.path, contents: data, attributes: [:])
             }
         }
-        catch let error { print(error) }
+        catch let error { displayMessage_sgup0027(title: appDelegate.API_ERROR_TITLE, message: error.localizedDescription) }
     }
                             
-    func getAllTeams(reload: Bool) async {
+    func getAllTeams(reload: Bool) async { // gets all teams from API
         var gamesURL = URLComponents()
-        gamesURL.scheme = "https"
-        gamesURL.host = "www.balldontlie.io"
-        gamesURL.path = "/api/v1/teams"
+        gamesURL.scheme = appDelegate.API_URL_SCHEME
+        gamesURL.host = appDelegate.API_URL_HOST
+        gamesURL.path = appDelegate.API_URL_PATH + appDelegate.API_URL_PATH_TEAMS
         
         guard let requestURL = gamesURL.url else {
-            print("Invalid URL")
+            displayMessage_sgup0027(title: appDelegate.URL_CONVERSION_ERROR_TITLE, message: appDelegate.URL_CONVERSION_ERROR_MESSAGE)
             return
         }
         
@@ -160,14 +166,14 @@ class StandingsTableViewController: UITableViewController {
             DispatchQueue.main.async {
                 self.decodeTeams(data: data, reload: reload)
                 let fileName = self.season.YEAR.rawValue + self.allTeamsFileManagerExtension
-                let localURL = self.cacheDirectoryPath.appendingPathComponent(fileName)
+                let localURL = self.appDelegate.cacheDirectoryPath.appendingPathComponent(fileName)
                 FileManager.default.createFile(atPath: localURL.path, contents: data, attributes: [:])
             }
         }
-        catch let error { print(error) }
+        catch let error { displayMessage_sgup0027(title: appDelegate.API_ERROR_TITLE, message: error.localizedDescription) }
     }
     
-    func getTeams(reload: Bool) {
+    func getTeams(reload: Bool) { // retrieves the teams data
         teamsData.removeAll()
         for (_, var teams) in divisionTeams {
             teams.removeAll()
@@ -177,14 +183,14 @@ class StandingsTableViewController: UITableViewController {
         }
         
         let fileName = season.YEAR.rawValue + allTeamsFileManagerExtension
-        let localURL = cacheDirectoryPath.appendingPathComponent(fileName)
+        let localURL = appDelegate.cacheDirectoryPath.appendingPathComponent(fileName)
         if FileManager.default.fileExists(atPath: localURL.path) && !reload {
             let data = FileManager.default.contents(atPath: localURL.path)
             if let data = data {
                 self.decodeTeams(data: data, reload: reload)
             }
             else {
-                displayMessage_sgup0027(title: "An error occured fetching teams", message: "FileManager data is invalid")
+                displayMessage_sgup0027(title: appDelegate.FILE_MANAGER_DATA_ERROR_TITLE, message: appDelegate.FILE_MANAGER_DATA_ERROR_MESSAGE)
             }
         }
         else {
@@ -198,7 +204,7 @@ class StandingsTableViewController: UITableViewController {
         
     }
     
-    func decodeTeams(data: Data, reload: Bool) {
+    func decodeTeams(data: Data, reload: Bool) { // decodes the teams data
         do {
             let decoder = JSONDecoder()
             let collection = try decoder.decode(TeamCollection.self, from: data)
@@ -208,19 +214,19 @@ class StandingsTableViewController: UITableViewController {
                 }
             }
         }
-        catch let error { print(error) }
+        catch let error { displayMessage_sgup0027(title: appDelegate.JSON_DECODER_ERROR_TITLE, message: error.localizedDescription) }
     }
     
-    func getTeamsGames(team: TeamData, reload: Bool){
+    func getTeamsGames(team: TeamData, reload: Bool){ // retrieves the teams games data
         let fileName = "\(team.id)" + gamesFileManagerExtension
-        let localURL = cacheDirectoryPath.appendingPathComponent(fileName)
+        let localURL = appDelegate.cacheDirectoryPath.appendingPathComponent(fileName)
         if FileManager.default.fileExists(atPath: localURL.path) && !reload {
             let data = FileManager.default.contents(atPath: localURL.path)
             if let data = data {
                 self.decodeTeamGames(data: data, team: team)
             }
             else {
-                displayMessage_sgup0027(title: "An error occured fetching team games", message: "FileManager data is invalid")
+                displayMessage_sgup0027(title: appDelegate.FILE_MANAGER_DATA_ERROR_TITLE, message: appDelegate.FILE_MANAGER_DATA_ERROR_MESSAGE)
             }
         }
         else {
@@ -231,9 +237,8 @@ class StandingsTableViewController: UITableViewController {
         
     }
     
-    func decodeTeamGames(data: Data, team: TeamData) {
+    func decodeTeamGames(data: Data, team: TeamData) { // decodes the teams games data
         guard let division = team.division, let conference = team.conference else {
-            print("Couldn't find team division and/or conference")
             return
         }
         do {
@@ -244,8 +249,8 @@ class StandingsTableViewController: UITableViewController {
                 for game in games {
                     teamData.addGame(game: game)
                 }
-                self.divisionTeams[division]!.append(teamData)
-                self.conferenceTeams[conference]!.append(teamData)
+                self.divisionTeams[Divisions.init(rawValue: division)!]!.append(teamData)
+                self.conferenceTeams[Conferences.init(rawValue: conference)!]!.append(teamData)
                 self.teamsData.append(teamData)
                 self.teamsData.sort(){ $0.pct > $1.pct }
                 for (divi, div_teams) in self.divisionTeams {
@@ -258,9 +263,8 @@ class StandingsTableViewController: UITableViewController {
                 
             }
         }
-        catch let error { print(error) }
+        catch let error { displayMessage_sgup0027(title: appDelegate.JSON_DECODER_ERROR_TITLE, message: error.localizedDescription) }
     }
-
 
     // MARK: - Table view data source
 
@@ -291,7 +295,7 @@ class StandingsTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "teamCell", for: indexPath) as! StandingsTeamCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: teamCellIdentifier, for: indexPath) as! StandingsTeamCell
         let team: TeamSeasonData
         if teamFilter == TeamFilter.CONFERENCE {
             team = conferenceTeams[Array(conferenceTeams.keys)[indexPath.section]]![indexPath.row]
@@ -337,13 +341,13 @@ class StandingsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if teamFilter == TeamFilter.CONFERENCE {
-            return Array(conferenceTeams.keys)[section]
+            return Array(conferenceTeams.keys)[section].rawValue
         }
         else if teamFilter == TeamFilter.DIVISION {
-            return Array(divisionTeams.keys)[section]
+            return Array(divisionTeams.keys)[section].rawValue
         }
         else {
-            return "League"
+            return TeamFilter.LEAGUE.rawValue
         }
     }
     
@@ -370,32 +374,15 @@ class StandingsTableViewController: UITableViewController {
         }
     }
     
-    func findPositions(teamToFind: TeamSeasonData) -> [String: Int]{
-        var div = 0
-        var conf = 0
-        var league = 0
-        for i in 0..<teamsData.count {
-            if teamsData[i].team.abbreviation == teamToFind.team.abbreviation {
-                league = i+1
-                break
-            }
-        }
-        for (_, divTeam) in divisionTeams {
-            for i in 0..<divTeam.count {
-                if divTeam[i].team.abbreviation == teamToFind.team.abbreviation {
-                    div = i+1
-                    break
-                }
-            }
-        }
-        for (_, confTeam) in conferenceTeams {
-            for i in 0..<confTeam.count {
-                if confTeam[i].team.abbreviation == teamToFind.team.abbreviation {
-                    conf = i+1
-                    break
-                }
-            }
-        }
-        return [TeamFilter.DIVISION.rawValue: div, TeamFilter.CONFERENCE.rawValue: conf, TeamFilter.LEAGUE.rawValue: league]
+    func findPositions(teamToFind: TeamSeasonData) -> [TeamFilter: Int]{ // find the positions in the league, division and conference for display
+        let div = divisionTeams[Divisions.init(rawValue: teamToFind.team.division!)!]!.firstIndex { team in
+            team.team.abbreviation == teamToFind.team.abbreviation
+        }! + 1
+        let conf = conferenceTeams[Conferences.init(rawValue: teamToFind.team.conference!)!]!.firstIndex { team in
+            team.team.abbreviation == teamToFind.team.abbreviation
+        }! + 1
+        let league = teamsData.firstIndex { team in team.team.abbreviation == teamToFind.team.abbreviation }! + 1
+        
+        return [TeamFilter.DIVISION: div, TeamFilter.CONFERENCE: conf, TeamFilter.LEAGUE: league]
     }
 }

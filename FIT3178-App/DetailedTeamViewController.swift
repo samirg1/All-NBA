@@ -4,13 +4,14 @@
 //
 //  Created by Samir Gupta on 6/5/22.
 //
+//  This page shows a detailed view of a selected team from StandingsTableViewController
 
 import UIKit
 
 class DetailedTeamViewController: UIViewController {
 
     var selectedTeam: TeamSeasonData?
-    var positions: [String: Int]?
+    var positions: [TeamFilter: Int]?
     
     @IBOutlet weak var teamImage: UIImageView!
     @IBOutlet weak var teamName: UILabel!
@@ -28,9 +29,9 @@ class DetailedTeamViewController: UIViewController {
         guard let selectedTeam = selectedTeam, let positions = positions else {
             return
         }
-        let confPos = positions[TeamFilter.CONFERENCE.rawValue]!
-        let divPos = positions[TeamFilter.DIVISION.rawValue]!
-        let leaguePos = positions[TeamFilter.LEAGUE.rawValue]!
+        let confPos = positions[TeamFilter.CONFERENCE]!
+        let divPos = positions[TeamFilter.DIVISION]!
+        let leaguePos = positions[TeamFilter.LEAGUE]!
 
         teamImage.image = UIImage(named: selectedTeam.team.abbreviation!)
         teamName.text = selectedTeam.team.fullName

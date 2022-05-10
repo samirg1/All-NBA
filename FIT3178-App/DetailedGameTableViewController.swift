@@ -4,6 +4,9 @@
 //
 //  Created by Samir Gupta on 20/4/22.
 //
+//  This page is created to show a detailed look at a particular live game by showing the teams major statistics from the game
+//  This page is limited by the free API used, and therefore instead of easily retrieving these stats, each individual player's stats is accumulated to provide the final team stats.
+//  Another limitation of this page is its inability to produce completely up-to-date stats/scores as the API is only updated every 10 or so minutes
 
 import UIKit
 
@@ -27,6 +30,9 @@ class StatsTableViewCell: UITableViewCell { // cell that houses the stats
 
 class DetailedGameTableViewController: UITableViewController {
     
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    let fileManagerExtension = "-teamStats"
+    
     var gameTitle : String?
     var game : GameData?
     var awayTeamGameData = TeamGameData()
@@ -38,13 +44,9 @@ class DetailedGameTableViewController: UITableViewController {
     let SCORES_CELL_IDENTIFIER = "scoresCell"
     let STATS_CELL_IDENTIFIER = "statsCell"
     let maxAmountOfPlayers = "40"
+    let playerGameStatsSegue = "playersGameStatsSegue"
     
-    let fileManagerExtension = "-teamStats"
-    lazy var cacheDirectoryPath: URL = {
-        let cacheDirectoryPaths = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
-        return cacheDirectoryPaths[0]
-    }()
-    
+    // indicator to be running whilst calling API in the middle of the tableView
     lazy var indicator: UIActivityIndicatorView = {
         var indicator = UIActivityIndicatorView()
         indicator.style = UIActivityIndicatorView.Style.large
@@ -63,24 +65,30 @@ class DetailedGameTableViewController: UITableViewController {
         getTeamsStats(reload: false)
     }
     
+    // MARK: Retrieving and Decoding Data
+    
     func getTeamsStats(reload: Bool) { // gets the teams stats
         guard let game = game else {
-            displayMessage_sgup0027(title: "Error Retrieving Game", message: "Unable to retrieve game from previous screen")
-            return
+            return // don't do anything if game does not exist
         }
 
+        // check if data has been stored previously
         let fileName = "\(game.id)" + fileManagerExtension
-        let localURL = cacheDirectoryPath.appendingPathComponent(fileName)
+        let localURL = appDelegate.cacheDirectoryPath.appendingPathComponent(fileName)
         if FileManager.default.fileExists(atPath: localURL.path) && !reload {
+            
+            // if so, decode and update the view
             let data = FileManager.default.contents(atPath: localURL.path)
             if let data = data {
                 self.decodePlayersStats(data: data, game: game)
             }
             else {
-                displayMessage_sgup0027(title: "An error occured fetching games", message: "FileManager data is invalid")
+                displayMessage_sgup0027(title: appDelegate.FILE_MANAGER_DATA_ERROR_TITLE, message: appDelegate.FILE_MANAGER_DATA_ERROR_MESSAGE)
             }
         }
         else {
+            
+            // otherwise call the API
             indicator.startAnimating()
             Task {
                 URLSession.shared.invalidateAndCancel()
@@ -96,6 +104,8 @@ class DetailedGameTableViewController: UITableViewController {
             if let playersStats = collection.playersGameStats {
                 awayTeamGameData = TeamGameData()
                 homeTeamGameData = TeamGameData()
+                
+                // for each player retrieved, add their stats to their team
                 for player in playersStats {
                     self.players.append(player)
                     if player.teamId == game.awayTeam.id {
@@ -109,7 +119,7 @@ class DetailedGameTableViewController: UITableViewController {
                 indicator.stopAnimating()
             }
         }
-        catch let error { displayMessage_sgup0027(title: "Unable to decode data", message: error.localizedDescription) }
+        catch let error { displayMessage_sgup0027(title: appDelegate.JSON_DECODER_ERROR_TITLE, message: error.localizedDescription) }
     }
     
     @IBAction func refreshCurrentGame(_ sender: Any) { // manual refresh of the current game
@@ -118,16 +128,16 @@ class DetailedGameTableViewController: UITableViewController {
     
     func requestPlayerStatsInGame(game: GameData) async { // API call to teams stats data
         var gamesURL = URLComponents()
-        gamesURL.scheme = "https"
-        gamesURL.host = "www.balldontlie.io"
-        gamesURL.path = "/api/v1/stats"
+        gamesURL.scheme = appDelegate.API_URL_SCHEME
+        gamesURL.host = appDelegate.API_URL_HOST
+        gamesURL.path = appDelegate.API_URL_PATH + appDelegate.API_URL_PATH_STATS
         gamesURL.queryItems = [
-            URLQueryItem(name: "game_ids[]", value: "\(game.id)"),
-            URLQueryItem(name: "per_page", value: maxAmountOfPlayers)
+            URLQueryItem(name: appDelegate.API_QUERY_GAME_ID, value: "\(game.id)"),
+            URLQueryItem(name: appDelegate.API_QUERY_PER_PAGE, value: maxAmountOfPlayers)
         ]
         
         guard let requestURL = gamesURL.url else {
-            displayMessage_sgup0027(title: "Unable to retrieve games", message: "Invalid API URL")
+            displayMessage_sgup0027(title: appDelegate.URL_CONVERSION_ERROR_TITLE, message: appDelegate.URL_CONVERSION_ERROR_MESSAGE)
             return
         }
         
@@ -137,15 +147,15 @@ class DetailedGameTableViewController: UITableViewController {
             DispatchQueue.main.async {
                 self.decodePlayersStats(data: data, game: game)
                 let fileName = "\(game.id)" + self.fileManagerExtension
-                let localURL = self.cacheDirectoryPath.appendingPathComponent(fileName)
+                let localURL = self.appDelegate.cacheDirectoryPath.appendingPathComponent(fileName)
                 FileManager.default.createFile(atPath: localURL.path, contents: data, attributes: [:])
             }
         }
-        catch let error { displayMessage_sgup0027(title: "An error occured whilst retrieving games", message: error.localizedDescription) }
+        catch let error { displayMessage_sgup0027(title: appDelegate.API_ERROR_TITLE, message: error.localizedDescription) }
     }
     
-    // gesture actions
-    @IBAction func playerGameStatsSelection(_ sender: Any) { performSegue(withIdentifier: "playersGameStatsSegue", sender: self) }
+    // MARK: Gesture Actions
+    @IBAction func playerGameStatsSelection(_ sender: Any) { performSegue(withIdentifier: playerGameStatsSegue, sender: self) }
     @IBAction func returnToGamesSwipeAction(_ sender: Any) { navigationController?.popViewController(animated: true) }
     
     
@@ -208,21 +218,21 @@ class DetailedGameTableViewController: UITableViewController {
                 cell.awayTeamData.text = "\(awayTeamGameData.blk)"
                 cell.homeTeamData.text = "\(homeTeamGameData.blk)"
             case .ft:
-                cell.awayTeamData.text = "\(awayTeamGameData.fta) / \(awayTeamGameData.ftm) - \(getPctForStat(made: awayTeamGameData.ftm, attempted: awayTeamGameData.fta))%"
-                cell.homeTeamData.text = "\(getPctForStat(made: homeTeamGameData.ftm, attempted: homeTeamGameData.fta))% - \(homeTeamGameData.fta) / \(homeTeamGameData.ftm)"
+                cell.awayTeamData.text = "\(awayTeamGameData.ftm) / \(awayTeamGameData.fta) - \(getPctForStat(made: awayTeamGameData.ftm, attempted: awayTeamGameData.fta))%"
+                cell.homeTeamData.text = "\(getPctForStat(made: homeTeamGameData.ftm, attempted: homeTeamGameData.fta))% - \(homeTeamGameData.ftm) / \(homeTeamGameData.fta)"
             case .fg:
-                cell.awayTeamData.text = "\(awayTeamGameData.fga) / \(awayTeamGameData.fgm) - \(getPctForStat(made: awayTeamGameData.fgm, attempted: awayTeamGameData.fga))%"
-                cell.homeTeamData.text = "\(getPctForStat(made: homeTeamGameData.fgm, attempted: homeTeamGameData.fga))% - \(homeTeamGameData.fga) / \(homeTeamGameData.fgm)"
+                cell.awayTeamData.text = "\(awayTeamGameData.fgm) / \(awayTeamGameData.fga) - \(getPctForStat(made: awayTeamGameData.fgm, attempted: awayTeamGameData.fga))%"
+                cell.homeTeamData.text = "\(getPctForStat(made: homeTeamGameData.fgm, attempted: homeTeamGameData.fga))% - \(homeTeamGameData.fgm) / \(homeTeamGameData.fga)"
             case .fg3:
-                cell.awayTeamData.text = "\(awayTeamGameData.fga3) / \(awayTeamGameData.fgm3) - \(getPctForStat(made: awayTeamGameData.fgm3, attempted: awayTeamGameData.fga3))%"
-                cell.homeTeamData.text = "\(getPctForStat(made: homeTeamGameData.fgm3, attempted: homeTeamGameData.fga3))% - \(homeTeamGameData.fga3) / \(homeTeamGameData.fgm3)"
+                cell.awayTeamData.text = "\(awayTeamGameData.fgm3) / \(awayTeamGameData.fga3) - \(getPctForStat(made: awayTeamGameData.fgm3, attempted: awayTeamGameData.fga3))%"
+                cell.homeTeamData.text = "\(getPctForStat(made: homeTeamGameData.fgm3, attempted: homeTeamGameData.fga3))% - \(homeTeamGameData.fgm3) / \(homeTeamGameData.fga3)"
             }
 
             return cell
         }
     }
     
-    func getPctForStat(made: Int, attempted: Int) -> Int {
+    func getPctForStat(made: Int, attempted: Int) -> Int { // gets a percentage of made shots vs attempted shots
         if attempted == 0 {
             return 0
         }
@@ -246,7 +256,9 @@ class DetailedGameTableViewController: UITableViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let destination = segue.destination as! PlayersGameStatsCollectionViewController
-        destination.playerGameStats = players
+        if segue.identifier == playerGameStatsSegue {
+            let destination = segue.destination as! PlayersGameStatsCollectionViewController
+            destination.playerGameStats = players
+        }
     }
 }

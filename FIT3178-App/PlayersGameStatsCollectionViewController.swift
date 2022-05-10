@@ -4,6 +4,7 @@
 //
 //  Created by Samir Gupta on 28/4/22.
 //
+//  This view shows a detailed summary of each player and their major statistical categories from a particular game
 
 import UIKit
 
