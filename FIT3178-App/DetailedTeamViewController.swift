@@ -10,22 +10,22 @@ import UIKit
 
 class DetailedTeamViewController: UIViewController {
 
-    var selectedTeam: TeamSeasonData?
-    var positions: [TeamFilter: Int]?
+    public var selectedTeam: TeamSeasonData?
+    public var positions: [TeamFilter: Int]?
     
-    @IBOutlet weak var teamImage: UIImageView!
-    @IBOutlet weak var teamName: UILabel!
-    @IBOutlet weak var conferenceLabel: UILabel!
-    @IBOutlet weak var recordLabel: UILabel!
-    @IBOutlet weak var leagueLabel: UILabel!
-    @IBOutlet weak var divisionLabel: UILabel!
+    @IBOutlet weak private var teamImage: UIImageView!
+    @IBOutlet weak private var teamName: UILabel!
+    @IBOutlet weak private var conferenceLabel: UILabel!
+    @IBOutlet weak private var recordLabel: UILabel!
+    @IBOutlet weak private var leagueLabel: UILabel!
+    @IBOutlet weak private var divisionLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         buildViewController()
     }
     
-    func buildViewController() {
+    private func buildViewController() {
         guard let selectedTeam = selectedTeam, let positions = positions else {
             return
         }
@@ -40,18 +40,6 @@ class DetailedTeamViewController: UIViewController {
         leagueLabel.text = "\(leaguePos.ordinal) in \(TeamFilter.LEAGUE.rawValue)"
         recordLabel.text = "Record\n\(selectedTeam.wins)-\(selectedTeam.losses)\nAt Home\n\(selectedTeam.homeWins)-\(selectedTeam.homeLosses)\nAway\n\(selectedTeam.awayWins)-\(selectedTeam.awayLosses)"
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
 
 extension Int { // get ordinal values from integers (1st, 2nd, 3rd .. etc) src: https://stackoverflow.com/questions/3312935/nsnumberformatter-and-th-st-nd-rd-ordinal-number-endings

@@ -10,7 +10,7 @@
 
 import UIKit
 
-enum StatSections: String { // storage of major statistical categories
+private enum StatSections: String { // storage of major statistical categories
     case pts = "points", reb = "rebounds", fg3 = "3-pt field goals", fg = "field goals", ft = "free throws", assists = "assists", blocks = "blocks", steals = "steals", turnovers = "turnovers", fouls = "fouls"
     static let mainVals = [pts, reb, fg3, fg, ft, assists, blocks, steals, turnovers, fouls]
 }
@@ -30,24 +30,28 @@ class StatsTableViewCell: UITableViewCell { // cell that houses the stats
 
 class DetailedGameTableViewController: UITableViewController {
     
-    let appDelegate = UIApplication.shared.delegate as! AppDelegate
-    let fileManagerExtension = "-teamStats"
+    private let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    public let fileManagerExtension = "-teamStats"
     
-    var gameTitle : String?
-    var game : GameData?
-    var awayTeamGameData = TeamGameData()
-    var homeTeamGameData = TeamGameData()
-    var players = [PlayerGameStatsData]()
+    // variables to check whether the view needs to be updated based on what has happened on other views
+    public var reloaded = false
+    public var toBeReloaded = false
     
-    let SECTION_SCORES = 0
-    let SECTION_STATS = 1
-    let SCORES_CELL_IDENTIFIER = "scoresCell"
-    let STATS_CELL_IDENTIFIER = "statsCell"
-    let maxAmountOfPlayers = "40"
-    let playerGameStatsSegue = "playersGameStatsSegue"
+    public var gameTitle : String?
+    public var game : GameData?
+    private var awayTeamGameData = TeamGameData()
+    private var homeTeamGameData = TeamGameData()
+    private var players = [PlayerGameStatsData]()
+    
+    private let SECTION_SCORES = 0
+    private let SECTION_STATS = 1
+    private let SCORES_CELL_IDENTIFIER = "scoresCell"
+    private let STATS_CELL_IDENTIFIER = "statsCell"
+    private let maxAmountOfPlayers = "40"
+    private let playerGameStatsSegue = "playersGameStatsSegue"
     
     // indicator to be running whilst calling API in the middle of the tableView
-    lazy var indicator: UIActivityIndicatorView = {
+    private lazy var indicator: UIActivityIndicatorView = {
         var indicator = UIActivityIndicatorView()
         indicator.style = UIActivityIndicatorView.Style.large
         indicator.translatesAutoresizingMaskIntoConstraints = false
@@ -62,12 +66,12 @@ class DetailedGameTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = gameTitle
-        getTeamsStats(reload: false)
+        getTeamsStats(reload: toBeReloaded)
     }
     
     // MARK: Retrieving and Decoding Data
     
-    func getTeamsStats(reload: Bool) { // gets the teams stats
+    private func getTeamsStats(reload: Bool) { // gets the teams stats
         guard let game = game else {
             return // don't do anything if game does not exist
         }
@@ -90,6 +94,8 @@ class DetailedGameTableViewController: UITableViewController {
             
             // otherwise call the API
             indicator.startAnimating()
+            reloaded = !toBeReloaded
+            toBeReloaded = false
             Task {
                 URLSession.shared.invalidateAndCancel()
                 await requestPlayerStatsInGame(game: game)
@@ -97,14 +103,14 @@ class DetailedGameTableViewController: UITableViewController {
         }
     }
     
-    func decodePlayersStats(data: Data, game: GameData) { // decodes that teams stats data
+    private func decodePlayersStats(data: Data, game: GameData) { // decodes that teams stats data
         do {
             let decoder = JSONDecoder()
             let collection = try decoder.decode(PlayerGameStatsCollectionData.self, from: data)
             if let playersStats = collection.playersGameStats {
                 awayTeamGameData = TeamGameData()
                 homeTeamGameData = TeamGameData()
-                
+                players.removeAll()
                 // for each player retrieved, add their stats to their team
                 for player in playersStats {
                     self.players.append(player)
@@ -119,14 +125,17 @@ class DetailedGameTableViewController: UITableViewController {
                 indicator.stopAnimating()
             }
         }
-        catch let error { displayMessage_sgup0027(title: appDelegate.JSON_DECODER_ERROR_TITLE, message: error.localizedDescription) }
+        catch let error {
+            displayMessage_sgup0027(title: appDelegate.JSON_DECODER_ERROR_TITLE, message: error.localizedDescription)
+            indicator.stopAnimating()
+        }
     }
     
-    @IBAction func refreshCurrentGame(_ sender: Any) { // manual refresh of the current game
+    @IBAction private func refreshCurrentGame(_ sender: Any) { // manual refresh of the current game
         getTeamsStats(reload: true)
     }
     
-    func requestPlayerStatsInGame(game: GameData) async { // API call to teams stats data
+    private func requestPlayerStatsInGame(game: GameData) async { // API call to teams stats data
         var gamesURL = URLComponents()
         gamesURL.scheme = appDelegate.API_URL_SCHEME
         gamesURL.host = appDelegate.API_URL_HOST
@@ -138,12 +147,18 @@ class DetailedGameTableViewController: UITableViewController {
         
         guard let requestURL = gamesURL.url else {
             displayMessage_sgup0027(title: appDelegate.URL_CONVERSION_ERROR_TITLE, message: appDelegate.URL_CONVERSION_ERROR_MESSAGE)
+            indicator.stopAnimating()
             return
         }
         
         let urlRequest = URLRequest(url: requestURL)
         do {
-            let (data, _) = try await URLSession.shared.data(for: urlRequest)
+            let (data, response) = try await URLSession.shared.data(for: urlRequest)
+            if let response = response as? HTTPURLResponse, response.statusCode != HTTP_ERROR_CODES.success.rawValue  {
+                displayMessage_sgup0027(title: appDelegate.API_ERROR_TITLE, message: appDelegate.API_ERROR_CODE_MESSAGES[response.statusCode]!)
+                indicator.stopAnimating()
+                return
+            }
             DispatchQueue.main.async {
                 self.decodePlayersStats(data: data, game: game)
                 let fileName = "\(game.id)" + self.fileManagerExtension
@@ -151,13 +166,20 @@ class DetailedGameTableViewController: UITableViewController {
                 FileManager.default.createFile(atPath: localURL.path, contents: data, attributes: [:])
             }
         }
-        catch let error { displayMessage_sgup0027(title: appDelegate.API_ERROR_TITLE, message: error.localizedDescription) }
+        catch let error {
+            displayMessage_sgup0027(title: appDelegate.API_ERROR_TITLE, message: error.localizedDescription)
+            indicator.stopAnimating()
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        if let gameViewController = navigationController?.topViewController as? GamesTableViewController {
+            gameViewController.toBeReloaded = reloaded
+        }
     }
     
     // MARK: Gesture Actions
-    @IBAction func playerGameStatsSelection(_ sender: Any) { performSegue(withIdentifier: playerGameStatsSegue, sender: self) }
-    @IBAction func returnToGamesSwipeAction(_ sender: Any) { navigationController?.popViewController(animated: true) }
-    
+    @IBAction private func playerGameStatsSelection(_ sender: Any) { performSegue(withIdentifier: playerGameStatsSegue, sender: self) }
     
     // MARK: - Table view data source
 
@@ -232,7 +254,7 @@ class DetailedGameTableViewController: UITableViewController {
         }
     }
     
-    func getPctForStat(made: Int, attempted: Int) -> Int { // gets a percentage of made shots vs attempted shots
+    private func getPctForStat(made: Int, attempted: Int) -> Int { // gets a percentage of made shots vs attempted shots
         if attempted == 0 {
             return 0
         }

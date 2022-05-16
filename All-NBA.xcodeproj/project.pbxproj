@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		37133C462831DCFA0065694C /* SeasonStatsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37133C452831DCFA0065694C /* SeasonStatsTableViewController.swift */; };
 		371F1008280E8A69000B1443 /* GamesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371F1007280E8A68000B1443 /* GamesTableViewController.swift */; };
 		371F100A280EB09A000B1443 /* GameData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371F1009280EB09A000B1443 /* GameData.swift */; };
 		371F100C280EB13C000B1443 /* TeamData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371F100B280EB13C000B1443 /* TeamData.swift */; };
@@ -30,6 +31,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		37133C452831DCFA0065694C /* SeasonStatsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeasonStatsTableViewController.swift; sourceTree = "<group>"; };
 		371F1007280E8A68000B1443 /* GamesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamesTableViewController.swift; sourceTree = "<group>"; };
 		371F1009280EB09A000B1443 /* GameData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameData.swift; sourceTree = "<group>"; };
 		371F100B280EB13C000B1443 /* TeamData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamData.swift; sourceTree = "<group>"; };
@@ -41,7 +43,7 @@
 		3750ABCC2827B930008B2135 /* UIViewController-sgup0027.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController-sgup0027.swift"; sourceTree = "<group>"; };
 		3750ABCE2828BAC4008B2135 /* TeamGameData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamGameData.swift; sourceTree = "<group>"; };
 		377DE88C281A2107009D3BE2 /* PlayersGameStatsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayersGameStatsCollectionViewController.swift; sourceTree = "<group>"; };
-		3794FD5527E821190090BE26 /* FIT3178-App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FIT3178-App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3794FD5527E821190090BE26 /* All-NBA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "All-NBA.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3794FD5827E821190090BE26 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3794FD5A27E821190090BE26 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		3794FD5F27E821190090BE26 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -99,7 +101,7 @@
 		3794FD5627E821190090BE26 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				3794FD5527E821190090BE26 /* FIT3178-App.app */,
+				3794FD5527E821190090BE26 /* All-NBA.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -121,6 +123,7 @@
 				377DE88C281A2107009D3BE2 /* PlayersGameStatsCollectionViewController.swift */,
 				3750ABC1282158C0008B2135 /* StandingsTableViewController.swift */,
 				3750ABC72824F6E5008B2135 /* DetailedTeamViewController.swift */,
+				37133C452831DCFA0065694C /* SeasonStatsTableViewController.swift */,
 			);
 			path = "FIT3178-App";
 			sourceTree = "<group>";
@@ -128,9 +131,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		3794FD5427E821190090BE26 /* FIT3178-App */ = {
+		3794FD5427E821190090BE26 /* All-NBA */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3794FD6927E8211B0090BE26 /* Build configuration list for PBXNativeTarget "FIT3178-App" */;
+			buildConfigurationList = 3794FD6927E8211B0090BE26 /* Build configuration list for PBXNativeTarget "All-NBA" */;
 			buildPhases = (
 				3794FD5127E821190090BE26 /* Sources */,
 				3794FD5227E821190090BE26 /* Frameworks */,
@@ -140,9 +143,9 @@
 			);
 			dependencies = (
 			);
-			name = "FIT3178-App";
+			name = "All-NBA";
 			productName = "FIT3178-App";
-			productReference = 3794FD5527E821190090BE26 /* FIT3178-App.app */;
+			productReference = 3794FD5527E821190090BE26 /* All-NBA.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -160,7 +163,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 3794FD5027E821190090BE26 /* Build configuration list for PBXProject "FIT3178-App" */;
+			buildConfigurationList = 3794FD5027E821190090BE26 /* Build configuration list for PBXProject "All-NBA" */;
 			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -173,7 +176,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				3794FD5427E821190090BE26 /* FIT3178-App */,
+				3794FD5427E821190090BE26 /* All-NBA */,
 			);
 		};
 /* End PBXProject section */
@@ -198,6 +201,7 @@
 			files = (
 				371F100A280EB09A000B1443 /* GameData.swift in Sources */,
 				371F1008280E8A69000B1443 /* GamesTableViewController.swift in Sources */,
+				37133C462831DCFA0065694C /* SeasonStatsTableViewController.swift in Sources */,
 				371F100E280EC770000B1443 /* GameCollection.swift in Sources */,
 				3794FD5927E821190090BE26 /* AppDelegate.swift in Sources */,
 				3750ABC82824F6E5008B2135 /* DetailedTeamViewController.swift in Sources */,
@@ -361,6 +365,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = F95X2BGT79;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "FIT3178-App/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -373,7 +378,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "edu.monash.FIT3178-App";
+				PRODUCT_BUNDLE_IDENTIFIER = "edu.monash.All-NBA";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -388,6 +393,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = F95X2BGT79;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "FIT3178-App/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -400,7 +406,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "edu.monash.FIT3178-App";
+				PRODUCT_BUNDLE_IDENTIFIER = "edu.monash.All-NBA";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -411,7 +417,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		3794FD5027E821190090BE26 /* Build configuration list for PBXProject "FIT3178-App" */ = {
+		3794FD5027E821190090BE26 /* Build configuration list for PBXProject "All-NBA" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3794FD6727E8211B0090BE26 /* Debug */,
@@ -420,7 +426,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3794FD6927E8211B0090BE26 /* Build configuration list for PBXNativeTarget "FIT3178-App" */ = {
+		3794FD6927E8211B0090BE26 /* Build configuration list for PBXNativeTarget "All-NBA" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3794FD6A27E8211B0090BE26 /* Debug */,

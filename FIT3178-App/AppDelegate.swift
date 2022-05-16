@@ -7,31 +7,49 @@
 
 import UIKit
 
+public enum HTTP_ERROR_CODES: Int {
+    case success = 200
+    case bad_request = 400
+    case not_found = 404
+    case not_acceptable = 406
+    case too_many_requests = 429
+    case server_error = 500
+    case service_unavailable = 503
+}
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
-    let API_URL_SCHEME = "https"
-    let API_URL_HOST = "www.balldontlie.io"
-    let API_URL_PATH = "/api/v1/"
-    let API_URL_PATH_STATS = "stats"
-    let API_URL_PATH_GAMES = "games"
-    let API_URL_PATH_TEAMS = "teams"
-    let API_QUERY_GAME_ID = "game_ids[]"
-    let API_QUERY_PER_PAGE = "per_page"
-    let API_QUERY_DATES = "dates[]"
-    let API_QUERY_START_DATE = "start_date"
-    let API_QUERY_END_DATE = "end_date"
-    let API_QUERY_SEASONS = "seasons[]"
-    let API_QUERY_TEAM_ID = "team_ids[]"
     
-    let URL_CONVERSION_ERROR_TITLE = "Unable to retrieve information"
-    let URL_CONVERSION_ERROR_MESSAGE = "Invalid URL"
-    let API_ERROR_TITLE = "An error occured whilst retrieving data"
-    let FILE_MANAGER_DATA_ERROR_TITLE = "An error occured fetching data"
-    let FILE_MANAGER_DATA_ERROR_MESSAGE = "Stored file data is invalid"
-    let JSON_DECODER_ERROR_TITLE = "Error decoding API data"
+    public let API_URL_SCHEME = "https"
+    public let API_URL_HOST = "www.balldontlie.io"
+    public let API_URL_PATH = "/api/v1/"
+    public let API_URL_PATH_STATS = "stats"
+    public let API_URL_PATH_GAMES = "games"
+    public let API_URL_PATH_TEAMS = "teams"
+    public let API_QUERY_GAME_ID = "game_ids[]"
+    public let API_QUERY_PER_PAGE = "per_page"
+    public let API_QUERY_DATES = "dates[]"
+    public let API_QUERY_START_DATE = "start_date"
+    public let API_QUERY_END_DATE = "end_date"
+    public let API_QUERY_SEASONS = "seasons[]"
+    public let API_QUERY_TEAM_ID = "team_ids[]"
+    public let API_ERROR_CODE_MESSAGES = [
+        HTTP_ERROR_CODES.bad_request.rawValue: "Invalid server request",
+        HTTP_ERROR_CODES.not_found.rawValue: "Server request was not found",
+        HTTP_ERROR_CODES.not_acceptable.rawValue: "Invalid server request format",
+        HTTP_ERROR_CODES.too_many_requests.rawValue: "Too many server requests",
+        HTTP_ERROR_CODES.server_error.rawValue: "Internal server error",
+        HTTP_ERROR_CODES.service_unavailable.rawValue: "Server currently unavailable"
+    ]
     
-    lazy var cacheDirectoryPath: URL = {
+    public let URL_CONVERSION_ERROR_TITLE = "Unable to retrieve information"
+    public let URL_CONVERSION_ERROR_MESSAGE = "Invalid URL"
+    public let API_ERROR_TITLE = "An error occured whilst retrieving data"
+    public let FILE_MANAGER_DATA_ERROR_TITLE = "An error occured fetching data"
+    public let FILE_MANAGER_DATA_ERROR_MESSAGE = "Stored file data is invalid"
+    public let JSON_DECODER_ERROR_TITLE = "Error decoding API data"
+    
+    public lazy var cacheDirectoryPath: URL = {
         let cacheDirectoryPaths = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
         return cacheDirectoryPaths[0]
     }()

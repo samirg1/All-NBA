@@ -8,111 +8,168 @@
 
 import UIKit
 
-private let cellHeaders = ["NAME", "PTS", "REB", "AST", "STL", "BLK", "TOV", "FG%"]
-private let reuseIdentifier = "statCell"
+private enum SortFilters: String {
+    case none = "none"
+    case points = "pts"
+    case rebounds = "reb"
+    case assists = "ast"
+    case steals = "stl"
+    case blocks = "blk"
+    case turnovers = "tov"
+    case percentage = "pct"
+}
 
 class PlayerGameStatsCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var label: UILabel!
 }
 
+class PlayerGameNameCollectionViewCell: UICollectionViewCell {
+    @IBOutlet weak var nameLabel: UILabel!
+}
+
 class PlayersGameStatsCollectionViewController: UICollectionViewController {
     
-    var playerGameStats: [PlayerGameStatsData]?
-    var sortingKey = "pts"
-    
-    private lazy var compositionalLayout: UICollectionViewCompositionalLayout = { () -> UICollectionViewCompositionalLayout in
-        let layout = UICollectionViewCompositionalLayout { [weak self] (sectionIndex: Int, layoutEnvironment: NSCollectionLayoutEnvironment) -> NSCollectionLayoutSection in
-            let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(1.0)))
-            item.contentInsets = NSDirectionalEdgeInsets(top: 4.0,
-                                                             leading: 0.0,
-                                                             bottom: 4.0,
-                                                             trailing: 0.0)
-            let group = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .estimated(136), heightDimension: .absolute(44)), subitem: item, count: self?.playerGameStats?.count ?? 1)
-            let section = NSCollectionLayoutSection(group: group)
-            section.orthogonalScrollingBehavior = .continuous
-            section.contentInsets = NSDirectionalEdgeInsets(top: 16.0,
-                                                                leading: 0.0,
-                                                                bottom: 16.0,
-                                                                trailing: 0.0)
-            return section
-        }
-        return layout
-    }()
+    private let cellHeaders = ["NAME", "PTS", "REB", "AST", "STL", "BLK", "TOV", "PCT"]
+    private let statIdentifier = "statCell"
+    private let nameIdentifier = "nameCell"
+    public var playerGameStats: [PlayerGameStatsData] = [PlayerGameStatsData]()
+    private var sortingKey : SortFilters = SortFilters.none
+    private let HEADER_SECTION = 0
+    private let NAME_ITEM = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        collectionView.collectionViewLayout = compositionalLayout
+        sortPlayerGameStats(clicked: SortFilters.points)
+        collectionView.setCollectionViewLayout(configureLayout(), animated: false)
+        collectionView.backgroundColor = .systemGray3
+        navigationController?.navigationBar.backgroundColor = .systemBackground
     }
     
-    func sortPlayerGameStats() {
+    private func configureLayout() -> UICollectionViewLayout {
+        let nameItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(3/9), heightDimension: .fractionalHeight(1))
+        let nameItem = NSCollectionLayoutItem(layoutSize: nameItemSize)
+        nameItem.contentInsets = NSDirectionalEdgeInsets(top: 1, leading: 1, bottom: 1, trailing: 1)
         
+        let statsSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/7), heightDimension: .fractionalHeight(1))
+        let statsLayout = NSCollectionLayoutItem(layoutSize: statsSize)
+        statsLayout.contentInsets = NSDirectionalEdgeInsets(top: 1, leading: 1, bottom: 1, trailing: 1)
+        let statsGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(6/9), heightDimension: .fractionalHeight(1))
+        let statGroup = NSCollectionLayoutGroup.horizontal(layoutSize: statsGroupSize, subitem: statsLayout, count: 7)
+
+        let sectionSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(4/3), heightDimension: .fractionalWidth(1/8))
+        let sectionLayoutGroup = NSCollectionLayoutGroup.horizontal(layoutSize: sectionSize, subitems: [nameItem, statGroup])
+        let sectionLayout = NSCollectionLayoutSection(group: sectionLayoutGroup)
+        sectionLayout.orthogonalScrollingBehavior = .continuous
+        return UICollectionViewCompositionalLayout(section: sectionLayout)
     }
     
-    @IBAction func backToGameSwipeAction(_ sender: Any) {
-        navigationController?.popViewController(animated: true)
+    private func sortPlayerGameStats(clicked: SortFilters) {
+        if sortingKey == clicked {
+            playerGameStats.reverse()
+        }
+        else {
+            switch clicked {
+            case .points, .none:
+                playerGameStats.sort(){ $0.pts > $1.pts }
+            case .rebounds:
+                playerGameStats.sort(){ $0.reb > $1.reb }
+            case .assists:
+                playerGameStats.sort(){ $0.ast > $1.ast }
+            case .steals:
+                playerGameStats.sort(){ $0.stl > $1.stl }
+            case .blocks:
+                playerGameStats.sort(){ $0.blk > $1.blk }
+            case .turnovers:
+                playerGameStats.sort(){ $0.turnover > $1.turnover }
+            case .percentage:
+                playerGameStats.sort(){ $0.pct > $1.pct }
+            }
+            sortingKey = clicked
+        }
+        collectionView.reloadData()
     }
     
     // MARK: UICollectionViewDataSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        return playerGameStats.count + 1
     }
 
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if let playerGameStats = playerGameStats {
-            return (playerGameStats.count + 1) * cellHeaders.count
-        }
-        return 1
+        return cellHeaders.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! PlayerGameStatsCollectionViewCell
-        cell.backgroundColor = .systemBlue
-        cell.label.text = "\(indexPath.item)"
-        // Configure the cell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: statIdentifier, for: indexPath) as! PlayerGameStatsCollectionViewCell
+        cell.label.leadingAnchor.constraint(equalTo: cell.leadingAnchor, constant: 5).isActive = false
+        if indexPath.section == HEADER_SECTION {
+            cell.backgroundColor = .systemGray4
+            
+            if let sort = SortFilters(rawValue: cellHeaders[indexPath.item].lowercased()), sort == sortingKey {
+                cell.label.attributedText =  NSAttributedString(string: cellHeaders[indexPath.item], attributes: [.underlineStyle: NSUnderlineStyle.single.rawValue, .font: UIFont.boldSystemFont(ofSize: cell.label.font.pointSize)])
+            }
+            else {
+                cell.label.attributedText =  NSAttributedString(string: cellHeaders[indexPath.item], attributes: [.font: UIFont.systemFont(ofSize: cell.label.font.pointSize)])
+            }
+                
+        }
+        else {
+            cell.backgroundColor = .systemBackground
+            
+            let player = playerGameStats[indexPath.section-1]
+            var text = ""
+            switch indexPath.item {
+            case NAME_ITEM:
+                let nameCell = collectionView.dequeueReusableCell(withReuseIdentifier: nameIdentifier, for: indexPath) as! PlayerGameNameCollectionViewCell
+                nameCell.backgroundColor = .systemBackground
+                let fname = player.playerFirstName
+                let stringFname = "\(fname[fname.startIndex])"
+                nameCell.nameLabel.attributedText = NSAttributedString(string: stringFname + ". " + player.playerLastName, attributes: [.font: UIFont.systemFont(ofSize: nameCell.nameLabel.font.pointSize)])
+                return nameCell
+            case 1:
+                text = "\(player.pts)"
+            case 2:
+                text = "\(player.reb)"
+            case 3:
+                text = "\(player.ast)"
+            case 4:
+                text = "\(player.stl)"
+            case 5:
+                text = "\(player.blk)"
+            case 6:
+                text = "\(player.turnover)"
+            case 7:
+                text = "\(player.pct)"
+            default:
+                text = ""
+            }
+            cell.label.attributedText = NSAttributedString(string: text, attributes: [.font: UIFont.systemFont(ofSize: cell.label.font.pointSize)])
+        }
     
         return cell
     }
 
     // MARK: UICollectionViewDelegate
-
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return true
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.section == HEADER_SECTION {
+            let selectedSort = SortFilters(rawValue: cellHeaders[indexPath.item].lowercased())
+            if let selectedSort = selectedSort {
+                sortPlayerGameStats(clicked: selectedSort)
+            }
+        }
+        else {
+            let player = playerGameStats[indexPath.section-1]
+            print(player.playerFirstName + " " + player.playerLastName)
+        }
     }
-    */
 
-    /*
-    // Uncomment this method to specify if the specified item should be selected
     override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return true
+        return indexPath.section != HEADER_SECTION || indexPath.item != NAME_ITEM
     }
-    */
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
-    
-    }
-    */
-    
     
     // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
     }
 }
