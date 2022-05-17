@@ -32,10 +32,15 @@ class PlayersGameStatsCollectionViewController: UICollectionViewController {
     private let cellHeaders = ["NAME", "PTS", "REB", "AST", "STL", "BLK", "TOV", "PCT"]
     private let statIdentifier = "statCell"
     private let nameIdentifier = "nameCell"
+    
     public var playerGameStats: [PlayerGameStatsData] = [PlayerGameStatsData]()
+    private var sortedGameStats: [PlayerGameStatsData] = [PlayerGameStatsData]()
+    private var selectedPlayer: PlayerGameStatsData?
+    
     private var sortingKey : SortFilters = SortFilters.none
     private let HEADER_SECTION = 0
     private let NAME_ITEM = 0
+    private let detailedSegue = "playerGameDetail"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,43 +51,55 @@ class PlayersGameStatsCollectionViewController: UICollectionViewController {
     }
     
     private func configureLayout() -> UICollectionViewLayout {
+        let contentInsets = NSDirectionalEdgeInsets(top: 1, leading: 1, bottom: 1, trailing: 1)
+        
+        // name item
         let nameItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(3/9), heightDimension: .fractionalHeight(1))
         let nameItem = NSCollectionLayoutItem(layoutSize: nameItemSize)
-        nameItem.contentInsets = NSDirectionalEdgeInsets(top: 1, leading: 1, bottom: 1, trailing: 1)
+        nameItem.contentInsets = contentInsets
         
+        // stats item (7 of them)
         let statsSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/7), heightDimension: .fractionalHeight(1))
         let statsLayout = NSCollectionLayoutItem(layoutSize: statsSize)
-        statsLayout.contentInsets = NSDirectionalEdgeInsets(top: 1, leading: 1, bottom: 1, trailing: 1)
+        statsLayout.contentInsets = contentInsets
         let statsGroupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(6/9), heightDimension: .fractionalHeight(1))
         let statGroup = NSCollectionLayoutGroup.horizontal(layoutSize: statsGroupSize, subitem: statsLayout, count: 7)
 
-        let sectionSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(4/3), heightDimension: .fractionalWidth(1/8))
+        // horizontal group containing the name item and the 7 stats items
+        let sectionSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
         let sectionLayoutGroup = NSCollectionLayoutGroup.horizontal(layoutSize: sectionSize, subitems: [nameItem, statGroup])
-        let sectionLayout = NSCollectionLayoutSection(group: sectionLayoutGroup)
-        sectionLayout.orthogonalScrollingBehavior = .continuous
-        return UICollectionViewCompositionalLayout(section: sectionLayout)
+        statsLayout.contentInsets = contentInsets
+        
+        // vertical group containing a horizontal group for each player (+1 for the cell headers)
+        let entireSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(4/3), heightDimension: .fractionalHeight(3/2))
+        let entireGroup = NSCollectionLayoutGroup.vertical(layoutSize: entireSize, subitem: sectionLayoutGroup, count: playerGameStats.count+1)
+        entireGroup.contentInsets = contentInsets
+        
+        let entire = NSCollectionLayoutSection(group: entireGroup)
+        entire.orthogonalScrollingBehavior = .continuous
+        return UICollectionViewCompositionalLayout(section: entire)
     }
     
     private func sortPlayerGameStats(clicked: SortFilters) {
         if sortingKey == clicked {
-            playerGameStats.reverse()
+            sortedGameStats.reverse()
         }
         else {
             switch clicked {
             case .points, .none:
-                playerGameStats.sort(){ $0.pts > $1.pts }
+                sortedGameStats = playerGameStats.sorted(){ $0.pts > $1.pts }
             case .rebounds:
-                playerGameStats.sort(){ $0.reb > $1.reb }
+                sortedGameStats = playerGameStats.sorted(){ $0.reb > $1.reb }
             case .assists:
-                playerGameStats.sort(){ $0.ast > $1.ast }
+                sortedGameStats = playerGameStats.sorted(){ $0.ast > $1.ast }
             case .steals:
-                playerGameStats.sort(){ $0.stl > $1.stl }
+                sortedGameStats = playerGameStats.sorted(){ $0.stl > $1.stl }
             case .blocks:
-                playerGameStats.sort(){ $0.blk > $1.blk }
+                sortedGameStats = playerGameStats.sorted(){ $0.blk > $1.blk }
             case .turnovers:
-                playerGameStats.sort(){ $0.turnover > $1.turnover }
+                sortedGameStats = playerGameStats.sorted(){ $0.turnover > $1.turnover }
             case .percentage:
-                playerGameStats.sort(){ $0.pct > $1.pct }
+                sortedGameStats = playerGameStats.sorted(){ $0.pct > $1.pct }
             }
             sortingKey = clicked
         }
@@ -92,18 +109,18 @@ class PlayersGameStatsCollectionViewController: UICollectionViewController {
     // MARK: UICollectionViewDataSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return playerGameStats.count + 1
+        return 1
     }
 
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return cellHeaders.count
+        return cellHeaders.count * (playerGameStats.count + 1)
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: statIdentifier, for: indexPath) as! PlayerGameStatsCollectionViewCell
         cell.label.leadingAnchor.constraint(equalTo: cell.leadingAnchor, constant: 5).isActive = false
-        if indexPath.section == HEADER_SECTION {
+        if indexPath.item / cellHeaders.count == HEADER_SECTION {
             cell.backgroundColor = .systemGray4
             
             if let sort = SortFilters(rawValue: cellHeaders[indexPath.item].lowercased()), sort == sortingKey {
@@ -117,9 +134,9 @@ class PlayersGameStatsCollectionViewController: UICollectionViewController {
         else {
             cell.backgroundColor = .systemBackground
             
-            let player = playerGameStats[indexPath.section-1]
+            let player = sortedGameStats[(indexPath.item / cellHeaders.count) - 1]
             var text = ""
-            switch indexPath.item {
+            switch indexPath.item % cellHeaders.count {
             case NAME_ITEM:
                 let nameCell = collectionView.dequeueReusableCell(withReuseIdentifier: nameIdentifier, for: indexPath) as! PlayerGameNameCollectionViewCell
                 nameCell.backgroundColor = .systemBackground
@@ -153,23 +170,29 @@ class PlayersGameStatsCollectionViewController: UICollectionViewController {
     // MARK: UICollectionViewDelegate
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.section == HEADER_SECTION {
-            let selectedSort = SortFilters(rawValue: cellHeaders[indexPath.item].lowercased())
+        if indexPath.item / cellHeaders.count == HEADER_SECTION {
+            let selectedSort = SortFilters(rawValue: cellHeaders[indexPath.item % cellHeaders.count].lowercased())
             if let selectedSort = selectedSort {
                 sortPlayerGameStats(clicked: selectedSort)
             }
         }
         else {
-            let player = playerGameStats[indexPath.section-1]
+            let player = sortedGameStats[(indexPath.item / cellHeaders.count) - 1]
             print(player.playerFirstName + " " + player.playerLastName)
+            selectedPlayer = player
+            performSegue(withIdentifier: detailedSegue, sender: self)
         }
     }
 
     override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return indexPath.section != HEADER_SECTION || indexPath.item != NAME_ITEM
+        return indexPath.item != NAME_ITEM
     }
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == detailedSegue {
+            let destination = segue.destination as! DetailedPlayerGameCollectionViewController
+            destination.player = selectedPlayer
+        }
     }
 }

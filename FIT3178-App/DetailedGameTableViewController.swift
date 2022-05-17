@@ -30,6 +30,7 @@ class StatsTableViewCell: UITableViewCell { // cell that houses the stats
 
 class DetailedGameTableViewController: UITableViewController {
     
+    /// Variable for accessing the contants in `AppDelegate`
     private let appDelegate = UIApplication.shared.delegate as! AppDelegate
     public let fileManagerExtension = "-teamStats"
     
@@ -66,6 +67,7 @@ class DetailedGameTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = gameTitle
+        futureGameCheck()
         getTeamsStats(reload: toBeReloaded)
     }
     
@@ -178,21 +180,33 @@ class DetailedGameTableViewController: UITableViewController {
         }
     }
     
+    private func isGameInFuture() -> Bool {
+        if let game = game, let status = game.status {
+            return !status.hasSuffix("ET")
+        }
+        return false
+    }
+    
+    @IBOutlet weak var playersButton: UIButton!
+    @IBOutlet var playersGestureAction: UISwipeGestureRecognizer!
+    private func futureGameCheck() {
+        if isGameInFuture() {
+            playersButton.isEnabled = true
+            playersGestureAction.isEnabled = true
+        }
+        else {
+            playersButton.isEnabled = false
+            playersGestureAction.isEnabled = false
+        }
+    }
+    
     // MARK: Gesture Actions
     @IBAction private func playerGameStatsSelection(_ sender: Any) { performSegue(withIdentifier: playerGameStatsSegue, sender: self) }
     
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        if let game = game, let status = game.status {
-            if status.hasSuffix("ET") {
-                return 1
-            }
-            else {
-                return StatSections.mainVals.count
-            }
-        }
-        return 1
+        return isGameInFuture() ? StatSections.mainVals.count : 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

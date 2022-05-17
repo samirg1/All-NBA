@@ -33,13 +33,13 @@
         <!--Standings-->
         <scene sceneID="Tle-dm-PEO">
             <objects>
-                <tableViewController id="he3-lm-Kvz" customClass="StandingsTableViewController" customModule="FIT3178_App" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="he3-lm-Kvz" customClass="StandingsTableViewController" customModule="All_NBA" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="WU9-Le-sZn">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="teamCell" rowHeight="60" id="CyG-oU-6W8" customClass="StandingsTeamCell" customModule="FIT3178_App" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="teamCell" rowHeight="60" id="CyG-oU-6W8" customClass="StandingsTeamCell" customModule="All_NBA" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="44.5" width="414" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="CyG-oU-6W8" id="5ZJ-Dg-76U">
@@ -185,7 +185,7 @@
         <!--TeamView-->
         <scene sceneID="7PN-mm-MXo">
             <objects>
-                <viewController title="TeamView" id="rAw-dx-X6x" customClass="DetailedTeamViewController" customModule="FIT3178_App" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="TeamView" id="rAw-dx-X6x" customClass="DetailedTeamViewController" customModule="All_NBA" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="J1S-FM-T3e">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -266,13 +266,13 @@
         <!--Game-->
         <scene sceneID="ET6-ep-ofb">
             <objects>
-                <tableViewController id="ZY6-Zh-zha" customClass="DetailedGameTableViewController" customModule="FIT3178_App" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="ZY6-Zh-zha" customClass="DetailedGameTableViewController" customModule="All_NBA" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="mqp-G0-gjE">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="scoresCell" rowHeight="185" id="SzM-bR-DtG" customClass="ScoreTableViewCell" customModule="FIT3178_App" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="scoresCell" rowHeight="185" id="SzM-bR-DtG" customClass="ScoreTableViewCell" customModule="All_NBA" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="49.5" width="414" height="185"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="SzM-bR-DtG" id="vuy-Zm-TZu">
@@ -344,7 +344,7 @@
                                     <outlet property="timeLabel" destination="qhf-va-wm3" id="b93-fj-Pp1"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="statsCell" rowHeight="78" id="vg7-oc-dfB" customClass="StatsTableViewCell" customModule="FIT3178_App" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="statsCell" rowHeight="78" id="vg7-oc-dfB" customClass="StatsTableViewCell" customModule="All_NBA" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="234.5" width="414" height="78"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="vg7-oc-dfB" id="JeA-T8-YIV">
@@ -415,6 +415,8 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="playersButton" destination="1ly-9T-0Nl" id="vo9-E8-ed7"/>
+                        <outlet property="playersGestureAction" destination="jj1-Db-Szn" id="tCx-06-9Pm"/>
                         <segue destination="UjT-14-buT" kind="show" identifier="playersGameStatsSegue" id="Bn5-mz-et0"/>
                     </connections>
                 </tableViewController>
@@ -430,7 +432,7 @@
         <!--Players-->
         <scene sceneID="STH-O2-YqB">
             <objects>
-                <collectionViewController id="UjT-14-buT" customClass="PlayersGameStatsCollectionViewController" customModule="FIT3178_App" customModuleProvider="target" sceneMemberID="viewController">
+                <collectionViewController id="UjT-14-buT" customClass="PlayersGameStatsCollectionViewController" customModule="All_NBA" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="nVE-Nj-pkD">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -442,7 +444,7 @@
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="nameCell" id="ecr-Ft-Wa6" customClass="PlayerGameNameCollectionViewCell" customModule="FIT3178_App" customModuleProvider="target">
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="nameCell" id="ecr-Ft-Wa6" customClass="PlayerGameNameCollectionViewCell" customModule="All_NBA" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="72" height="128"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="Mqi-Vf-eTA">
@@ -466,7 +468,7 @@
                                     <outlet property="nameLabel" destination="nf6-pc-PNW" id="hNF-Df-zHo"/>
                                 </connections>
                             </collectionViewCell>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="statCell" id="5tP-8n-8tV" customClass="PlayerGameStatsCollectionViewCell" customModule="FIT3178_App" customModuleProvider="target">
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="statCell" id="5tP-8n-8tV" customClass="PlayerGameStatsCollectionViewCell" customModule="All_NBA" customModuleProvider="target">
                                 <rect key="frame" x="72" y="0.0" width="128" height="128"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="5ai-Ex-MHx">
@@ -496,33 +498,124 @@
                         </connections>
                     </collectionView>
                     <navigationItem key="navigationItem" title="Players" id="b3n-V6-Qf9"/>
+                    <connections>
+                        <segue destination="js5-QG-Whl" kind="showDetail" identifier="playerGameDetail" id="NOr-Jg-5uw"/>
+                    </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ILi-n3-Y75" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4343" y="94"/>
         </scene>
-        <!--Collection View Controller-->
+        <!--Player Game-->
         <scene sceneID="17Q-QB-P6Q">
             <objects>
-                <collectionViewController id="js5-QG-Whl" sceneMemberID="viewController">
+                <collectionViewController title="Player Game" id="js5-QG-Whl" customClass="DetailedPlayerGameCollectionViewController" customModule="All_NBA" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="lFf-O1-UCM">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="8zR-CP-h5U">
-                            <size key="itemSize" width="128" height="128"/>
+                            <size key="itemSize" width="198" height="205"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="RqQ-TC-E9S">
-                                <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="headerCell" id="RqQ-TC-E9S" customClass="PlayerHeaderCollectionViewCell" customModule="All_NBA" customModuleProvider="target">
+                                <rect key="frame" x="4.5" y="0.0" width="405" height="112"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="P7b-VJ-PTw">
-                                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="405" height="112"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Josh Giddey" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LSU-p4-8ub">
+                                            <rect key="frame" x="155" y="45.5" width="95" height="21"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="95" id="gYW-uw-w03"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="OKC" translatesAutoresizingMaskIntoConstraints="NO" id="6Uk-d9-M63">
+                                            <rect key="frame" x="10" y="10" width="100" height="92"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="101" id="HtT-G8-dMR"/>
+                                                <constraint firstAttribute="width" constant="100" id="lz1-tE-AiC"/>
+                                            </constraints>
+                                        </imageView>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="OKC" translatesAutoresizingMaskIntoConstraints="NO" id="QoH-WR-d99">
+                                            <rect key="frame" x="295" y="10" width="100" height="92"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="101" id="5dt-rW-eIY"/>
+                                                <constraint firstAttribute="width" constant="100" id="dRd-MB-22x"/>
+                                            </constraints>
+                                        </imageView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="LSU-p4-8ub" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Uk-d9-M63" secondAttribute="trailing" id="2GI-Te-6B8"/>
+                                        <constraint firstItem="6Uk-d9-M63" firstAttribute="top" secondItem="P7b-VJ-PTw" secondAttribute="top" constant="10" id="FWb-Pj-q6a"/>
+                                        <constraint firstAttribute="bottom" secondItem="6Uk-d9-M63" secondAttribute="bottom" constant="10" id="Frb-ec-dbb"/>
+                                        <constraint firstItem="6Uk-d9-M63" firstAttribute="leading" secondItem="P7b-VJ-PTw" secondAttribute="leading" constant="10" id="RW5-5v-m1h"/>
+                                        <constraint firstItem="QoH-WR-d99" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="LSU-p4-8ub" secondAttribute="trailing" id="aFH-V0-PnQ"/>
+                                        <constraint firstAttribute="trailing" secondItem="QoH-WR-d99" secondAttribute="trailing" constant="10" id="cjD-fz-bKY"/>
+                                        <constraint firstItem="LSU-p4-8ub" firstAttribute="centerX" secondItem="P7b-VJ-PTw" secondAttribute="centerX" id="d9z-aQ-O6r"/>
+                                        <constraint firstItem="LSU-p4-8ub" firstAttribute="centerY" secondItem="P7b-VJ-PTw" secondAttribute="centerY" id="dcX-5R-73i"/>
+                                        <constraint firstAttribute="bottom" secondItem="QoH-WR-d99" secondAttribute="bottom" constant="10" id="g5w-ae-3pT"/>
+                                        <constraint firstItem="QoH-WR-d99" firstAttribute="top" secondItem="P7b-VJ-PTw" secondAttribute="top" constant="10" id="rRE-Z7-agM"/>
+                                    </constraints>
                                 </collectionViewCellContentView>
+                                <size key="customSize" width="405" height="112"/>
+                                <connections>
+                                    <outlet property="firstImage" destination="6Uk-d9-M63" id="6qS-ju-1dS"/>
+                                    <outlet property="nameLabel" destination="LSU-p4-8ub" id="fV2-yN-NKt"/>
+                                    <outlet property="secondImage" destination="QoH-WR-d99" id="n6D-I1-YLy"/>
+                                </connections>
+                            </collectionViewCell>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="statCell" id="b5n-Cb-wDn" customClass="PlayerStatCollectionViewCell" customModule="All_NBA" customModuleProvider="target">
+                                <rect key="frame" x="124" y="122" width="166" height="120"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="vem-rr-8P3">
+                                    <rect key="frame" x="0.0" y="0.0" width="166" height="120"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" text="13" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FcA-H1-qIr">
+                                            <rect key="frame" x="5" y="20" width="156" height="42"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="35"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Rebounds" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dZ5-Fk-oeh">
+                                            <rect key="frame" x="5" y="67" width="156" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(3off 10def)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qKS-Wp-aHs">
+                                            <rect key="frame" x="5" y="93" width="156" height="16"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="dZ5-Fk-oeh" secondAttribute="trailing" constant="5" id="8cr-no-OpY"/>
+                                        <constraint firstItem="FcA-H1-qIr" firstAttribute="top" secondItem="vem-rr-8P3" secondAttribute="top" constant="20" id="9wZ-mP-3mz"/>
+                                        <constraint firstItem="qKS-Wp-aHs" firstAttribute="top" secondItem="dZ5-Fk-oeh" secondAttribute="bottom" constant="5" id="Oya-Hd-4Fg"/>
+                                        <constraint firstItem="dZ5-Fk-oeh" firstAttribute="leading" secondItem="vem-rr-8P3" secondAttribute="leading" constant="5" id="UtR-7Q-uAA"/>
+                                        <constraint firstAttribute="trailing" secondItem="FcA-H1-qIr" secondAttribute="trailing" constant="5" id="aW2-4a-F5x"/>
+                                        <constraint firstItem="dZ5-Fk-oeh" firstAttribute="top" secondItem="FcA-H1-qIr" secondAttribute="bottom" constant="5" id="bAv-qr-x28"/>
+                                        <constraint firstItem="FcA-H1-qIr" firstAttribute="leading" secondItem="vem-rr-8P3" secondAttribute="leading" constant="5" id="f4c-mL-hhy"/>
+                                        <constraint firstItem="qKS-Wp-aHs" firstAttribute="leading" secondItem="vem-rr-8P3" secondAttribute="leading" constant="5" id="lSJ-hR-cQb"/>
+                                        <constraint firstAttribute="trailing" secondItem="qKS-Wp-aHs" secondAttribute="trailing" constant="5" id="pSQ-29-NKx"/>
+                                    </constraints>
+                                </collectionViewCellContentView>
+                                <size key="customSize" width="166" height="120"/>
+                                <connections>
+                                    <outlet property="numberLabel" destination="FcA-H1-qIr" id="euz-cm-gPZ"/>
+                                    <outlet property="statDetailLabel" destination="qKS-Wp-aHs" id="ZGf-hq-WAa"/>
+                                    <outlet property="statTitleLabel" destination="dZ5-Fk-oeh" id="Xhk-2J-cef"/>
+                                </connections>
                             </collectionViewCell>
                         </cells>
                         <connections>
@@ -530,15 +623,16 @@
                             <outlet property="delegate" destination="js5-QG-Whl" id="7ks-i7-nJD"/>
                         </connections>
                     </collectionView>
+                    <navigationItem key="navigationItem" id="Dbd-pR-0pX"/>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bg1-Ne-ofP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5246" y="94"/>
+            <point key="canvasLocation" x="5244.9275362318849" y="93.75"/>
         </scene>
         <!--Games-->
         <scene sceneID="qh1-i9-b3V">
             <objects>
-                <tableViewController title="Games" id="7Tj-aM-Q5A" customClass="GamesTableViewController" customModule="FIT3178_App" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Games" id="7Tj-aM-Q5A" customClass="GamesTableViewController" customModule="All_NBA" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" id="v0p-5Q-QrW">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -562,7 +656,7 @@
                             </items>
                         </toolbar>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="gamesCell" id="Far-X9-hL5" customClass="GamesTableViewCell" customModule="FIT3178_App" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="gamesCell" id="Far-X9-hL5" customClass="GamesTableViewCell" customModule="All_NBA" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="93.5" width="414" height="50.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Far-X9-hL5" id="fvw-XX-EER">
@@ -736,18 +830,20 @@
         <!--Season Stats-->
         <scene sceneID="msS-Xq-IsT">
             <objects>
-                <tableViewController id="MRT-kf-tAm" customClass="SeasonStatsTableViewController" customModule="FIT3178_App" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="MRT-kf-tAm" customClass="SeasonStatsTableViewController" customModule="All_NBA" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="Jnt-Kn-u78">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <scrollView key="tableHeaderView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" id="CCJ-Hr-L9F">
+                        <scrollView key="tableHeaderView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="CCJ-Hr-L9F">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="43"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="knt-tH-8oV" customClass="ScrollableSegmentedControl" customModule="FIT3178_App" customModuleProvider="target">
+                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="knt-tH-8oV" customClass="ScrollableSegmentedControl" customModule="All_NBA" customModuleProvider="target">
                                     <rect key="frame" x="8" y="5" width="2396" height="32"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="2396" id="wRi-0G-lib"/>
+                                    </constraints>
                                     <segments>
                                         <segment title="Points"/>
                                         <segment title="Rebounds"/>
@@ -765,6 +861,12 @@
                                 </segmentedControl>
                             </subviews>
                             <viewLayoutGuide key="safeArea" id="G13-o1-hiZ"/>
+                            <constraints>
+                                <constraint firstItem="knt-tH-8oV" firstAttribute="leading" secondItem="CCJ-Hr-L9F" secondAttribute="leadingMargin" id="15C-NZ-jK3"/>
+                                <constraint firstAttribute="bottom" secondItem="knt-tH-8oV" secondAttribute="bottom" constant="7" id="iFl-M8-lxc"/>
+                                <constraint firstAttribute="trailing" secondItem="knt-tH-8oV" secondAttribute="trailing" constant="-1990" id="u3D-df-4qZ"/>
+                                <constraint firstItem="knt-tH-8oV" firstAttribute="top" secondItem="G13-o1-hiZ" secondAttribute="top" constant="5" id="yUn-4t-2UJ"/>
+                            </constraints>
                             <viewLayoutGuide key="contentLayoutGuide" id="u8o-73-1qS"/>
                             <viewLayoutGuide key="frameLayoutGuide" id="s8B-SX-lwU"/>
                         </scrollView>
@@ -845,6 +947,7 @@
     </scenes>
     <resources>
         <image name="ATL" width="300" height="300"/>
+        <image name="OKC" width="300" height="300"/>
         <image name="calendar" catalog="system" width="128" height="106"/>
         <image name="list.number" catalog="system" width="128" height="97"/>
         <image name="plus.forwardslash.minus" catalog="system" width="128" height="115"/>
