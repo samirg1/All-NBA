@@ -59,10 +59,7 @@ class GamesTableViewController: UITableViewController {
         indicator.style = UIActivityIndicatorView.Style.large
         indicator.translatesAutoresizingMaskIntoConstraints = false
         self.refreshToolbar.addSubview(indicator)
-        NSLayoutConstraint.activate([
-            indicator.centerXAnchor.constraint(equalTo: refreshToolbar.centerXAnchor),
-            indicator.centerYAnchor.constraint(equalTo: refreshToolbar.centerYAnchor)
-        ])
+        NSLayoutConstraint.activate([ indicator.centerXAnchor.constraint(equalTo: refreshToolbar.centerXAnchor), indicator.centerYAnchor.constraint(equalTo: refreshToolbar.centerYAnchor) ])
         return indicator
     }()
     
@@ -73,7 +70,7 @@ class GamesTableViewController: UITableViewController {
         addNotifications()
     }
     
-    func addNotifications() {
+    private func addNotifications() {
         for game in selectedDateGames {
             guard let status = game.status else { continue }
             if !status.hasSuffix("ET") { continue }
@@ -96,7 +93,7 @@ class GamesTableViewController: UITableViewController {
         }
     }
     
-    func createGameNotification(date: DateComponents, title: String) {
+    private func createGameNotification(date: DateComponents, title: String) {
         guard appDelegate.notificationsEnabled == true else { return }
         
         let content = UNMutableNotificationContent()

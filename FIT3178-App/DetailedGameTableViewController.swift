@@ -243,7 +243,7 @@ class DetailedGameTableViewController: UITableViewController {
                 cell.homeTeamData.text = "\(homeTeamGameData.pts)"
             case .reb:
                 cell.awayTeamData.text = "\(awayTeamGameData.dreb) / \(awayTeamGameData.oreb) - \(awayTeamGameData.reb)"
-                cell.homeTeamData.text = "\(awayTeamGameData.reb) - \(awayTeamGameData.dreb) / \(awayTeamGameData.oreb)"
+                cell.homeTeamData.text = "\(homeTeamGameData.reb) - \(homeTeamGameData.dreb) / \(homeTeamGameData.oreb)"
             case .assists:
                 cell.awayTeamData.text = "\(awayTeamGameData.ast)"
                 cell.homeTeamData.text = "\(homeTeamGameData.ast)"
