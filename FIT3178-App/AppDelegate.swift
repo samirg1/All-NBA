@@ -18,7 +18,7 @@ public enum HTTP_ERROR_CODES: Int {
 }
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
     public let API_URL_SCHEME = "https"
     public let API_URL_HOST = "www.balldontlie.io"
@@ -53,9 +53,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let cacheDirectoryPaths = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
         return cacheDirectoryPaths[0]
     }()
+    
+    public var notificationsEnabled = false
+    
+    public var currentTimeZone = TimeZone.current.identifier
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        let notificationCenter = UNUserNotificationCenter.current()
+        
+        notificationCenter.getNotificationSettings { notificationSettings in
+            if notificationSettings.authorizationStatus == .notDetermined {
+                
+                notificationCenter.requestAuthorization(options: [.alert]) { granted, error in
+                    self.notificationsEnabled = granted
+                    if granted {
+                        let notificationCenter = UNUserNotificationCenter.current()
+                        notificationCenter.delegate = self
+                    }
+                }
+            }
+            else if notificationSettings.authorizationStatus == .authorized {
+                self.notificationsEnabled = true
+                let notificationCenter = UNUserNotificationCenter.current()
+                notificationCenter.delegate = self
+            }
+        }
+        
+        
         return true
     }
 
@@ -73,6 +99,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
 
-
+    // Function required when registering as a delegate. We can process notifications if they are in the foreground!
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        // Print some information to console saying we have recieved the notification
+        // We could do some automatic processing here if we didnt want the user's response
+        print("Notification triggered while app running")
+        
+        // By default iOS will silence a notification if the application is in the foreground. We can over-ride this with the following
+        completionHandler([.banner])
+    }
 }
 

@@ -30,7 +30,7 @@ class StatsTableViewCell: UITableViewCell { // cell that houses the stats
 
 class DetailedGameTableViewController: UITableViewController {
     
-    /// Variable for accessing the contants in `AppDelegate`
+    /// Variable for accessing the contants in ``AppDelegate``
     private let appDelegate = UIApplication.shared.delegate as! AppDelegate
     public let fileManagerExtension = "-teamStats"
     
@@ -223,7 +223,13 @@ class DetailedGameTableViewController: UITableViewController {
             cell.homeImage.image = UIImage(named: homeAbbr)
             cell.scoreLabel.text = "\(game.awayScore) - \(game.homeScore)"
             cell.timeLabel.text = time
-            cell.statusLabel.text = status
+            
+            if status.hasSuffix("T"){
+                cell.statusLabel.text = APItoCurrentTimeZoneDisplay(string: status)
+            }
+            else {
+                cell.statusLabel.text = status
+            }
             
             return cell
         }

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		37133C462831DCFA0065694C /* SeasonStatsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37133C452831DCFA0065694C /* SeasonStatsTableViewController.swift */; };
+		371A53F92834C26C00763CC0 /* TimezonesAndFormats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371A53F82834C26C00763CC0 /* TimezonesAndFormats.swift */; };
 		371F1008280E8A69000B1443 /* GamesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371F1007280E8A68000B1443 /* GamesTableViewController.swift */; };
 		371F100A280EB09A000B1443 /* GameData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371F1009280EB09A000B1443 /* GameData.swift */; };
 		371F100C280EB13C000B1443 /* TeamData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371F100B280EB13C000B1443 /* TeamData.swift */; };
@@ -33,6 +34,7 @@
 
 /* Begin PBXFileReference section */
 		37133C452831DCFA0065694C /* SeasonStatsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeasonStatsTableViewController.swift; sourceTree = "<group>"; };
+		371A53F82834C26C00763CC0 /* TimezonesAndFormats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimezonesAndFormats.swift; sourceTree = "<group>"; };
 		371F1007280E8A68000B1443 /* GamesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GamesTableViewController.swift; sourceTree = "<group>"; };
 		371F1009280EB09A000B1443 /* GameData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameData.swift; sourceTree = "<group>"; };
 		371F100B280EB13C000B1443 /* TeamData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamData.swift; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 				3750ABC1282158C0008B2135 /* StandingsTableViewController.swift */,
 				3750ABC72824F6E5008B2135 /* DetailedTeamViewController.swift */,
 				37133C452831DCFA0065694C /* SeasonStatsTableViewController.swift */,
+				371A53F82834C26C00763CC0 /* TimezonesAndFormats.swift */,
 			);
 			path = "FIT3178-App";
 			sourceTree = "<group>";
@@ -203,6 +206,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				371F100A280EB09A000B1443 /* GameData.swift in Sources */,
+				371A53F92834C26C00763CC0 /* TimezonesAndFormats.swift in Sources */,
 				371F1008280E8A69000B1443 /* GamesTableViewController.swift in Sources */,
 				37133C462831DCFA0065694C /* SeasonStatsTableViewController.swift in Sources */,
 				371F100E280EC770000B1443 /* GameCollection.swift in Sources */,

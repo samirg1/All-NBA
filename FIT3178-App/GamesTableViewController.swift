@@ -9,7 +9,12 @@
 
 import UIKit
 
-private enum GestureDateChanges: Int { // deals with how much to change the date (in days) once a gesture is recognised
+/// Dealing with how to change the date once a gesture is recognised
+///
+/// The raw value of this enumeration represents the amount of days to add to the current date when the gesture is recognised.
+/// - Case `left` = 1
+/// - Case `right` = -1
+private enum GestureDateChanges: Int {
     case left = 1
     case right = -1
 }
@@ -43,9 +48,6 @@ class GamesTableViewController: UITableViewController {
     private let GAMES_SECTION = 0
     private let INFO_SECTION = 1
     
-    private let USTimeZoneAbbreviation = "MDT"
-    private let defaultDateFormat = "yyyy-MM-dd"
-    
     @IBOutlet weak private var menuButton: UIButton!
     @IBOutlet weak private var todayButtonOutlet: UIBarButtonItem!
     @IBOutlet weak private var dateLabel: UILabel!
@@ -68,17 +70,62 @@ class GamesTableViewController: UITableViewController {
         super.viewDidLoad()
         todayButtonOutlet.isEnabled = false // as initial screen is "Today", disable the button
         resetToday(self) // retrieve the required data from today
+        addNotifications()
+    }
+    
+    func addNotifications() {
+        for game in selectedDateGames {
+            guard let status = game.status else { continue }
+            if !status.hasSuffix("ET") { continue }
+            let timeString = convertTo24HourTime(string: status)
+            let time = convertTimeZones(string: timeString, from: TimeZoneIdentifiers.usa_nyk.rawValue, to: appDelegate.currentTimeZone, format: .time24hr)
+            let formatter = DateFormatter()
+            formatter.dateFormat = DateFormats.API.rawValue
+            let date = formatter.date(from: selectedDate)!
+            
+            var dateComponents = DateComponents()
+            dateComponents.year = formatter.calendar.component(.year, from: date)
+            dateComponents.month = formatter.calendar.component(.month, from: date)
+            dateComponents.day = formatter.calendar.component(.day, from: date)
+            dateComponents.hour = formatter.calendar.component(.hour, from: time)
+            dateComponents.minute = formatter.calendar.component(.minute, from: time)
+            
+            let title = "\(game.homeTeam.abbreviation!) vs \(game.awayTeam.abbreviation!)"
+            
+            createGameNotification(date: dateComponents, title: title)
+        }
+    }
+    
+    func createGameNotification(date: DateComponents, title: String) {
+        guard appDelegate.notificationsEnabled == true else { return }
+        
+        let content = UNMutableNotificationContent()
+        content.title = "Game Alert"
+        content.body = title + " starting soon"
+        
+        let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: false)
+        
+        let identifier = "\(title) - \(selectedDate)"
+        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+        
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
+        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
     }
     
     // MARK: - Retrieving and Decoding Data
     
     private func requestGamesOnDate() async { // API call to get all games on specific date stored in 'selectedDate'
+        let API_date = convertTimeZones(string: selectedDate, from: TimeZoneIdentifiers.aus_melb.rawValue, to: TimeZoneIdentifiers.usa_nyk.rawValue, format: DateFormats.API)
+        let formatter = DateFormatter()
+        formatter.dateFormat = DateFormats.API.rawValue
+        let API_date_string = formatter.string(from: API_date)
+        
         var gamesURL = URLComponents()
         gamesURL.scheme = appDelegate.API_URL_SCHEME
         gamesURL.host = appDelegate.API_URL_HOST
         gamesURL.path = appDelegate.API_URL_PATH + appDelegate.API_URL_PATH_GAMES
         gamesURL.queryItems = [
-            URLQueryItem(name: appDelegate.API_QUERY_DATES, value: selectedDate)
+            URLQueryItem(name: appDelegate.API_QUERY_DATES, value: API_date_string)
         ]
         
         guard let requestURL = gamesURL.url else {
@@ -150,10 +197,11 @@ class GamesTableViewController: UITableViewController {
             let decoder = JSONDecoder()
             let collection = try decoder.decode(GameCollection.self, from: data)
             if let games = collection.games {
-                self.selectedDateGames.append(contentsOf: games)
-                self.tableView.reloadData()
-                self.changeBadgeNumber()
+                selectedDateGames.append(contentsOf: games)
+                tableView.reloadData()
+                changeBadgeNumber()
                 indicator.stopAnimating() // stop the indicator if it is active
+                addNotifications()
             }
         }
         catch let error {
@@ -198,27 +246,16 @@ class GamesTableViewController: UITableViewController {
         }
         
         // get the current date, edit it and update the view accordingly
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = defaultDateFormat
-        dateFormatter.timeZone = TimeZone.init(abbreviation: USTimeZoneAbbreviation)
-        let oldDate = dateFormatter.date(from: selectedDate)!
-        let newDate = Calendar.current.date(byAdding: .day, value: change, to: oldDate)
-        selectedDate = dateFormatter.string(from: newDate!)
+        let oldDate = DateFormatter().stringToDate(string: selectedDate, format: DateFormats.API, timezone: appDelegate.currentTimeZone)
+        let newDate = Calendar.current.date(byAdding: .day, value: change, to: oldDate)!
+        selectedDate = DateFormatter().dateToString(date: newDate, format: DateFormats.API, timezone: appDelegate.currentTimeZone)
         getGames(reload: false)
     }
     
     private func getNewDateText(date: String) -> String { // gets the new navigation title of the view based on the 'selectedDate'
-        let todaysDate = getTodaysDate()
-        todayButtonOutlet.isEnabled = todaysDate != date
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = defaultDateFormat
-        dateFormatter.timeZone = TimeZone.init(abbreviation: USTimeZoneAbbreviation)
-        let oldDate = dateFormatter.date(from: date)!
-        
-        let newDateFormatter = DateFormatter()
-        newDateFormatter.dateFormat = "EEEE, d MMM"
-        return newDateFormatter.string(from: oldDate)
+        todayButtonOutlet.isEnabled = getTodaysDate() != date
+        let currentDate = DateFormatter().stringToDate(string: date, format: DateFormats.API, timezone: appDelegate.currentTimeZone)
+        return DateFormatter().dateToString(date: currentDate, format: DateFormats.display, timezone: appDelegate.currentTimeZone)
     }
     
     private func defaultMenuBuild() { // builds the menu for changing the season
@@ -239,11 +276,7 @@ class GamesTableViewController: UITableViewController {
     }
     
     private func getTodaysDate() -> String { // gets todays date as a string
-        let today = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = defaultDateFormat
-        dateFormatter.timeZone = TimeZone.init(abbreviation: USTimeZoneAbbreviation)
-        return dateFormatter.string(from: today)
+        return DateFormatter().dateToString(date: Date(), format: DateFormats.API, timezone: appDelegate.currentTimeZone)
     }
     
     private func changeBadgeNumber() { // changes the badge number of the tab to represent how many live games there are
@@ -292,7 +325,7 @@ class GamesTableViewController: UITableViewController {
                 cell.awayTeamScore.text = awayAbb
                 cell.homeTeamScore.text = homeAbb
                 cell.timeLabel.text = "@"
-                cell.statusLabel.text = status
+                cell.statusLabel.text = APItoCurrentTimeZoneDisplay(string: status)
                 cell.timeLabel.backgroundColor = UIColor.secondarySystemBackground
                 cell.homeTeamScore.textColor = UILabel().textColor
                 cell.awayTeamScore.textColor = UILabel().textColor

@@ -117,11 +117,11 @@ class StandingsTableViewController: UITableViewController {
     
     private func getTeams(reload: Bool) { // retrieves the teams data
         teamsData.removeAll()
-        for (_, var teams) in divisionTeams {
-            teams.removeAll()
+        for (div, _) in divisionTeams {
+            divisionTeams[div]?.removeAll()
         }
-        for (_, var teams) in conferenceTeams {
-            teams.removeAll()
+        for (conf, _) in conferenceTeams {
+            conferenceTeams[conf]?.removeAll()
         }
         
         let fileName = season.YEAR.rawValue + allTeamsFileManagerExtension
@@ -139,7 +139,7 @@ class StandingsTableViewController: UITableViewController {
             indicator.startAnimating()
             teamFilterMenu.isEnabled = false
             Task {
-                await getAllTeams(reload: reload)
+                await requestAllTeams(reload: reload)
                 print("done!")
                 indicator.stopAnimating()
                 teamFilterMenu.isEnabled = true
@@ -169,7 +169,7 @@ class StandingsTableViewController: UITableViewController {
         
     }
     
-    private func getAllTeams(reload: Bool) async { // gets all teams from API
+    private func requestAllTeams(reload: Bool) async { // gets all teams from API
         var gamesURL = URLComponents()
         gamesURL.scheme = appDelegate.API_URL_SCHEME
         gamesURL.host = appDelegate.API_URL_HOST
