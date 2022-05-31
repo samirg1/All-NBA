@@ -30,13 +30,13 @@ private enum Divisions: String { // stores the divisions of the NBA
     case SOUTHWEST = "Southwest"
 }
 
-private enum Season2021_2022: String { // stores the 2021/22 season info
+public enum Season2021_2022: String { // stores the 2021/22 season info
     case YEAR = "2021"
     case START = "2021-10-19"
     case END = "2022-04-10"
 }
 
-private enum Season2020_2021: String { // stores the 2020/21 season info
+public enum Season2020_2021: String { // stores the 2020/21 season info
     case YEAR = "2020"
     case START = "2020-12-22"
     case END = "2020-05-16"
@@ -54,10 +54,6 @@ class StandingsTeamCell: UITableViewCell { // cell depicting a team's info
 }
 
 class StandingsTableViewController: UITableViewController {
-    
-    private let appDelegate = UIApplication.shared.delegate as! AppDelegate
-    public let gamesFileManagerExtension = "-seasonGamesData"
-    public let allTeamsFileManagerExtension = "-all_teams"
     
     private let MAX_GAMES_IN_SEASON = "82"
     private var season = Season2021_2022.self
@@ -95,7 +91,7 @@ class StandingsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         buildFilterMenu()
-        getTeams(reload: false)
+        getTeamsData(reload: false)
     }
     
     @IBOutlet weak private var teamFilterMenu: UIButton!
@@ -114,8 +110,7 @@ class StandingsTableViewController: UITableViewController {
     
     
     // MARK: Retrieving Data from API
-    
-    private func getTeams(reload: Bool) { // retrieves the teams data
+    private func getTeamsData(reload: Bool) { // retrieves the teams data
         teamsData.removeAll()
         for (div, _) in divisionTeams {
             divisionTeams[div]?.removeAll()
@@ -124,122 +119,31 @@ class StandingsTableViewController: UITableViewController {
             conferenceTeams[conf]?.removeAll()
         }
         
-        let fileName = season.YEAR.rawValue + allTeamsFileManagerExtension
-        let localURL = appDelegate.cacheDirectoryPath.appendingPathComponent(fileName)
-        if FileManager.default.fileExists(atPath: localURL.path) && !reload {
-            let data = FileManager.default.contents(atPath: localURL.path)
-            if let data = data {
-                self.decodeTeams(data: data, reload: reload)
+        let fileName = season.YEAR.rawValue + FileManagerFiles.all_teams_suffix.rawValue
+        if doesFileExist(name: fileName) && !reload {
+            if let data = getFileData(name: fileName) {
+               return decodeTeams(data: data, reload: reload)
             }
-            else {
-                displayMessage_sgup0027(title: appDelegate.FILE_MANAGER_DATA_ERROR_TITLE, message: appDelegate.FILE_MANAGER_DATA_ERROR_MESSAGE)
-            }
+            return displayMessage_sgup0027(title: FILE_MANAGER_DATA_ERROR_TITLE, message: FILE_MANAGER_DATA_ERROR_MESSAGE)
         }
         else {
             indicator.startAnimating()
             teamFilterMenu.isEnabled = false
             Task {
-                await requestAllTeams(reload: reload)
-                print("done!")
+                URLSession.shared.invalidateAndCancel()
+                let (data, error) = await requestData(path: .teams, queries: [:])
+                guard let data = data else {
+                    displayMessage_sgup0027(title: error!.title, message: error!.message)
+                    indicator.stopAnimating()
+                    return
+                }
+                
+                // update/create a file to persistently store the data retrieved
+                setFileData(name: fileName, data: data)
+                decodeTeams(data: data, reload: reload)
                 indicator.stopAnimating()
                 teamFilterMenu.isEnabled = true
             }
-        }
-        
-        
-    }
-    
-    private func getTeamsGames(team: TeamData, reload: Bool){ // retrieves the teams games data
-        let fileName = "\(team.id)" + gamesFileManagerExtension
-        let localURL = appDelegate.cacheDirectoryPath.appendingPathComponent(fileName)
-        if FileManager.default.fileExists(atPath: localURL.path) && !reload {
-            let data = FileManager.default.contents(atPath: localURL.path)
-            if let data = data {
-                self.decodeTeamGames(data: data, team: team)
-            }
-            else {
-                displayMessage_sgup0027(title: appDelegate.FILE_MANAGER_DATA_ERROR_TITLE, message: appDelegate.FILE_MANAGER_DATA_ERROR_MESSAGE)
-            }
-        }
-        else {
-            Task {
-                await self.requestTeamGames(team: team)
-            }
-        }
-        
-    }
-    
-    private func requestAllTeams(reload: Bool) async { // gets all teams from API
-        var gamesURL = URLComponents()
-        gamesURL.scheme = appDelegate.API_URL_SCHEME
-        gamesURL.host = appDelegate.API_URL_HOST
-        gamesURL.path = appDelegate.API_URL_PATH + appDelegate.API_URL_PATH_TEAMS
-        
-        guard let requestURL = gamesURL.url else {
-            displayMessage_sgup0027(title: appDelegate.URL_CONVERSION_ERROR_TITLE, message: appDelegate.URL_CONVERSION_ERROR_MESSAGE)
-            indicator.stopAnimating()
-            return
-        }
-        
-        let urlRequest = URLRequest(url: requestURL)
-        do {
-            let (data, response) = try await URLSession.shared.data(for: urlRequest)
-            if let response = response as? HTTPURLResponse, response.statusCode != HTTP_ERROR_CODES.success.rawValue  {
-                displayMessage_sgup0027(title: appDelegate.API_ERROR_TITLE, message: appDelegate.API_ERROR_CODE_MESSAGES[response.statusCode]!)
-                indicator.stopAnimating()
-                return
-            }
-            self.decodeTeams(data: data, reload: reload)
-            DispatchQueue.main.async {
-                
-                let fileName = self.season.YEAR.rawValue + self.allTeamsFileManagerExtension
-                let localURL = self.appDelegate.cacheDirectoryPath.appendingPathComponent(fileName)
-                FileManager.default.createFile(atPath: localURL.path, contents: data, attributes: [:])
-            }
-        }
-        catch let error {
-            displayMessage_sgup0027(title: appDelegate.API_ERROR_TITLE, message: error.localizedDescription)
-            indicator.stopAnimating()
-        }
-    }
-    
-    private func requestTeamGames(team: TeamData) async { // gets a specifc teams season games from API
-        var gamesURL = URLComponents()
-        gamesURL.scheme = appDelegate.API_URL_SCHEME
-        gamesURL.host = appDelegate.API_URL_HOST
-        gamesURL.path = appDelegate.API_URL_PATH + appDelegate.API_URL_PATH_GAMES
-        gamesURL.queryItems = [
-            URLQueryItem(name: appDelegate.API_QUERY_TEAM_ID, value: "\(team.id)"),
-            URLQueryItem(name: appDelegate.API_QUERY_SEASONS, value: season.YEAR.rawValue),
-            URLQueryItem(name: appDelegate.API_QUERY_PER_PAGE, value: MAX_GAMES_IN_SEASON),
-            URLQueryItem(name: appDelegate.API_QUERY_START_DATE, value: season.START.rawValue),
-            URLQueryItem(name: appDelegate.API_QUERY_END_DATE, value: season.END.rawValue)
-        ]
-        
-        guard let requestURL = gamesURL.url else {
-            displayMessage_sgup0027(title: appDelegate.URL_CONVERSION_ERROR_TITLE, message: appDelegate.URL_CONVERSION_ERROR_MESSAGE)
-            indicator.stopAnimating()
-            return
-        }
-        
-        let urlRequest = URLRequest(url: requestURL)
-        do {
-            let (data, response) = try await URLSession.shared.data(for: urlRequest)
-            if let response = response as? HTTPURLResponse, response.statusCode != HTTP_ERROR_CODES.success.rawValue  {
-                displayMessage_sgup0027(title: appDelegate.API_ERROR_TITLE, message: appDelegate.API_ERROR_CODE_MESSAGES[response.statusCode]!)
-                indicator.stopAnimating()
-                return
-            }
-            DispatchQueue.main.async {
-                self.decodeTeamGames(data: data, team: team)
-                let fileName = "\(team.id)" + self.gamesFileManagerExtension
-                let localURL = self.appDelegate.cacheDirectoryPath.appendingPathComponent(fileName)
-                FileManager.default.createFile(atPath: localURL.path, contents: data, attributes: [:])
-            }
-        }
-        catch let error {
-            displayMessage_sgup0027(title: appDelegate.API_ERROR_TITLE, message: error.localizedDescription)
-            indicator.stopAnimating()
         }
     }
     
@@ -249,13 +153,46 @@ class StandingsTableViewController: UITableViewController {
             let collection = try decoder.decode(TeamCollection.self, from: data)
             if let teams = collection.teams {
                     for team in teams {
-                        getTeamsGames(team: team, reload: reload)
+                        getTeamSeasonGameData(team: team, reload: reload)
                     }
             }
         }
         catch let error {
-            displayMessage_sgup0027(title: appDelegate.JSON_DECODER_ERROR_TITLE, message: error.localizedDescription)
+            displayMessage_sgup0027(title: JSON_DECODER_ERROR_TITLE, message: error.localizedDescription)
             indicator.stopAnimating()
+        }
+    }
+    
+    private func getTeamSeasonGameData(team: TeamData, reload: Bool){ // retrieves the teams games data
+        let fileName = "\(team.id)" + FileManagerFiles.team_season_games_suffix.rawValue
+        if doesFileExist(name: fileName) && !reload {
+            if let data = getFileData(name: fileName) {
+                return decodeTeamGames(data: data, team: team)
+            }
+            return displayMessage_sgup0027(title: FILE_MANAGER_DATA_ERROR_TITLE, message: FILE_MANAGER_DATA_ERROR_MESSAGE)
+        }
+        else {
+            Task {
+                URLSession.shared.invalidateAndCancel()
+                let queries: [API_QUERIES: String] = [
+                    .team_ids : "\(team.id)",
+                    .seasons : season.YEAR.rawValue,
+                    .per_page : MAX_GAMES_IN_SEASON,
+                    .start_date : season.START.rawValue,
+                    .end_date : season.END.rawValue
+                ]
+                
+                let (data, error) = await requestData(path: .games, queries: queries)
+                guard let data = data else {
+                    displayMessage_sgup0027(title: error!.title, message: error!.message)
+                    indicator.stopAnimating()
+                    return
+                }
+                
+                // update/create a file to persistently store the data retrieved
+                setFileData(name: fileName, data: data)
+                decodeTeamGames(data: data, team: team)
+            }
         }
     }
     
@@ -286,13 +223,13 @@ class StandingsTableViewController: UITableViewController {
             }
         }
         catch let error {
-            displayMessage_sgup0027(title: appDelegate.JSON_DECODER_ERROR_TITLE, message: error.localizedDescription)
+            displayMessage_sgup0027(title: JSON_DECODER_ERROR_TITLE, message: error.localizedDescription)
             indicator.stopAnimating()
         }
     }
     
     @IBAction private func manualRefresh(_ sender: Any) {
-        getTeams(reload: true)
+        getTeamsData(reload: true)
     }
 
     // MARK: - Table view data source

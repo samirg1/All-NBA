@@ -21,7 +21,7 @@ class FavouritesSettingsTableViewController: UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        appDelegate.getFavourites()
+        getFavourites()
         tableView.reloadData()
     }
 
@@ -81,7 +81,7 @@ class FavouritesSettingsTableViewController: UITableViewController {
             else {
                 appDelegate.favouriteTeams.remove(at: indexPath.row)
             }
-            appDelegate.updateFavourites()
+            updateFavourites()
             tableView.reloadData()
         }
     }

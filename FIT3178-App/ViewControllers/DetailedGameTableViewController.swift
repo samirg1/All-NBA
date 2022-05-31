@@ -30,10 +30,6 @@ class StatsTableViewCell: UITableViewCell { // cell that houses the stats
 
 class DetailedGameTableViewController: UITableViewController {
     
-    /// Variable for accessing the contants in ``AppDelegate``
-    private let appDelegate = UIApplication.shared.delegate as! AppDelegate
-    public let fileManagerExtension = "-teamStats"
-    
     // variables to check whether the view needs to be updated based on what has happened on other views
     public var reloaded = false
     public var toBeReloaded = false
@@ -79,18 +75,13 @@ class DetailedGameTableViewController: UITableViewController {
         }
 
         // check if data has been stored previously
-        let fileName = "\(game.id)" + fileManagerExtension
-        let localURL = appDelegate.cacheDirectoryPath.appendingPathComponent(fileName)
-        if FileManager.default.fileExists(atPath: localURL.path) && !reload {
-            
+        let fileName = "\(game.id)" + FileManagerFiles.team_game_stats_suffix.rawValue
+        if doesFileExist(name: fileName) && !reload {
             // if so, decode and update the view
-            let data = FileManager.default.contents(atPath: localURL.path)
-            if let data = data {
-                self.decodePlayersStats(data: data, game: game)
+            if let data = getFileData(name: fileName) {
+                return decodePlayersStats(data: data, game: game)
             }
-            else {
-                displayMessage_sgup0027(title: appDelegate.FILE_MANAGER_DATA_ERROR_TITLE, message: appDelegate.FILE_MANAGER_DATA_ERROR_MESSAGE)
-            }
+            return displayMessage_sgup0027(title: FILE_MANAGER_DATA_ERROR_TITLE, message: FILE_MANAGER_DATA_ERROR_MESSAGE)
         }
         else {
             
@@ -100,7 +91,16 @@ class DetailedGameTableViewController: UITableViewController {
             toBeReloaded = false
             Task {
                 URLSession.shared.invalidateAndCancel()
-                await requestPlayerStatsInGame(game: game)
+                let (data, error) = await requestData(path: .stats, queries: [.game_ids : "\(game.id)", .per_page: maxAmountOfPlayers])
+                guard let data = data else {
+                    displayMessage_sgup0027(title: error!.title, message: error!.message)
+                    indicator.stopAnimating()
+                    return
+                }
+                
+                // update/create a file to persistently store the data retrieved
+                setFileData(name: fileName, data: data)
+                decodePlayersStats(data: data, game: game)
             }
         }
     }
@@ -128,50 +128,13 @@ class DetailedGameTableViewController: UITableViewController {
             }
         }
         catch let error {
-            displayMessage_sgup0027(title: appDelegate.JSON_DECODER_ERROR_TITLE, message: error.localizedDescription)
+            displayMessage_sgup0027(title: JSON_DECODER_ERROR_TITLE, message: error.localizedDescription)
             indicator.stopAnimating()
         }
     }
     
     @IBAction public func refreshCurrentGame(_ sender: Any) { // manual refresh of the current game
         getTeamsStats(reload: true)
-    }
-    
-    private func requestPlayerStatsInGame(game: GameData) async { // API call to teams stats data
-        var gamesURL = URLComponents()
-        gamesURL.scheme = appDelegate.API_URL_SCHEME
-        gamesURL.host = appDelegate.API_URL_HOST
-        gamesURL.path = appDelegate.API_URL_PATH + appDelegate.API_URL_PATH_STATS
-        gamesURL.queryItems = [
-            URLQueryItem(name: appDelegate.API_QUERY_GAME_ID, value: "\(game.id)"),
-            URLQueryItem(name: appDelegate.API_QUERY_PER_PAGE, value: maxAmountOfPlayers)
-        ]
-        
-        guard let requestURL = gamesURL.url else {
-            displayMessage_sgup0027(title: appDelegate.URL_CONVERSION_ERROR_TITLE, message: appDelegate.URL_CONVERSION_ERROR_MESSAGE)
-            indicator.stopAnimating()
-            return
-        }
-        
-        let urlRequest = URLRequest(url: requestURL)
-        do {
-            let (data, response) = try await URLSession.shared.data(for: urlRequest)
-            if let response = response as? HTTPURLResponse, response.statusCode != HTTP_ERROR_CODES.success.rawValue  {
-                displayMessage_sgup0027(title: appDelegate.API_ERROR_TITLE, message: appDelegate.API_ERROR_CODE_MESSAGES[response.statusCode]!)
-                indicator.stopAnimating()
-                return
-            }
-            DispatchQueue.main.async {
-                self.decodePlayersStats(data: data, game: game)
-                let fileName = "\(game.id)" + self.fileManagerExtension
-                let localURL = self.appDelegate.cacheDirectoryPath.appendingPathComponent(fileName)
-                FileManager.default.createFile(atPath: localURL.path, contents: data, attributes: [:])
-            }
-        }
-        catch let error {
-            displayMessage_sgup0027(title: appDelegate.API_ERROR_TITLE, message: error.localizedDescription)
-            indicator.stopAnimating()
-        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {

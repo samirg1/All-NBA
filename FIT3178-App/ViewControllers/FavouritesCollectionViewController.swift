@@ -19,7 +19,7 @@ class FavouritesCollectionViewController: UICollectionViewController {
         
         self.collectionView!.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         
-        appDelegate.getFavourites()
+        getFavourites()
     }
     
     

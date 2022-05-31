@@ -31,7 +31,6 @@ class GamesTableViewCell: UITableViewCell { // cell that shows the main game inf
 class GamesTableViewController: UITableViewController {
     
     private let appDelegate = UIApplication.shared.delegate as! AppDelegate
-    public let fileManagerNamingExtension = "-gameCollection"
     
     // variables to check whether the view needs to be updated based on what has happened on other views
     public var reloaded = false
@@ -69,6 +68,7 @@ class GamesTableViewController: UITableViewController {
         resetToday(self) // retrieve the required data from today
     }
     
+    // MARK: Notificatino Handling
     private func addNotifications() {
         guard appDelegate.notificationsEnabled == true else { return }
         
@@ -109,69 +109,18 @@ class GamesTableViewController: UITableViewController {
     }
     
     // MARK: - Retrieving and Decoding Data
-    
-    private func requestGamesOnDate() async { // API call to get all games on specific date stored in 'selectedDate'
-        let API_date = convertTimeZones(string: selectedDate, from: TimeZoneIdentifiers.aus_melb.rawValue, to: TimeZoneIdentifiers.usa_nyk.rawValue, format: DateFormats.API)
-        let formatter = DateFormatter()
-        formatter.dateFormat = DateFormats.API.rawValue
-        let API_date_string = formatter.string(from: API_date)
-        
-        var gamesURL = URLComponents()
-        gamesURL.scheme = appDelegate.API_URL_SCHEME
-        gamesURL.host = appDelegate.API_URL_HOST
-        gamesURL.path = appDelegate.API_URL_PATH + appDelegate.API_URL_PATH_GAMES
-        gamesURL.queryItems = [
-            URLQueryItem(name: appDelegate.API_QUERY_DATES, value: API_date_string)
-        ]
-        
-        guard let requestURL = gamesURL.url else {
-            displayMessage_sgup0027(title: appDelegate.URL_CONVERSION_ERROR_TITLE, message: appDelegate.URL_CONVERSION_ERROR_MESSAGE)
-            indicator.stopAnimating()
-            return
-        }
-        
-        let urlRequest = URLRequest(url: requestURL)
-        do {
-            let (data, response) = try await URLSession.shared.data(for: urlRequest)
-            if let response = response as? HTTPURLResponse, response.statusCode != HTTP_ERROR_CODES.success.rawValue  {
-                displayMessage_sgup0027(title: appDelegate.API_ERROR_TITLE, message: appDelegate.API_ERROR_CODE_MESSAGES[response.statusCode]!)
-                indicator.stopAnimating()
-                return
-            }
-            DispatchQueue.main.async {
-                
-                // decode the data and update view(s)
-                self.decodeJSONforSelectedDateGames(data: data)
-                
-                // update/create a file to persistently store the data retrieved
-                let fileName = self.selectedDate + self.fileManagerNamingExtension
-                let localURL = self.appDelegate.cacheDirectoryPath.appendingPathComponent(fileName)
-                FileManager.default.createFile(atPath: localURL.path, contents: data, attributes: [:])
-            }
-        }
-        catch let error {
-            displayMessage_sgup0027(title: appDelegate.API_ERROR_TITLE, message: error.localizedDescription)
-            indicator.stopAnimating()
-        }
-    }
-    
-    private func getGames(reload: Bool) { // gets data of all games on date
+    private func getGameData(reload: Bool) { // gets data of all games on date
         dateLabel.text = getNewDateText(date: selectedDate)
         selectedDateGames.removeAll()
         
         // determines whether file exists or whether the user has selected to reload
-        let fileName = selectedDate + fileManagerNamingExtension
-        let localURL = appDelegate.cacheDirectoryPath.appendingPathComponent(fileName)
-        if FileManager.default.fileExists(atPath: localURL.path) && !reload
-        {
+        let fileName = selectedDate + FileManagerFiles.date_game_collection_suffix.rawValue
+        if doesFileExist(name: fileName) && !reload {
             // if file exists (and user hasn't reloaded) retrieve data, decode it and update views
-            let data = FileManager.default.contents(atPath: localURL.path)
-            if let data = data {
-                self.decodeJSONforSelectedDateGames(data: data)
+            if let data = getFileData(name: fileName) {
+                return decodeGameData(data: data)
             }
-            else {
-                displayMessage_sgup0027(title: appDelegate.FILE_MANAGER_DATA_ERROR_TITLE, message: appDelegate.FILE_MANAGER_DATA_ERROR_MESSAGE)
-            }
+            return displayMessage_sgup0027(title: FILE_MANAGER_DATA_ERROR_TITLE, message: FILE_MANAGER_DATA_ERROR_MESSAGE)
         }
         else {
             
@@ -181,14 +130,31 @@ class GamesTableViewController: UITableViewController {
             reloaded = !toBeReloaded
             toBeReloaded = false
             
+            // get the date to search games for in the correct timezone and format
+            let API_date = convertTimeZones(string: selectedDate, from: TimeZoneIdentifiers.aus_melb.rawValue, to: TimeZoneIdentifiers.usa_nyk.rawValue, format: DateFormats.API)
+            let formatter = DateFormatter()
+            formatter.dateFormat = DateFormats.API.rawValue
+            let API_date_string = formatter.string(from: API_date)
+            
+            
             Task {
                 URLSession.shared.invalidateAndCancel()
-                await requestGamesOnDate()
+                
+                let (data, error) = await requestData(path: .games, queries: [.dates : API_date_string])
+                guard let data = data else {
+                    displayMessage_sgup0027(title: error!.title, message: error!.message)
+                    indicator.stopAnimating()
+                    return
+                }
+                
+                // update/create a file to persistently store the data retrieved
+                setFileData(name: fileName, data: data)
+                decodeGameData(data: data)
             }
         }
     }
     
-    private func decodeJSONforSelectedDateGames(data: Data){ // decodes data of all games and updates view
+    private func decodeGameData(data: Data){ // decodes data of all games and updates view
         do {
             let decoder = JSONDecoder()
             let collection = try decoder.decode(GameCollection.self, from: data)
@@ -201,19 +167,19 @@ class GamesTableViewController: UITableViewController {
             }
         }
         catch let error {
-            displayMessage_sgup0027(title: appDelegate.JSON_DECODER_ERROR_TITLE, message: error.localizedDescription)
+            displayMessage_sgup0027(title: JSON_DECODER_ERROR_TITLE, message: error.localizedDescription)
             indicator.stopAnimating()
         }
     }
     
     @IBAction private func manualRefreshGames(_ sender: Any) { // manually refresh the current games
-        getGames(reload: true)
+        getGameData(reload: true)
     }
     
     @IBAction private func resetToday(_ sender: Any) { // resets the view to the current day
         selectedDate = getTodaysDate()
         defaultMenuBuild()
-        getGames(reload: toBeReloaded)
+        getGameData(reload: toBeReloaded)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -245,7 +211,7 @@ class GamesTableViewController: UITableViewController {
         let oldDate = DateFormatter().stringToDate(string: selectedDate, format: DateFormats.API, timezone: appDelegate.currentTimeZoneIdentifier)
         let newDate = Calendar.current.date(byAdding: .day, value: change, to: oldDate)!
         selectedDate = DateFormatter().dateToString(date: newDate, format: DateFormats.API, timezone: appDelegate.currentTimeZoneIdentifier)
-        getGames(reload: false)
+        getGameData(reload: false)
     }
     
     private func getNewDateText(date: String) -> String { // gets the new navigation title of the view based on the 'selectedDate'
@@ -261,7 +227,7 @@ class GamesTableViewController: UITableViewController {
             let oldYear = Int.init(selectedDateSplit[0])
             if year != oldYear {
                 self.selectedDate = "\(year)-\(selectedDateSplit[1])-\(selectedDateSplit[2])"
-                self.getGames(reload: false)
+                self.getGameData(reload: false)
             }
         }
         

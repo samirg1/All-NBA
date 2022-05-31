@@ -34,7 +34,6 @@ public enum TimeZoneIdentifiers: String {
     case usa_nyk = "America/New_York"
 }
 
-
 public extension DateFormatter {
     
     /// Converts a string into a date with a specified timezone.
