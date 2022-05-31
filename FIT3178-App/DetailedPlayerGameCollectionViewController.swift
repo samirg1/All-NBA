@@ -132,7 +132,7 @@ class DetailedPlayerGameCollectionViewController: UICollectionViewController {
             cell.statDetailLabel.text = ""
         case .twos:
             cell.numberLabel.text = "\(player.fgm - player.fgm3)/\(player.fga-player.fga3)"
-            cell.statDetailLabel.text = "\(Float(player.fgm - player.fgm3)/Float(player.fga-player.fga3)*100)%"
+            cell.statDetailLabel.text = get2PointFieldGoalPercentage(fgm: player.fgm, fga: player.fga, fgm3: player.fgm3, fga3: player.fga3)
         case .threes:
             cell.numberLabel.text = "\(player.fgm3)/\(player.fga3)"
             cell.statDetailLabel.text = "\(player.pct3)%"
@@ -145,6 +145,15 @@ class DetailedPlayerGameCollectionViewController: UICollectionViewController {
         }
     
         return cell
+    }
+    
+    private func get2PointFieldGoalPercentage(fgm: Int, fga: Int, fgm3: Int, fga3: Int) -> String {
+        if fga - fga3 == 0 {
+            return "0.0%"
+        }
+        let pct = Float(fgm - fgm3)/Float(fga - fga3)*100
+        let rounded_pct = Float(Int(pct * 10)) / Float(10)
+        return "\(rounded_pct)%"
     }
 
     // MARK: UICollectionViewDelegate

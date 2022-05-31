@@ -67,15 +67,16 @@ class GamesTableViewController: UITableViewController {
         super.viewDidLoad()
         todayButtonOutlet.isEnabled = false // as initial screen is "Today", disable the button
         resetToday(self) // retrieve the required data from today
-        addNotifications()
     }
     
     private func addNotifications() {
+        guard appDelegate.notificationsEnabled == true else { return }
+        
         for game in selectedDateGames {
             guard let status = game.status else { continue }
             if !status.hasSuffix("ET") { continue }
             let timeString = convertTo24HourTime(string: status)
-            let time = convertTimeZones(string: timeString, from: TimeZoneIdentifiers.usa_nyk.rawValue, to: appDelegate.currentTimeZone, format: .time24hr)
+            let time = convertTimeZones(string: timeString, from: TimeZoneIdentifiers.usa_nyk.rawValue, to: appDelegate.currentTimeZoneIdentifier, format: .time24hr)
             let formatter = DateFormatter()
             formatter.dateFormat = DateFormats.API.rawValue
             let date = formatter.date(from: selectedDate)!
@@ -94,8 +95,6 @@ class GamesTableViewController: UITableViewController {
     }
     
     private func createGameNotification(date: DateComponents, title: String) {
-        guard appDelegate.notificationsEnabled == true else { return }
-        
         let content = UNMutableNotificationContent()
         content.title = "Game Alert"
         content.body = title + " starting soon"
@@ -243,16 +242,16 @@ class GamesTableViewController: UITableViewController {
         }
         
         // get the current date, edit it and update the view accordingly
-        let oldDate = DateFormatter().stringToDate(string: selectedDate, format: DateFormats.API, timezone: appDelegate.currentTimeZone)
+        let oldDate = DateFormatter().stringToDate(string: selectedDate, format: DateFormats.API, timezone: appDelegate.currentTimeZoneIdentifier)
         let newDate = Calendar.current.date(byAdding: .day, value: change, to: oldDate)!
-        selectedDate = DateFormatter().dateToString(date: newDate, format: DateFormats.API, timezone: appDelegate.currentTimeZone)
+        selectedDate = DateFormatter().dateToString(date: newDate, format: DateFormats.API, timezone: appDelegate.currentTimeZoneIdentifier)
         getGames(reload: false)
     }
     
     private func getNewDateText(date: String) -> String { // gets the new navigation title of the view based on the 'selectedDate'
         todayButtonOutlet.isEnabled = getTodaysDate() != date
-        let currentDate = DateFormatter().stringToDate(string: date, format: DateFormats.API, timezone: appDelegate.currentTimeZone)
-        return DateFormatter().dateToString(date: currentDate, format: DateFormats.display, timezone: appDelegate.currentTimeZone)
+        let currentDate = DateFormatter().stringToDate(string: date, format: DateFormats.API, timezone: appDelegate.currentTimeZoneIdentifier)
+        return DateFormatter().dateToString(date: currentDate, format: DateFormats.display, timezone: appDelegate.currentTimeZoneIdentifier)
     }
     
     private func defaultMenuBuild() { // builds the menu for changing the season
@@ -273,7 +272,7 @@ class GamesTableViewController: UITableViewController {
     }
     
     private func getTodaysDate() -> String { // gets todays date as a string
-        return DateFormatter().dateToString(date: Date(), format: DateFormats.API, timezone: appDelegate.currentTimeZone)
+        return DateFormatter().dateToString(date: Date(), format: DateFormats.API, timezone: appDelegate.currentTimeZoneIdentifier)
     }
     
     private func changeBadgeNumber() { // changes the badge number of the tab to represent how many live games there are

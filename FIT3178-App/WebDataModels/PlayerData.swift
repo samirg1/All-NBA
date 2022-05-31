@@ -7,15 +7,15 @@
 
 import UIKit
 
-class PlayerData: NSObject, Decodable { // stores the data for a specific player from API
+class PlayerData: NSObject, Codable { // stores the data for a specific player from API
     var id: Int
-    var firstName : String?
-    var lastName : String?
+    var firstName : String
+    var lastName : String
     var position : String?
     var heightFeet : Int?
     var heightInches : Int?
     var weightPounds : Int?
-    var team : TeamData?
+    var team : TeamData
     
     private enum CodingKeys: String, CodingKey {
         case id
@@ -34,10 +34,22 @@ class PlayerData: NSObject, Decodable { // stores the data for a specific player
         id = try container.decode(Int.self, forKey: .id)
         firstName = try container.decode(String.self, forKey: .firstName)
         lastName = try container.decode(String.self, forKey: .lastName)
-        position = try container.decode(String.self, forKey: .position)
-        heightFeet = try container.decode(Int.self, forKey: .heightFeet)
-        heightInches = try container.decode(Int.self, forKey: .heightInches)
-        weightPounds = try container.decode(Int.self, forKey: .weightPounds)
+        position = try container.decode(String?.self, forKey: .position)
+        heightFeet = try container.decode(Int?.self, forKey: .heightFeet)
+        heightInches = try container.decode(Int?.self, forKey: .heightInches)
+        weightPounds = try container.decode(Int?.self, forKey: .weightPounds)
         team = try container.decode(TeamData.self, forKey: .team)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(firstName, forKey: .firstName)
+        try container.encode(lastName, forKey: .lastName)
+        try container.encode(position, forKey: .position)
+        try container.encode(heightFeet, forKey: .heightFeet)
+        try container.encode(heightInches, forKey: .heightInches)
+        try container.encode(weightPounds, forKey: .weightPounds)
+        try container.encode(team, forKey: .team)
     }
 }

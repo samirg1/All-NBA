@@ -116,7 +116,7 @@ public func convertTo24HourTime(string: String) -> String {
 /// - Returns: the converted pretty print time.
 func APItoCurrentTimeZoneDisplay(string: String) -> String {
     let timeString = convertTo24HourTime(string: string)
-    let newTime = convertTimeZones(string: timeString, from: TimeZoneIdentifiers.usa_nyk.rawValue, to: (UIApplication.shared.delegate as! AppDelegate).currentTimeZone, format: .time24hr)
+    let newTime = convertTimeZones(string: timeString, from: TimeZoneIdentifiers.usa_nyk.rawValue, to: (UIApplication.shared.delegate as! AppDelegate).currentTimeZoneIdentifier, format: .time24hr)
     let formatter = DateFormatter()
     formatter.amSymbol = "AM"
     formatter.pmSymbol = "PM"

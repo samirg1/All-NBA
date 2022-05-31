@@ -38,8 +38,8 @@ class GameData: NSObject, Decodable { // used to store a specific game's data fr
         awayTeam = try container.decode(TeamData.self, forKey: .awayTeam)
         homeScore = try container.decode(Int.self, forKey: .homeScore)
         awayScore = try container.decode(Int.self, forKey: .awayScore)
-        period = try container.decode(Int.self, forKey: .period)
-        time = try container.decode(String.self, forKey: .time)
-        status = try container.decode(String.self, forKey: .status)
+        period = try container.decode(Int?.self, forKey: .period)
+        time = try container.decode(String?.self, forKey: .time)
+        status = try container.decode(String?.self, forKey: .status)
     }
 }

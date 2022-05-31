@@ -133,7 +133,7 @@ class DetailedGameTableViewController: UITableViewController {
         }
     }
     
-    @IBAction private func refreshCurrentGame(_ sender: Any) { // manual refresh of the current game
+    @IBAction public func refreshCurrentGame(_ sender: Any) { // manual refresh of the current game
         getTeamsStats(reload: true)
     }
     

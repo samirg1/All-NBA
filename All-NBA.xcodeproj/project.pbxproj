@@ -13,12 +13,18 @@
 		371F100A280EB09A000B1443 /* GameData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371F1009280EB09A000B1443 /* GameData.swift */; };
 		371F100C280EB13C000B1443 /* TeamData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371F100B280EB13C000B1443 /* TeamData.swift */; };
 		371F100E280EC770000B1443 /* GameCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371F100D280EC770000B1443 /* GameCollection.swift */; };
+		374DE303283E3214008CAC34 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374DE302283E3214008CAC34 /* SettingsTableViewController.swift */; };
 		3750ABC2282158C0008B2135 /* StandingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3750ABC1282158C0008B2135 /* StandingsTableViewController.swift */; };
 		3750ABC428223491008B2135 /* TeamSeasonData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3750ABC328223491008B2135 /* TeamSeasonData.swift */; };
 		3750ABC6282249AE008B2135 /* TeamCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3750ABC5282249AE008B2135 /* TeamCollection.swift */; };
 		3750ABC82824F6E5008B2135 /* DetailedTeamViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3750ABC72824F6E5008B2135 /* DetailedTeamViewController.swift */; };
 		3750ABCD2827B930008B2135 /* UIViewController-sgup0027.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3750ABCC2827B930008B2135 /* UIViewController-sgup0027.swift */; };
 		3750ABCF2828BAC4008B2135 /* TeamGameData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3750ABCE2828BAC4008B2135 /* TeamGameData.swift */; };
+		375E69D82841AA92000B28C9 /* FavouritesCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 375E69D72841AA92000B28C9 /* FavouritesCollectionViewController.swift */; };
+		375E69DA2841B35E000B28C9 /* FavouritesSettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 375E69D92841B35E000B28C9 /* FavouritesSettingsTableViewController.swift */; };
+		375E69DC2841B36F000B28C9 /* NotificationSettingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 375E69DB2841B36F000B28C9 /* NotificationSettingTableViewController.swift */; };
+		375E69DE2841B381000B28C9 /* AddFavouritesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 375E69DD2841B381000B28C9 /* AddFavouritesTableViewController.swift */; };
+		375E69E22845D7B9000B28C9 /* PlayerDataCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 375E69E12845D7B9000B28C9 /* PlayerDataCollection.swift */; };
 		377DE88D281A2107009D3BE2 /* PlayersGameStatsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377DE88C281A2107009D3BE2 /* PlayersGameStatsCollectionViewController.swift */; };
 		378D30EF28333497000D2E69 /* DetailedPlayerGameCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378D30EE28333497000D2E69 /* DetailedPlayerGameCollectionViewController.swift */; };
 		3794FD5927E821190090BE26 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3794FD5827E821190090BE26 /* AppDelegate.swift */; };
@@ -39,12 +45,18 @@
 		371F1009280EB09A000B1443 /* GameData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameData.swift; sourceTree = "<group>"; };
 		371F100B280EB13C000B1443 /* TeamData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamData.swift; sourceTree = "<group>"; };
 		371F100D280EC770000B1443 /* GameCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCollection.swift; sourceTree = "<group>"; };
+		374DE302283E3214008CAC34 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
 		3750ABC1282158C0008B2135 /* StandingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StandingsTableViewController.swift; sourceTree = "<group>"; };
 		3750ABC328223491008B2135 /* TeamSeasonData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamSeasonData.swift; sourceTree = "<group>"; };
 		3750ABC5282249AE008B2135 /* TeamCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamCollection.swift; sourceTree = "<group>"; };
 		3750ABC72824F6E5008B2135 /* DetailedTeamViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedTeamViewController.swift; sourceTree = "<group>"; };
 		3750ABCC2827B930008B2135 /* UIViewController-sgup0027.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController-sgup0027.swift"; sourceTree = "<group>"; };
 		3750ABCE2828BAC4008B2135 /* TeamGameData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamGameData.swift; sourceTree = "<group>"; };
+		375E69D72841AA92000B28C9 /* FavouritesCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouritesCollectionViewController.swift; sourceTree = "<group>"; };
+		375E69D92841B35E000B28C9 /* FavouritesSettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouritesSettingsTableViewController.swift; sourceTree = "<group>"; };
+		375E69DB2841B36F000B28C9 /* NotificationSettingTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingTableViewController.swift; sourceTree = "<group>"; };
+		375E69DD2841B381000B28C9 /* AddFavouritesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFavouritesTableViewController.swift; sourceTree = "<group>"; };
+		375E69E12845D7B9000B28C9 /* PlayerDataCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDataCollection.swift; sourceTree = "<group>"; };
 		377DE88C281A2107009D3BE2 /* PlayersGameStatsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayersGameStatsCollectionViewController.swift; sourceTree = "<group>"; };
 		378D30EE28333497000D2E69 /* DetailedPlayerGameCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedPlayerGameCollectionViewController.swift; sourceTree = "<group>"; };
 		3794FD5527E821190090BE26 /* All-NBA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "All-NBA.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -84,6 +96,7 @@
 			isa = PBXGroup;
 			children = (
 				37F6159828101BD200E3E3F9 /* PlayerData.swift */,
+				375E69E12845D7B9000B28C9 /* PlayerDataCollection.swift */,
 				371F100B280EB13C000B1443 /* TeamData.swift */,
 				3750ABC5282249AE008B2135 /* TeamCollection.swift */,
 				371F100D280EC770000B1443 /* GameCollection.swift */,
@@ -120,8 +133,10 @@
 				3750ABCC2827B930008B2135 /* UIViewController-sgup0027.swift */,
 				3794FD5827E821190090BE26 /* AppDelegate.swift */,
 				3794FD5A27E821190090BE26 /* SceneDelegate.swift */,
+				371A53F82834C26C00763CC0 /* TimezonesAndFormats.swift */,
 				377DE8892819002E009D3BE2 /* WebDataModels */,
 				3750ABD02828BACC008B2135 /* DataModels */,
+				375E69D72841AA92000B28C9 /* FavouritesCollectionViewController.swift */,
 				371F1007280E8A68000B1443 /* GamesTableViewController.swift */,
 				37F615962810179200E3E3F9 /* DetailedGameTableViewController.swift */,
 				377DE88C281A2107009D3BE2 /* PlayersGameStatsCollectionViewController.swift */,
@@ -129,7 +144,10 @@
 				3750ABC1282158C0008B2135 /* StandingsTableViewController.swift */,
 				3750ABC72824F6E5008B2135 /* DetailedTeamViewController.swift */,
 				37133C452831DCFA0065694C /* SeasonStatsTableViewController.swift */,
-				371A53F82834C26C00763CC0 /* TimezonesAndFormats.swift */,
+				374DE302283E3214008CAC34 /* SettingsTableViewController.swift */,
+				375E69D92841B35E000B28C9 /* FavouritesSettingsTableViewController.swift */,
+				375E69DB2841B36F000B28C9 /* NotificationSettingTableViewController.swift */,
+				375E69DD2841B381000B28C9 /* AddFavouritesTableViewController.swift */,
 			);
 			path = "FIT3178-App";
 			sourceTree = "<group>";
@@ -205,6 +223,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				375E69DE2841B381000B28C9 /* AddFavouritesTableViewController.swift in Sources */,
 				371F100A280EB09A000B1443 /* GameData.swift in Sources */,
 				371A53F92834C26C00763CC0 /* TimezonesAndFormats.swift in Sources */,
 				371F1008280E8A69000B1443 /* GamesTableViewController.swift in Sources */,
@@ -212,11 +231,15 @@
 				371F100E280EC770000B1443 /* GameCollection.swift in Sources */,
 				3794FD5927E821190090BE26 /* AppDelegate.swift in Sources */,
 				3750ABC82824F6E5008B2135 /* DetailedTeamViewController.swift in Sources */,
+				375E69E22845D7B9000B28C9 /* PlayerDataCollection.swift in Sources */,
+				375E69DA2841B35E000B28C9 /* FavouritesSettingsTableViewController.swift in Sources */,
 				3750ABCF2828BAC4008B2135 /* TeamGameData.swift in Sources */,
 				3750ABC428223491008B2135 /* TeamSeasonData.swift in Sources */,
 				37F615972810179200E3E3F9 /* DetailedGameTableViewController.swift in Sources */,
+				375E69DC2841B36F000B28C9 /* NotificationSettingTableViewController.swift in Sources */,
 				378D30EF28333497000D2E69 /* DetailedPlayerGameCollectionViewController.swift in Sources */,
 				37F6159B28101DA700E3E3F9 /* PlayerGameStatsData.swift in Sources */,
+				375E69D82841AA92000B28C9 /* FavouritesCollectionViewController.swift in Sources */,
 				37F6159928101BD200E3E3F9 /* PlayerData.swift in Sources */,
 				371F100C280EB13C000B1443 /* TeamData.swift in Sources */,
 				377DE88D281A2107009D3BE2 /* PlayersGameStatsCollectionViewController.swift in Sources */,
@@ -225,6 +248,7 @@
 				37F6159D2810228100E3E3F9 /* PlayerGameStatsCollectionData.swift in Sources */,
 				3794FD5B27E821190090BE26 /* SceneDelegate.swift in Sources */,
 				3750ABC2282158C0008B2135 /* StandingsTableViewController.swift in Sources */,
+				374DE303283E3214008CAC34 /* SettingsTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
