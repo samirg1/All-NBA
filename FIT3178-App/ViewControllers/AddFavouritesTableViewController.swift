@@ -125,7 +125,7 @@ class AddFavouritesTableViewController: UITableViewController, UISearchBarDelega
     /// Action when the user wants to save the favourites they have selected.
     ///  - Parameters:
     ///     - sender: The triggerer of this action.
-    @IBAction func addFavourites(_ sender: Any) {
+    @IBAction private func addFavourites(_ sender: Any) {
         for path in tableView.indexPathsForSelectedRows! {
             if isPlayerSelected() {
                 let player = players[path.row]

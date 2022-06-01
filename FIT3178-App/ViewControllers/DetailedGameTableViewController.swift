@@ -193,7 +193,7 @@ class DetailedGameTableViewController: UITableViewController {
     /// Action to manually refresh the current game.
     /// - Parameters:
     ///     - sender: The triggerer of this action.
-    @IBAction public func refreshCurrentGame(_ sender: Any) { // manual refresh of the current game
+    @IBAction private func refreshCurrentGame(_ sender: Any) { // manual refresh of the current game
         getTeamsStats(reload: true)
     }
     

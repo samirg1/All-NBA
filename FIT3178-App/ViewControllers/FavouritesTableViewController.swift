@@ -199,20 +199,13 @@ class FavouritesTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        var c = 0
-        for p in playerData {
-            if !p.isNil() {
-                c+=1
-            }
-        }
-        
         if section == playerSection {
-            return c
+            return playerData.count
         }
         else if section == teamSection {
             return teamData.count
         }
-        if c == 0 && teamData.count == 0 {
+        if playerData.isEmpty && teamData.isEmpty {
             return 1
         }
         return 0

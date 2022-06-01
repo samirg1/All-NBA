@@ -124,6 +124,8 @@ class StandingsTableViewController: UITableViewController {
     @IBOutlet weak private var teamFilterMenu: UIButton!
     
     /// Build the team filter menu.
+    ///
+    /// Code source [here.](https://developer.apple.com/forums/thread/683700)
     private func buildFilterMenu() {
         let optionsClosure = { (action: UIAction) in
             self.teamFilter = TeamFilter(rawValue: action.title)!

@@ -32,7 +32,7 @@ class NotificationSettingTableViewController: UITableViewController {
     private let optionCellIdentifier = "optionCell"
     /// The section that houses the user settings.
     private let userSettingSection = 0
-    /// The row that links to the device's settings. [Source found here.](https://stackoverflow.com/questions/42848539/opening-apps-notification-settings-in-the-settings-app)
+    /// The row that links to the device's settings.
     private let settingsRow = 0
     /// The row that houses the game alert switch.
     private let gameAlertRow = 0
@@ -45,7 +45,7 @@ class NotificationSettingTableViewController: UITableViewController {
     /// Action to update the ``AppDelegate`` on changes to the notification settings.
     /// - Parameters:
     ///     - sender: The triggerer of this action.
-    @IBAction func switchChanged(_ sender: Any) {
+    @IBAction private func switchChanged(_ sender: Any) {
         let sender = sender as! UISwitch
         if sender.tag == gameAlertRow {
             appDelegate.gameAlertNotifcations = sender.isOn
@@ -101,6 +101,10 @@ class NotificationSettingTableViewController: UITableViewController {
         return sections[section].uppercased()
     }
 
+    /// Override of ``tableView(_:didSelectRowAt:)`` method.
+    ///
+    /// When selecting the the prompt to change user notification settings, the user is sent to the settings on their device.
+    /// [Source found here.](https://stackoverflow.com/questions/42848539/opening-apps-notification-settings-in-the-settings-app)
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == settingsRow { // go to settings
             if let appSettings = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(appSettings) {

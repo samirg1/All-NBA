@@ -12,10 +12,10 @@ import UIKit
 /// Dealing with how to change the date once a gesture is recognised
 ///
 /// The raw value of this enumeration represents the amount of days to add to the current date when the gesture is recognised.
-/// - Case `left` = 1
-/// - Case `right` = -1
 private enum GestureDateChanges: Int {
+    /// The date change on a left swipe.
     case left = 1
+    /// The date change on a right swipe.
     case right = -1
 }
 
@@ -247,7 +247,7 @@ class GamesTableViewController: UITableViewController {
     /// Action to change the selected date in view.
     /// - Parameters:
     ///     - sender: The triggerer of this action.
-    @IBAction private func changeDateButton(_ sender: Any) { // changes the sepcific date of viewable games
+    @IBAction private func changeDateButton(_ sender: Any) {
         var change = 0
         if let sender = sender as? UIBarButtonItem { // if user changes date using the buttons
             change = sender.tag
@@ -278,8 +278,10 @@ class GamesTableViewController: UITableViewController {
         return DateFormatter().dateToString(date: currentDate, format: DateFormats.display, timezone: appDelegate.currentTimeZoneIdentifier)
     }
     
-    /// Builds the default menu for changing the years to display dates.
-    private func defaultMenuBuild() { // builds the menu for changing the season
+    /// Builds the default menu for changing the year to display.
+    ///
+    /// Code source found [here.](https://developer.apple.com/forums/thread/683700)
+    private func defaultMenuBuild() {
         let optionsClosure = { (action: UIAction) in
             let year = Int.init(action.title.split(separator: "/")[0])! + 1
             let selectedDateSplit = self.selectedDate.split(separator: "-")

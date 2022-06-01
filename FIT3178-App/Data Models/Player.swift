@@ -8,7 +8,7 @@
 import UIKit
 
 /// Class representing an NBA player.
-class Player: NSObject, Codable { // stores the data for a specific player from API
+class Player: NSObject, Codable {
     /// The ID of the player.
     var id: Int
     /// The player's first name.
@@ -23,7 +23,7 @@ class Player: NSObject, Codable { // stores the data for a specific player from 
     var heightInches : Int?
     /// The player's weight in pounds.
     var weightPounds : Int?
-    /// The team the player belongs to,
+    /// The team the player belongs to.
     var team : Team
     
     /// Coding keys required for encoding and decoding.
