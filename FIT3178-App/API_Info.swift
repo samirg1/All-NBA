@@ -18,6 +18,8 @@ public enum API_URL_PATHS: String {
     case teams = "teams"
     /// The path of the API to access players.
     case players = "players"
+    /// The path of the API to access player's season stats.
+    case averages = "season_averages"
 }
 
 /// Stores the currently used API queries.
@@ -38,6 +40,10 @@ public enum API_QUERIES: String {
     case seasons = "seasons[]"
     /// The query of the API to specify team IDs to find results for.
     case team_ids = "team_ids[]"
+    /// The query of the API to specify specifc players to find results for.
+    case player_ids = "player_ids[]"
+    /// The query of the API to specify the required page number of the results to find.
+    case page = "page"
 }
 
 // MARK: - API Error Handling

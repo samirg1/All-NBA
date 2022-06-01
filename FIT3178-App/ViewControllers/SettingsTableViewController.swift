@@ -46,7 +46,6 @@ class SettingsTableViewController: UITableViewController {
 
         var content = cell.defaultContentConfiguration()
         content.text = SettingSections.all[indexPath.row].rawValue
-        content.secondaryText = ">"
         cell.contentConfiguration = content
 
         return cell

@@ -39,6 +39,13 @@ class PlayerGameStatsData : NSObject, Decodable { // used to store all player st
     var teamId : Int
     var teamAbbreviation : String
     
+    var gameId: Int
+    var gameHomeTeamId: Int
+    var gameAwayTeamId: Int
+    var gameHomeScore: Int
+    var gameAwayScore: Int
+    var gameDate: String
+    
     private enum CodingKeys: String, CodingKey {
         case id
         case pts
@@ -62,6 +69,7 @@ class PlayerGameStatsData : NSObject, Decodable { // used to store all player st
         case pf
         case player
         case team
+        case game
     }
     
     private enum TeamKeys: String, CodingKey {
@@ -75,10 +83,20 @@ class PlayerGameStatsData : NSObject, Decodable { // used to store all player st
         case playerLastName = "last_name"
     }
     
+    private enum GameKeys: String, CodingKey {
+        case gameId = "id"
+        case gameHomeTeamId = "home_team_id"
+        case gameAwayTeamId = "visitor_team_id"
+        case gameHomeScore = "home_team_score"
+        case gameAwayScore = "visitor_team_score"
+        case gameDate = "date"
+    }
+    
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let teamContainer = try container.nestedContainer(keyedBy: TeamKeys.self, forKey: .team)
         let playerContainer = try container.nestedContainer(keyedBy: PlayerKeys.self, forKey: .player)
+        let gameContainer = try container.nestedContainer(keyedBy: GameKeys.self, forKey: .game)
         
         id = try container.decode(Int.self, forKey: .id)
         pts = try container.decode(Int.self, forKey: .pts)
@@ -105,5 +123,11 @@ class PlayerGameStatsData : NSObject, Decodable { // used to store all player st
         playerLastName = try playerContainer.decode(String.self, forKey: .playerLastName)
         teamId = try teamContainer.decode(Int.self, forKey: .teamId)
         teamAbbreviation = try teamContainer.decode(String.self, forKey: .teamAbbreviation)
+        gameId = try gameContainer.decode(Int.self, forKey: .gameId)
+        gameHomeScore = try gameContainer.decode(Int.self, forKey: .gameHomeScore)
+        gameAwayScore = try gameContainer.decode(Int.self, forKey: .gameAwayScore)
+        gameAwayTeamId = try gameContainer.decode(Int.self, forKey: .gameAwayTeamId)
+        gameHomeTeamId = try gameContainer.decode(Int.self, forKey: .gameHomeTeamId)
+        gameDate = try gameContainer.decode(String.self, forKey: .gameDate)
     }
 }

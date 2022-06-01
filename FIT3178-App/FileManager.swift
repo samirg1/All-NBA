@@ -33,6 +33,7 @@ public enum FileManagerFiles: String {
     case team_game_stats_suffix = "-teamStats"
     case team_season_games_suffix = "-seasonGamesData"
     case all_teams_suffix = "-all_teams"
+    case player_season_stats_suffix = "-seasonStats"
 }
 
 public func doesFileExist(name: String) -> Bool {
@@ -49,10 +50,8 @@ public func getFileData(name: String) -> Data? {
 }
 
 public func setFileData(name: String, data: Data) {
-    if doesFileExist(name: name) {
-        let localURL = cacheDirectoryPath.appendingPathComponent(name)
-        FileManager.default.createFile(atPath: localURL.path, contents: data, attributes: [:])
-    }
+    let localURL = cacheDirectoryPath.appendingPathComponent(name)
+    FileManager.default.createFile(atPath: localURL.path, contents: data, attributes: [:])
 }
 
 public func getFavourites() {
