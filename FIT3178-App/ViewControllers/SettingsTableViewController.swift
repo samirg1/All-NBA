@@ -7,26 +7,27 @@
 
 import UIKit
 
+/// Sections of setting to be displayed.
 private enum SettingSections: String {
+    /// The favourites section.
     case favourties = "Favourites"
+    /// The notifications section.
     case notifications = "Notifications"
+    /// Variable to hold all sections.
     static var all = [favourties, notifications]
 }
 
+/// Custom class to allow user to change their experience with the app.
 class SettingsTableViewController: UITableViewController {
-    
-    let sectionCellIdentifier =  "sectionCell"
-    let favouritesSectionSegue = "favouritesSegue"
-    let notificationsSectionSegue = "notificationsSegue"
+    /// The cell identifier of the section.
+    private let sectionCellIdentifier =  "sectionCell"
+    /// The segue identifier to segue to ``FavouritesSettingsTableViewController``.
+    private let favouritesSectionSegue = "favouritesSegue"
+    /// The segue identifier to segue to ``NotificationSettingTableViewController``.
+    private let notificationsSectionSegue = "notificationsSegue"
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
     // MARK: - Table view data source
@@ -56,30 +57,4 @@ class SettingsTableViewController: UITableViewController {
         let segue = SettingSections.all[indexPath.row].rawValue.lowercased() + "Segue"
         performSegue(withIdentifier: segue, sender: self)
     }
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

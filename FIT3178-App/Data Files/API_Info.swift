@@ -83,8 +83,8 @@ public let JSON_DECODER_ERROR_TITLE = "Error decoding API data"
 
 /// Request specific data from the API.
 /// - Parameters:
-///     - path: the path of the URL.
-///     - queries: a dictionary of key/value pairs of API queries.
+///     - path: The path of the URL.
+///     - queries: A dictionary of key/value pairs of API queries.
 /// - Returns: A tuple containing the data (if any), and the error title and message (if any).
 public func requestData(path: API_URL_PATHS, queries: [API_QUERIES:String]) async -> (Data?, (title: String, message: String)?) {
     var gamesURL = URLComponents()

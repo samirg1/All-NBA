@@ -7,50 +7,92 @@
 
 import UIKit
 
+/// The stat sections to display in this view.
 private enum PlayerStatSections: String {
+    /// The points scored.
     case points = "Points"
+    /// The amounts of rebounds secured.
     case rebounds = "Rebounds"
+    /// The amount of assists acquired.
     case assists = "Assists"
+    /// The amount of steals.
     case steals = "Steals"
+    /// The amount of blocks.
     case blocks = "Blocks"
+    /// The amount of minutes.
     case minutes = "Minutes"
+    /// The amount turnovers.
     case turnovers = "Turnovers"
+    /// The amount of fouls.
     case fouls = "Fouls"
+    /// The amount of two pointers shot.
     case twos = "2-Pointers"
+    /// The amount of three pointers shot.
     case threes = "3-Pointers"
+    /// The amount of field goals shot.
     case fg = "Field Goals"
+    /// The amount of free throws shot.
     case ft = "Free Throws"
+    /// Collection of all of the statistical categories to display.
     static var allItems = [points, rebounds, assists, steals, blocks, minutes, turnovers, fouls, twos, threes, fg, ft]
 }
 
+/// Custom class to provide a header for this page.
 class PlayerHeaderCollectionViewCell: UICollectionViewCell {
+    /// The first image of the player's team's logo.
     @IBOutlet weak var firstImage: UIImageView!
+    /// The second image of the player's team's logo.
     @IBOutlet weak var secondImage: UIImageView!
+    /// The name label of the player.
     @IBOutlet weak var nameLabel: UILabel!
 }
 
+/// Custom class representing a cell for each major statistical category.
 class PlayerStatCollectionViewCell: UICollectionViewCell {
+    /// The label for the numerical value of the stat.
     @IBOutlet weak var numberLabel: UILabel!
+    /// The title of this stat.
     @IBOutlet weak var statTitleLabel: UILabel!
+    /// Label for any extra detail of this stat.
     @IBOutlet weak var statDetailLabel: UILabel!
 }
 
+/// Class to display a detailed look at a single player's performance in a game.
 class DetailedPlayerGameCollectionViewController: UICollectionViewController {
-    
+    /// The section housing the header of this view.
     private let HEADER_SECTION = 0
+    /// The cell identifier of the header cell.
     private let headerCell = "headerCell"
+    /// The cell identifier of the stat cell.
     private let statCell = "statCell"
-    public var player: PlayerGameStatsData?
+    /// The player to display the performance of.
+    public var player: PlayerGameStats?
     
-
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.setCollectionViewLayout(configureLayout(), animated: false)
         collectionView.backgroundColor = .systemGray3
     }
+    
+    /// Given the total made and attempted shots and the total 3 point made and attempted shots, calculate the 2 point field goal percentage.
+    /// - Parameters:
+    ///     - fgm: The amount of field goals made.
+    ///     - fga: The amount of field goals attempted.
+    ///     - fgm3: The amount of 3-point field goals made.
+    ///     - fga3: The amount of 3-point field goals attempted.
+    /// - Returns: A stringed version of the 2-point percentage.
+    private func get2PointFieldGoalPercentage(fgm: Int, fga: Int, fgm3: Int, fga3: Int) -> String {
+        if fga - fga3 == 0 {
+            return "0.0%"
+        }
+        let pct = Float(fgm - fgm3)/Float(fga - fga3)*100
+        let rounded_pct = Float(Int(pct * 10)) / Float(10)
+        return "\(rounded_pct)%"
+    }
 
     // MARK: UICollectionViewDataSource
     
+    /// Configure the layout of the collection view.
     private func configureLayout() -> UICollectionViewLayout {
         let contentInsets = NSDirectionalEdgeInsets(top: 1, leading: 1, bottom: 1, trailing: 1)
         
@@ -146,45 +188,4 @@ class DetailedPlayerGameCollectionViewController: UICollectionViewController {
     
         return cell
     }
-    
-    private func get2PointFieldGoalPercentage(fgm: Int, fga: Int, fgm3: Int, fga3: Int) -> String {
-        if fga - fga3 == 0 {
-            return "0.0%"
-        }
-        let pct = Float(fgm - fgm3)/Float(fga - fga3)*100
-        let rounded_pct = Float(Int(pct * 10)) / Float(10)
-        return "\(rounded_pct)%"
-    }
-
-    // MARK: UICollectionViewDelegate
-
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
-    
-    }
-    */
-
 }

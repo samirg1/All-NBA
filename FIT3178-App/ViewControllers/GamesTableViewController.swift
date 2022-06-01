@@ -19,40 +19,62 @@ private enum GestureDateChanges: Int {
     case right = -1
 }
 
-class GamesTableViewCell: UITableViewCell { // cell that shows the main game info
+/// Custom table cell class to house the main game information.
+class GamesTableViewCell: UITableViewCell {
+    /// The logo of the away team.
     @IBOutlet weak var awayTeamImage: UIImageView!
+    /// The score of the away team.
     @IBOutlet weak var awayTeamScore: UILabel!
+    /// The logo of the home team.
     @IBOutlet weak var homeTeamImage: UIImageView!
+    /// The score of the home team.
     @IBOutlet weak var homeTeamScore: UILabel!
+    /// The time label of the game.
     @IBOutlet weak var timeLabel: UILabel!
+    /// The status label of the game.
     @IBOutlet weak var statusLabel: UILabel!
 }
 
+/// Custom table class to display a date's live, past and future games to the user.
 class GamesTableViewController: UITableViewController {
-    
+    /// Variable to access the ``AppDelegate`` of this App.
     private let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
-    // variables to check whether the view needs to be updated based on what has happened on other views
+    /// Variable to determine whether this view controller has reloaded.
     public var reloaded = false
+    /// Variable to determine wthere this view controller needs to be reloaded.
     public var toBeReloaded = false
     
+    /// The selected date to show games for.
     private var selectedDate = String()
-    private var selectedDateGames = [GameData]()
-    private var selectedGame : GameData?
+    /// The games on the selected data.
+    private var selectedDateGames = [Game]()
+    /// The game that the user has selected.
+    private var selectedGame : Game?
+    /// The title of the game the user has selected.
     private var selectedGameTitle : String?
+    /// The segue identifer of the segue to perform once a game is selected.
     private var selectedGameSegue = "gameSelectSegue"
     
+    /// The cell identifer of the game cell.
     private let GAME_CELL_IDENTIFIER = "gamesCell"
+    /// The cell identifier of the info cell.
     private let INFO_CELL_IDENTIFIER = "infoCell"
+    /// The section that houses the games.
     private let GAMES_SECTION = 0
+    /// The section that houses extra info.
     private let INFO_SECTION = 1
     
+    /// The menu button used to show and change the year.
     @IBOutlet weak private var menuButton: UIButton!
+    /// The button used to revert the date back to today's date.
     @IBOutlet weak private var todayButtonOutlet: UIBarButtonItem!
+    /// The label that describes the current date.
     @IBOutlet weak private var dateLabel: UILabel!
+    /// The toolbar that houses a refresh button.
     @IBOutlet weak private var refreshToolbar: UIToolbar!
     
-    // displays the indicator when data is loading from API in the centre of the toolbar
+    /// Indicator used to indicate when an asynchronous task is active.
     private lazy var indicator: UIActivityIndicatorView = {
         var indicator = UIActivityIndicatorView()
         indicator.style = UIActivityIndicatorView.Style.large
@@ -68,14 +90,25 @@ class GamesTableViewController: UITableViewController {
         resetToday(self) // retrieve the required data from today
     }
     
-    // MARK: Notificatino Handling
+    override func viewWillAppear(_ animated: Bool) {
+        if toBeReloaded {
+            manualRefreshGames(self)
+        }
+        else {
+            reloaded = false
+        }
+    }
+    
+    // MARK: Notification Handling
+    
+    /// Add local notifications of upcoming games once the user has seen them.
     private func addNotifications() {
         if !appDelegate.notificationsEnabled || !appDelegate.gameAlertNotifcations {
-            return
+            return // user needs to have notifications enables and have game alert notification activated
         }
         
         for game in selectedDateGames {
-            if appDelegate.favouritesOnlyNotifications {
+            if appDelegate.favouritesOnlyNotifications { // if user has selected to only get favourite team notifications
                 if !appDelegate.favouriteTeams.contains(where: { team in team.id == game.homeTeam.id || team.id == game.awayTeam.id}) {
                     continue
                 }
@@ -104,6 +137,10 @@ class GamesTableViewController: UITableViewController {
         }
     }
     
+    /// Create and queue a local notification of an upcoming game.
+    /// - Parameters:
+    ///     - date: The specific date to get the notification.
+    ///     - title: The title game to add to the notification.
     private func createGameNotification(date: DateComponents, title: String) {
         let content = UNMutableNotificationContent()
         content.title = "Game Alert"
@@ -119,7 +156,11 @@ class GamesTableViewController: UITableViewController {
     }
     
     // MARK: - Retrieving and Decoding Data
-    private func getGameData(reload: Bool) { // gets data of all games on date
+    
+    /// Get all the games on the selected date.
+    /// - Parameters:
+    ///     - reload: Whether or not data should be reloaded regardless of whether a file exists or not.
+    private func getGameData(reload: Bool) {
         dateLabel.text = getNewDateText(date: selectedDate)
         selectedDateGames.removeAll()
         
@@ -130,7 +171,7 @@ class GamesTableViewController: UITableViewController {
             if let data = getFileData(name: fileName) {
                 return decodeGameData(data: data)
             }
-            return displayMessage_sgup0027(title: FILE_MANAGER_DATA_ERROR_TITLE, message: FILE_MANAGER_DATA_ERROR_MESSAGE)
+            return displaySimpleMessage(title: FILE_MANAGER_DATA_ERROR_TITLE, message: FILE_MANAGER_DATA_ERROR_MESSAGE)
         }
         else {
             
@@ -150,7 +191,7 @@ class GamesTableViewController: UITableViewController {
             Task {
                 let (data, error) = await requestData(path: .games, queries: [.dates : API_date_string])
                 guard let data = data else {
-                    displayMessage_sgup0027(title: error!.title, message: error!.message)
+                    displaySimpleMessage(title: error!.title, message: error!.message)
                     indicator.stopAnimating()
                     return
                 }
@@ -162,6 +203,9 @@ class GamesTableViewController: UITableViewController {
         }
     }
     
+    /// Decode the game data retrieved from the API.
+    /// - Parameters:
+    ///     - data: The data to decode.
     private func decodeGameData(data: Data){ // decodes data of all games and updates view
         do {
             let decoder = JSONDecoder()
@@ -175,32 +219,34 @@ class GamesTableViewController: UITableViewController {
             }
         }
         catch let error {
-            displayMessage_sgup0027(title: JSON_DECODER_ERROR_TITLE, message: error.localizedDescription)
+            displaySimpleMessage(title: JSON_DECODER_ERROR_TITLE, message: error.localizedDescription)
             indicator.stopAnimating()
         }
     }
     
-    @IBAction private func manualRefreshGames(_ sender: Any) { // manually refresh the current games
+    // MARK: Triggered Actions
+    
+    /// Action to manually refresh the games.
+    /// - Parameters:
+    ///     - sender: The triggerer of this action.
+    @IBAction private func manualRefreshGames(_ sender: Any) {
         getGameData(reload: true)
     }
     
-    @IBAction private func resetToday(_ sender: Any) { // resets the view to the current day
+    /// Action to reset the view controller to show the games on the current date.
+    /// - Parameters:
+    ///     - sender: The triggerer of this action.
+    @IBAction private func resetToday(_ sender: Any) {
         selectedDate = getTodaysDate()
         defaultMenuBuild()
         getGameData(reload: toBeReloaded)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        if toBeReloaded {
-            manualRefreshGames(self)
-        }
-        else {
-            reloaded = false
-        }
-    }
+    // MARK: Dates, Titles and Menus
     
-    // MARK: - Dates, Titles and Menus
-    
+    /// Action to change the selected date in view.
+    /// - Parameters:
+    ///     - sender: The triggerer of this action.
     @IBAction private func changeDateButton(_ sender: Any) { // changes the sepcific date of viewable games
         var change = 0
         if let sender = sender as? UIBarButtonItem { // if user changes date using the buttons
@@ -222,12 +268,17 @@ class GamesTableViewController: UITableViewController {
         getGameData(reload: false)
     }
     
-    private func getNewDateText(date: String) -> String { // gets the new navigation title of the view based on the 'selectedDate'
+    /// Function to get the new text to be displayed to show the user the current date.
+    /// - Parameters:
+    ///     - date: The stringed current date.
+    /// - Returns: A string displaying a pretty printed version of the current date.
+    private func getNewDateText(date: String) -> String {
         todayButtonOutlet.isEnabled = getTodaysDate() != date
         let currentDate = DateFormatter().stringToDate(string: date, format: DateFormats.API, timezone: appDelegate.currentTimeZoneIdentifier)
         return DateFormatter().dateToString(date: currentDate, format: DateFormats.display, timezone: appDelegate.currentTimeZoneIdentifier)
     }
     
+    /// Builds the default menu for changing the years to display dates.
     private func defaultMenuBuild() { // builds the menu for changing the season
         let optionsClosure = { (action: UIAction) in
             let year = Int.init(action.title.split(separator: "/")[0])! + 1
@@ -245,11 +296,14 @@ class GamesTableViewController: UITableViewController {
         ])
     }
     
+    /// Gets today's date as a string in API format.
+    /// - Returns: Today's date as a string.
     private func getTodaysDate() -> String { // gets todays date as a string
         return DateFormatter().dateToString(date: Date(), format: DateFormats.API, timezone: appDelegate.currentTimeZoneIdentifier)
     }
     
-    private func changeBadgeNumber() { // changes the badge number of the tab to represent how many live games there are
+    /// Changes the badge number shown on this view's tab bar item to match the amount of live games there are.
+    private func changeBadgeNumber() {
         var numberOfLiveGames = 0
         if selectedDate == getTodaysDate() {
             for game in selectedDateGames {

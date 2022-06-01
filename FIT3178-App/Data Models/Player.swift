@@ -1,5 +1,5 @@
 //
-//  PlayerData.swift
+//  Player.swift
 //  FIT3178-App
 //
 //  Created by Samir Gupta on 20/4/22.
@@ -7,16 +7,26 @@
 
 import UIKit
 
-class PlayerData: NSObject, Codable { // stores the data for a specific player from API
+/// Class representing an NBA player.
+class Player: NSObject, Codable { // stores the data for a specific player from API
+    /// The ID of the player.
     var id: Int
+    /// The player's first name.
     var firstName : String
+    /// The player's last name.
     var lastName : String
+    /// The player's position.
     var position : String?
+    /// The player's height in feet.
     var heightFeet : Int?
+    /// The player's height in inches.
     var heightInches : Int?
+    /// The player's weight in pounds.
     var weightPounds : Int?
-    var team : TeamData
+    /// The team the player belongs to,
+    var team : Team
     
+    /// Coding keys required for encoding and decoding.
     private enum CodingKeys: String, CodingKey {
         case id
         case firstName = "first_name"
@@ -38,7 +48,7 @@ class PlayerData: NSObject, Codable { // stores the data for a specific player f
         heightFeet = try container.decode(Int?.self, forKey: .heightFeet)
         heightInches = try container.decode(Int?.self, forKey: .heightInches)
         weightPounds = try container.decode(Int?.self, forKey: .weightPounds)
-        team = try container.decode(TeamData.self, forKey: .team)
+        team = try container.decode(Team.self, forKey: .team)
     }
     
     func encode(to encoder: Encoder) throws {
@@ -51,5 +61,16 @@ class PlayerData: NSObject, Codable { // stores the data for a specific player f
         try container.encode(heightInches, forKey: .heightInches)
         try container.encode(weightPounds, forKey: .weightPounds)
         try container.encode(team, forKey: .team)
+    }
+}
+
+/// Class to store a collection of Players.
+class PlayerCollection: NSObject, Decodable {
+    /// The players in this collection.
+    var players: [Player]?
+    
+    /// The coding keys required for decoding.
+    private enum CodingKeys: String, CodingKey {
+        case players = "data"
     }
 }

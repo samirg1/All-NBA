@@ -19,7 +19,6 @@ private var cacheDirectoryPath: URL = {
 
 /// Error title used when the data stored in `FileManager` is invalid.
 public let FILE_MANAGER_DATA_ERROR_TITLE = "An error occured fetching data"
-
 /// Error message used when the data stored in `FileManager` is invalid.
 public let FILE_MANAGER_DATA_ERROR_MESSAGE = "Stored file data is invalid."
 
@@ -47,7 +46,7 @@ public enum FileManagerFiles: String {
 /// Check if a particular file exists.
 /// - Parameters:
 ///     - name: The name of the file.
-/// - Returns: `true` if the files exists, `false` if not.
+/// - Returns: If the files exists, `true`, otherwise `false`.
 public func doesFileExist(name: String) -> Bool {
     let localURL = cacheDirectoryPath.appendingPathComponent(name)
     return FileManager.default.fileExists(atPath: localURL.path)
@@ -83,7 +82,7 @@ public func getFavourites() {
         if let data = data {
             do {
                 let decoder = JSONDecoder()
-                let collection = try decoder.decode([TeamData].self, from: data)
+                let collection = try decoder.decode([Team].self, from: data)
                 appDelegate.favouriteTeams = collection
             }
             catch let error {
@@ -98,7 +97,7 @@ public func getFavourites() {
         if let data = data {
             do {
                 let decoder = JSONDecoder()
-                let collection = try decoder.decode([PlayerData].self, from: data)
+                let collection = try decoder.decode([Player].self, from: data)
                 appDelegate.favouritePlayers = collection
             }
             catch let error {
@@ -122,7 +121,12 @@ public func updateFavourites() {
     FileManager.default.createFile(atPath: player_localURL.path, contents: player_data, attributes: [:])
 }
 
-func getNotificationSettings(update: Bool) {
+/// Update or retrieve the current status of the user's notification settings.
+///
+/// If an update on these settings has occured, the files will be updated, otherwise the current data is checked to ensure up to date settings.
+/// - Parameters:
+///     - update: Boolean value determining whether an update has occured or not.
+public func getNotificationSettings(update: Bool) {
     let fileName = FileManagerFiles.game_alert_notifications.rawValue
     if doesFileExist(name: fileName) && !update {
         if let data = getFileData(name: fileName) {

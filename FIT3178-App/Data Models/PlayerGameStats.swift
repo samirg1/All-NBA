@@ -1,5 +1,5 @@
 //
-//  PlayerGameStatsData.swift
+//  PlayerGameStats.swift
 //  FIT3178-App
 //
 //  Created by Samir Gupta on 20/4/22.
@@ -7,45 +7,72 @@
 
 import UIKit
 
-class PlayerGameStatsData : NSObject, Decodable { // used to store all player stats from a specific game from the API
+/// Class to store a player's game stats.
+class PlayerGameStats : NSObject, Decodable {
+    /// The ID of this particular set of stats.
     var id: Int
-    
+    /// The amount of points the player has scored in the game.
     var pts: Int
+    /// The amount of rebounds the player has secured in the game.
     var reb: Int
+    /// The amount of assists the player has in the game
     var ast: Int
+    /// The amount of blocks the player has in the game.
     var blk: Int
+    /// The amount of steals the player has in the game.
     var stl: Int
+    /// The amount of turnovers the player has in the game.
     var turnover: Int
-    
+    /// The amount of defensive rebounds the player has in the game.
     var dreb: Int
+    /// The amount of offensive rebounds the player has in the game.
     var oreb: Int
-    
+    /// The player's 3-point percentage.
     var pct3: Float
+    /// The amount of 3-point shots the player has made in the game.
     var fgm3: Int
+    /// The amount of 3-point shots the player has attempted in the game.
     var fga3: Int
+    /// The player's overall shot percentage.
     var pct: Float
+    /// The amount of shots the player has made in the game.
     var fgm: Int
+    /// The amount of shots the player has attempted in the game.
     var fga: Int
+    /// The player's free throw percentage.
     var pct1: Float
+    /// The amount of free throws the player has attempted in the game.
     var fta: Int
+    /// The amount of free throws the player has made in the game.
     var ftm: Int
-    
+    /// The amount of minutes the player has played in the game. Stored as 'MM:ss'.
     var min: String
+    /// The amount of fouls the player has in the game.
     var pf: Int
-    
+    /// The player's ID
     var playerId : Int
+    /// The player's first name.
     var playerFirstName : String
+    /// The player's last name.
     var playerLastName : String
+    /// The player's team's ID.
     var teamId : Int
+    /// The player's team's abbreviated name.
     var teamAbbreviation : String
-    
+    /// The ID of the game.
     var gameId: Int
+    /// The ID of the home team of the game.
     var gameHomeTeamId: Int
+    /// The ID of the away team of the game.
     var gameAwayTeamId: Int
+    /// The home team's score in the game.
     var gameHomeScore: Int
+    /// The away team's score in the game.
     var gameAwayScore: Int
+    /// The date of the game.
     var gameDate: String
     
+    /// The coding keys required for decoding the root level.
     private enum CodingKeys: String, CodingKey {
         case id
         case pts
@@ -72,17 +99,20 @@ class PlayerGameStatsData : NSObject, Decodable { // used to store all player st
         case game
     }
     
+    /// The coding keys required for decoding the team level.
     private enum TeamKeys: String, CodingKey {
         case teamId = "id"
         case teamAbbreviation = "abbreviation"
     }
     
+    /// The coding keys required for decoding the player level.
     private enum PlayerKeys: String, CodingKey {
         case playerId = "id"
         case playerFirstName = "first_name"
         case playerLastName = "last_name"
     }
     
+    /// The coding keys required for decoding the game level.
     private enum GameKeys: String, CodingKey {
         case gameId = "id"
         case gameHomeTeamId = "home_team_id"
@@ -129,5 +159,16 @@ class PlayerGameStatsData : NSObject, Decodable { // used to store all player st
         gameAwayTeamId = try gameContainer.decode(Int.self, forKey: .gameAwayTeamId)
         gameHomeTeamId = try gameContainer.decode(Int.self, forKey: .gameHomeTeamId)
         gameDate = try gameContainer.decode(String.self, forKey: .gameDate)
+    }
+}
+
+/// Class to store a collection of player's game stats.
+class PlayerGameStatsCollection: NSObject, Decodable {
+    /// The collection of player's game stats.
+    var playersGameStats : [PlayerGameStats]?
+    
+    /// The coding keys required for decoding.
+    private enum CodingKeys: String, CodingKey {
+        case playersGameStats = "data"
     }
 }

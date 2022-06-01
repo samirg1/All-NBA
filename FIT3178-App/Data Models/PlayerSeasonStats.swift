@@ -7,12 +7,18 @@
 
 import UIKit
 
+/// Class to house a players season stat averages.
 class PlayerSeasonStats: NSObject, Decodable {
+    /// The ID of the player.
     var id: Int
+    /// The average amount of points this player scores per game.
     var pts: Double
+    /// The average amount of assists this player acquires per game.
     var ast: Double
+    /// The average amount of rebounds this player secures per game.
     var reb: Double
     
+    /// The coding keys required for decoding.
     private enum StatKeys: String, CodingKey {
         case id = "player_id"
         case pts
@@ -28,4 +34,14 @@ class PlayerSeasonStats: NSObject, Decodable {
         reb = try container.decode(Double.self, forKey: .reb)
     }
     
+}
+
+/// Class used to house a collection of player's season stat averages.
+class PlayerSeasonStatCollection: NSObject, Decodable {
+    var players: [PlayerSeasonStats]?
+    
+    /// The coding keys required for decoding.
+    private enum CodingKeys: String, CodingKey {
+        case players = "data"
+    }
 }

@@ -7,13 +7,19 @@
 
 import UIKit
 
+/// Custom class to edit the user's favourites.
 class FavouritesSettingsTableViewController: UITableViewController {
-    
+    /// Variable to access the ``AppDelegate`` of the App.
     private let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    /// The section headers of the table view.
     private let sectionHeaders = ["PLAYERS", "TEAMS", ""]
+    /// The section that houses the user's favourite players.
     private let playersSection = 0
+    /// The section that houses the user's favourite teams.
     private let teamSection = 1
+    /// The section that houses any additional info.
     private let infoSection = 2
+    /// The identifier of the default cell.
     private let cellIdentifier = "favouriteCell"
     
     override func viewDidLoad() {
@@ -67,12 +73,10 @@ class FavouritesSettingsTableViewController: UITableViewController {
         return cell
     }
 
-    // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return indexPath.section != infoSection
     }
 
-    // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             if indexPath.section == playersSection {
@@ -95,15 +99,4 @@ class FavouritesSettingsTableViewController: UITableViewController {
         }
         return sectionHeaders[section]
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

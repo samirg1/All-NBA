@@ -10,59 +10,85 @@
 
 import UIKit
 
-public enum TeamFilter: String { // stores the team filters for standings
+/// Stores the team filters for standings.
+public enum TeamFilter: String {
+    /// The conference filter.
     case CONFERENCE = "Conference"
+    /// The division filter.
     case DIVISION = "Division"
+    /// The league filter (i.e. no filter).
     case LEAGUE = "League"
 }
 
-private enum Conferences: String { // stores the conferences of the NBA
+/// Stores the conferences of the NBA.
+private enum Conferences: String {
+    /// The eastern conference.
     case EAST = "East"
+    /// The western conference.
     case WEST = "West"
 }
 
-private enum Divisions: String { // stores the divisions of the NBA
+/// Stores the divisions of the NBA.
+private enum Divisions: String {
+    /// The Atlantic division.
     case ATLANTIC = "Atlantic"
+    /// The Central division.
     case CENTRAL = "Central"
+    /// The Southeast division.
     case SOUTHEAST = "Southeast"
+    /// The Northwest division.
     case NORTHWEST = "Northwest"
+    /// The Pacific division.
     case PACIFIC = "Pacific"
+    /// The Southwest division.
     case SOUTHWEST = "Southwest"
 }
 
-public enum Season2021_2022: String { // stores the 2021/22 season info
+/// Stores the 2021/22 season info
+public enum Season2021_2022: String {
+    /// The year this season started.
     case YEAR = "2021"
+    /// The start date of this season.
     case START = "2021-10-19"
+    /// The end date of this season.
     case END = "2022-04-10"
 }
 
-public enum Season2020_2021: String { // stores the 2020/21 season info
-    case YEAR = "2020"
-    case START = "2020-12-22"
-    case END = "2020-05-16"
-}
-
-class StandingsTeamCell: UITableViewCell { // cell depicting a team's info
+/// Custom cell depicting a team's main information.
+class StandingsTeamCell: UITableViewCell {
+    /// The team's logo.
     @IBOutlet weak var teamImage: UIImageView!
+    /// The position of the team.
     @IBOutlet weak var numberLabel: UILabel!
+    /// The abbreviation of the team.
     @IBOutlet weak var abbreviationLabel: UILabel!
+    /// The season record of the team.
     @IBOutlet weak var seasonRecordLabel: UILabel!
+    /// The percentage wins of the team.
     @IBOutlet weak var percentageLabel: UILabel!
+    /// The home record of the team.
     @IBOutlet weak var homeRecordLabel: UILabel!
+    /// The away record of the team.
     @IBOutlet weak var awayRecordLabel: UILabel!
+    /// The label of how many games behind the front the team is.
     @IBOutlet weak var gamesBehindLabel: UILabel!
 }
 
 class StandingsTableViewController: UITableViewController {
-    
+    /// The maximum amount of games in a regular season.
     private let MAX_GAMES_IN_SEASON = "82"
+    /// The current season.
     private var season = Season2021_2022.self
+    /// The current team filter.
     private var teamFilter: TeamFilter = TeamFilter.LEAGUE
-    private var teamsData: [TeamSeasonData] = []
+    /// The collection of teams.
+    private var teamsData: [TeamSeasonStats] = []
+    /// The cell identifier of the cell that houses the team's stats.
     private let teamCellIdentifier = "teamCell"
-    private var selectedTeam: TeamSeasonData?
-    
-    private var divisionTeams: [Divisions: [TeamSeasonData]] = [
+    /// The selected team (if any).
+    private var selectedTeam: TeamSeasonStats?
+    /// The collection of teams, split up by division.
+    private var divisionTeams: [Divisions: [TeamSeasonStats]] = [
         Divisions.ATLANTIC: [],
         Divisions.CENTRAL: [],
         Divisions.SOUTHEAST: [],
@@ -70,12 +96,12 @@ class StandingsTableViewController: UITableViewController {
         Divisions.PACIFIC: [],
         Divisions.SOUTHWEST: []
     ]
-    
-    private var conferenceTeams: [Conferences: [TeamSeasonData]] = [
+    /// The collection of teams, split up by conference.
+    private var conferenceTeams: [Conferences: [TeamSeasonStats]] = [
         Conferences.EAST: [],
         Conferences.WEST: []
     ]
-    
+    /// The indicator used to indicate when an asynchronous task is active.
     private lazy var indicator: UIActivityIndicatorView = {
         var indicator = UIActivityIndicatorView()
         indicator.style = UIActivityIndicatorView.Style.large
@@ -94,8 +120,11 @@ class StandingsTableViewController: UITableViewController {
         getTeamsData(reload: false)
     }
     
+    /// Outlet to the team filter button.
     @IBOutlet weak private var teamFilterMenu: UIButton!
-    private func buildFilterMenu() { // build the team filter menu
+    
+    /// Build the team filter menu.
+    private func buildFilterMenu() {
         let optionsClosure = { (action: UIAction) in
             self.teamFilter = TeamFilter(rawValue: action.title)!
             self.tableView.reloadData()
@@ -110,7 +139,11 @@ class StandingsTableViewController: UITableViewController {
     
     
     // MARK: Retrieving Data from API
-    private func getTeamsData(reload: Bool) { // retrieves the teams data
+    
+    /// Retrieve all teams.
+    /// - Parameters:
+    ///     - reload: Whether to reload the data from the API regardless of whether a file exists or not.
+    private func getTeamsData(reload: Bool) {
         teamsData.removeAll()
         for (div, _) in divisionTeams {
             divisionTeams[div]?.removeAll()
@@ -124,7 +157,7 @@ class StandingsTableViewController: UITableViewController {
             if let data = getFileData(name: fileName) {
                return decodeTeams(data: data, reload: reload)
             }
-            return displayMessage_sgup0027(title: FILE_MANAGER_DATA_ERROR_TITLE, message: FILE_MANAGER_DATA_ERROR_MESSAGE)
+            return displaySimpleMessage(title: FILE_MANAGER_DATA_ERROR_TITLE, message: FILE_MANAGER_DATA_ERROR_MESSAGE)
         }
         else {
             indicator.startAnimating()
@@ -132,7 +165,7 @@ class StandingsTableViewController: UITableViewController {
             Task {
                 let (data, error) = await requestData(path: .teams, queries: [:])
                 guard let data = data else {
-                    displayMessage_sgup0027(title: error!.title, message: error!.message)
+                    displaySimpleMessage(title: error!.title, message: error!.message)
                     indicator.stopAnimating()
                     return
                 }
@@ -146,7 +179,11 @@ class StandingsTableViewController: UITableViewController {
         }
     }
     
-    private func decodeTeams(data: Data, reload: Bool) { // decodes the teams data
+    /// Decode the team data.
+    /// - Parameters:
+    ///     - data: The data to decode.
+    ///     - reload: Whether to reload the data from the API regardless of whether a file exists or not.
+    private func decodeTeams(data: Data, reload: Bool) {
         do {
             let decoder = JSONDecoder()
             let collection = try decoder.decode(TeamCollection.self, from: data)
@@ -157,18 +194,22 @@ class StandingsTableViewController: UITableViewController {
             }
         }
         catch let error {
-            displayMessage_sgup0027(title: JSON_DECODER_ERROR_TITLE, message: error.localizedDescription)
+            displaySimpleMessage(title: JSON_DECODER_ERROR_TITLE, message: error.localizedDescription)
             indicator.stopAnimating()
         }
     }
     
-    private func getTeamSeasonGameData(team: TeamData, reload: Bool){ // retrieves the teams games data
+    /// Get a team's season data.
+    /// - Parameters:
+    ///     - team: The team to find data for.
+    ///     - reload: Whether to reload the data from the API regardless of whether a file exists or not.
+    private func getTeamSeasonGameData(team: Team, reload: Bool){
         let fileName = "\(team.id)" + FileManagerFiles.team_season_games_suffix.rawValue
         if doesFileExist(name: fileName) && !reload {
             if let data = getFileData(name: fileName) {
                 return decodeTeamGames(data: data, team: team)
             }
-            return displayMessage_sgup0027(title: FILE_MANAGER_DATA_ERROR_TITLE, message: FILE_MANAGER_DATA_ERROR_MESSAGE)
+            return displaySimpleMessage(title: FILE_MANAGER_DATA_ERROR_TITLE, message: FILE_MANAGER_DATA_ERROR_MESSAGE)
         }
         else {
             Task {
@@ -182,7 +223,7 @@ class StandingsTableViewController: UITableViewController {
                 
                 let (data, error) = await requestData(path: .games, queries: queries)
                 guard let data = data else {
-                    displayMessage_sgup0027(title: error!.title, message: error!.message)
+                    displaySimpleMessage(title: error!.title, message: error!.message)
                     indicator.stopAnimating()
                     return
                 }
@@ -194,7 +235,11 @@ class StandingsTableViewController: UITableViewController {
         }
     }
     
-    private func decodeTeamGames(data: Data, team: TeamData) { // decodes the teams games data
+    /// Decode a team's season data.
+    /// - Parameters:
+    ///     - data: The data to decode
+    ///     - team: The team that's data is being decoded.
+    private func decodeTeamGames(data: Data, team: Team) {
         guard let division = team.division, let conference = team.conference else {
             return
         }
@@ -202,7 +247,7 @@ class StandingsTableViewController: UITableViewController {
             let decoder = JSONDecoder()
             let collection = try decoder.decode(GameCollection.self, from: data)
             if let games = collection.games {
-                let teamData = TeamSeasonData(withTeam: team)
+                let teamData = TeamSeasonStats(withTeam: team)
                 for game in games {
                     teamData.addGame(game: game)
                 }
@@ -221,13 +266,30 @@ class StandingsTableViewController: UITableViewController {
             }
         }
         catch let error {
-            displayMessage_sgup0027(title: JSON_DECODER_ERROR_TITLE, message: error.localizedDescription)
+            displaySimpleMessage(title: JSON_DECODER_ERROR_TITLE, message: error.localizedDescription)
             indicator.stopAnimating()
         }
     }
     
+    /// Action to manually refresh data.
     @IBAction private func manualRefresh(_ sender: Any) {
         getTeamsData(reload: true)
+    }
+    
+    /// Find and return the positions of a particular team in their conference, division and league.
+    /// - Parameters:
+    ///     - teamToFind: The team to find positions for.
+    /// - Returns: Key/value pairs matching the team filter to the position the team is in this subsection of the league.
+    private func findPositions(teamToFind: TeamSeasonStats) -> [TeamFilter: Int]{ // find the positions in the league, division and conference for display
+        let div = divisionTeams[Divisions.init(rawValue: teamToFind.team.division!)!]!.firstIndex { team in
+            team.team.abbreviation == teamToFind.team.abbreviation
+        }! + 1
+        let conf = conferenceTeams[Conferences.init(rawValue: teamToFind.team.conference!)!]!.firstIndex { team in
+            team.team.abbreviation == teamToFind.team.abbreviation
+        }! + 1
+        let league = teamsData.firstIndex { team in team.team.abbreviation == teamToFind.team.abbreviation }! + 1
+        
+        return [TeamFilter.DIVISION: div, TeamFilter.CONFERENCE: conf, TeamFilter.LEAGUE: league]
     }
 
     // MARK: - Table view data source
@@ -260,7 +322,7 @@ class StandingsTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: teamCellIdentifier, for: indexPath) as! StandingsTeamCell
-        let team: TeamSeasonData
+        let team: TeamSeasonStats
         if teamFilter == TeamFilter.CONFERENCE {
             team = conferenceTeams[Array(conferenceTeams.keys)[indexPath.section]]![indexPath.row]
         }
@@ -336,17 +398,5 @@ class StandingsTableViewController: UITableViewController {
             destination.selectedTeam = selectedTeam
             destination.positions = findPositions(teamToFind: selectedTeam!)
         }
-    }
-    
-    private func findPositions(teamToFind: TeamSeasonData) -> [TeamFilter: Int]{ // find the positions in the league, division and conference for display
-        let div = divisionTeams[Divisions.init(rawValue: teamToFind.team.division!)!]!.firstIndex { team in
-            team.team.abbreviation == teamToFind.team.abbreviation
-        }! + 1
-        let conf = conferenceTeams[Conferences.init(rawValue: teamToFind.team.conference!)!]!.firstIndex { team in
-            team.team.abbreviation == teamToFind.team.abbreviation
-        }! + 1
-        let league = teamsData.firstIndex { team in team.team.abbreviation == teamToFind.team.abbreviation }! + 1
-        
-        return [TeamFilter.DIVISION: div, TeamFilter.CONFERENCE: conf, TeamFilter.LEAGUE: league]
     }
 }

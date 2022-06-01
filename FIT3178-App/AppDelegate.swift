@@ -12,16 +12,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     /// Variable that determines whether the notifications have been enabled on the current device.
     public var notificationsEnabled: Bool = true
-    
+    /// Variable to determine whether or not the user has elected to allow Game Alert notifications.
     public var gameAlertNotifcations: Bool = true
-    
+    /// Variable to determine whether or not the user has elected to only allow Game Alert notifications from their favourite teams and players.
     public var favouritesOnlyNotifications: Bool = false
     
     /// Variable that determines the identifier of the timezone that the App will show times and dates in.
     public var currentTimeZoneIdentifier = TimeZone.current.identifier
     
-    public var favouriteTeams: [TeamData] = []
-    public var favouritePlayers: [PlayerData] = []
+    /// The user's favourite teams.
+    public var favouriteTeams: [Team] = []
+    /// The user's favourite players.
+    public var favouritePlayers: [Player] = []
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -30,7 +32,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         notificationCenter.getNotificationSettings { notificationSettings in
             if notificationSettings.authorizationStatus == .notDetermined {
-                
                 notificationCenter.requestAuthorization(options: [.alert]) { granted, error in
                     self.notificationsEnabled = granted
                     if granted {
@@ -63,13 +64,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
 
-    // Function required when registering as a delegate. We can process notifications if they are in the foreground!
+    
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        // Print some information to console saying we have recieved the notification
-        // We could do some automatic processing here if we didnt want the user's response
-        print("Notification triggered while app running")
-        
-        // By default iOS will silence a notification if the application is in the foreground. We can over-ride this with the following
         completionHandler([.banner])
     }
 }

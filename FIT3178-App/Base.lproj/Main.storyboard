@@ -24,7 +24,6 @@
                         <segue destination="EWT-XR-fuR" kind="relationship" relationship="viewControllers" id="AcJ-fS-yi9"/>
                         <segue destination="Aer-sw-IXf" kind="relationship" relationship="viewControllers" id="nMo-sc-HnN"/>
                         <segue destination="0Ci-4z-HhT" kind="relationship" relationship="viewControllers" id="1fX-we-zpz"/>
-                        <segue destination="6um-Kg-d19" kind="relationship" relationship="viewControllers" id="1fw-fn-25y"/>
                         <segue destination="59B-eg-DQF" kind="relationship" relationship="viewControllers" id="vHe-I5-c59"/>
                     </connections>
                 </tabBarController>
@@ -182,7 +181,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xdw-Wu-nOw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2570" y="-589"/>
+            <point key="canvasLocation" x="2570" y="71"/>
         </scene>
         <!--TeamView-->
         <scene sceneID="7PN-mm-MXo">
@@ -263,7 +262,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xSI-pA-vEb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3445" y="-589"/>
+            <point key="canvasLocation" x="3445" y="71"/>
         </scene>
         <!--Game-->
         <scene sceneID="ET6-ep-ofb">
@@ -429,7 +428,7 @@
                     </connections>
                 </swipeGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="3445" y="94"/>
+            <point key="canvasLocation" x="3445" y="806"/>
         </scene>
         <!--Players-->
         <scene sceneID="STH-O2-YqB">
@@ -506,7 +505,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ILi-n3-Y75" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4343" y="94"/>
+            <point key="canvasLocation" x="4365" y="806"/>
         </scene>
         <!--Player Game-->
         <scene sceneID="17Q-QB-P6Q">
@@ -629,7 +628,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bg1-Ne-ofP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5244.9275362318849" y="93.75"/>
+            <point key="canvasLocation" x="5284" y="806"/>
         </scene>
         <!--Games-->
         <scene sceneID="qh1-i9-b3V">
@@ -808,7 +807,7 @@
                     </connections>
                 </swipeGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="2570" y="94"/>
+            <point key="canvasLocation" x="2570" y="806"/>
         </scene>
         <!--Games-->
         <scene sceneID="Ex7-5p-3HW">
@@ -827,75 +826,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="z7Q-bm-Ijn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1688" y="94"/>
-        </scene>
-        <!--Season Stats-->
-        <scene sceneID="msS-Xq-IsT">
-            <objects>
-                <tableViewController id="MRT-kf-tAm" customClass="SeasonStatsTableViewController" customModule="All_NBA" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="Jnt-Kn-u78">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <scrollView key="tableHeaderView" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="CCJ-Hr-L9F">
-                            <rect key="frame" x="0.0" y="0.0" width="414" height="43"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <subviews>
-                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="knt-tH-8oV" customClass="ScrollableSegmentedControl" customModule="All_NBA" customModuleProvider="target">
-                                    <rect key="frame" x="8" y="5" width="2396" height="32"/>
-                                    <constraints>
-                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="2396" id="wRi-0G-lib"/>
-                                    </constraints>
-                                    <segments>
-                                        <segment title="Points"/>
-                                        <segment title="Rebounds"/>
-                                        <segment title="Assists"/>
-                                        <segment title="Steals"/>
-                                        <segment title="Blocks"/>
-                                        <segment title="Minutes"/>
-                                        <segment title="Turnovers"/>
-                                        <segment title="Fouls"/>
-                                        <segment title="3PM"/>
-                                        <segment title="3P%"/>
-                                        <segment title="FG%"/>
-                                        <segment title="FT%"/>
-                                    </segments>
-                                </segmentedControl>
-                            </subviews>
-                            <viewLayoutGuide key="safeArea" id="G13-o1-hiZ"/>
-                            <constraints>
-                                <constraint firstItem="knt-tH-8oV" firstAttribute="leading" secondItem="CCJ-Hr-L9F" secondAttribute="leadingMargin" id="15C-NZ-jK3"/>
-                                <constraint firstAttribute="bottom" secondItem="knt-tH-8oV" secondAttribute="bottom" constant="7" id="iFl-M8-lxc"/>
-                                <constraint firstAttribute="trailing" secondItem="knt-tH-8oV" secondAttribute="trailing" constant="-1990" id="u3D-df-4qZ"/>
-                                <constraint firstItem="knt-tH-8oV" firstAttribute="top" secondItem="G13-o1-hiZ" secondAttribute="top" constant="5" id="yUn-4t-2UJ"/>
-                            </constraints>
-                            <viewLayoutGuide key="contentLayoutGuide" id="u8o-73-1qS"/>
-                            <viewLayoutGuide key="frameLayoutGuide" id="s8B-SX-lwU"/>
-                        </scrollView>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="playerCell" id="CKP-1A-oxZ">
-                                <rect key="frame" x="0.0" y="87.5" width="414" height="43.5"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="CKP-1A-oxZ" id="XTf-FJ-FxL">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="MRT-kf-tAm" id="II8-y4-Xn4"/>
-                            <outlet property="delegate" destination="MRT-kf-tAm" id="uLk-Sk-y4q"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Season Stats" id="RoK-QD-XZ7"/>
-                    <connections>
-                        <outlet property="sectionScrollView" destination="CCJ-Hr-L9F" id="NSL-Mq-Brv"/>
-                        <outlet property="segmentCon" destination="knt-tH-8oV" id="LB8-rp-eZx"/>
-                    </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="HuN-eZ-chJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2569.5652173913045" y="817.63392857142856"/>
+            <point key="canvasLocation" x="1661" y="806"/>
         </scene>
         <!--Favourites-->
         <scene sceneID="184-0J-73u">
@@ -1073,7 +1004,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="u1B-63-ecy" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2569.5652173913045" y="-1266.2946428571429"/>
+            <point key="canvasLocation" x="2571" y="-660"/>
         </scene>
         <!--Standings-->
         <scene sceneID="gfh-e0-2RP">
@@ -1103,26 +1034,7 @@
                     </items>
                 </toolbar>
             </objects>
-            <point key="canvasLocation" x="1687" y="-589"/>
-        </scene>
-        <!--Stats-->
-        <scene sceneID="0Fn-de-rUf">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="6um-Kg-d19" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Stats" image="plus.forwardslash.minus" catalog="system" id="8dS-tt-21g"/>
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="xYf-h8-uVm">
-                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="MRT-kf-tAm" kind="relationship" relationship="rootViewController" id="K0u-JZ-qaj"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="kH7-xr-hTd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1662" y="818"/>
+            <point key="canvasLocation" x="1661" y="71"/>
         </scene>
         <!--Settings-->
         <scene sceneID="VXp-79-fnR">
@@ -1400,7 +1312,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VtO-se-cfp" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1687" y="-1266"/>
+            <point key="canvasLocation" x="1661" y="-660"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
@@ -1412,7 +1324,6 @@
         <image name="calendar" catalog="system" width="128" height="106"/>
         <image name="gear" catalog="system" width="128" height="119"/>
         <image name="list.number" catalog="system" width="128" height="97"/>
-        <image name="plus.forwardslash.minus" catalog="system" width="128" height="115"/>
         <image name="star" catalog="system" width="128" height="116"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

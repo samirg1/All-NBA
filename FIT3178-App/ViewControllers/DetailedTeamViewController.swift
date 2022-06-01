@@ -8,16 +8,25 @@
 
 import UIKit
 
+/// Custom view controller to display a more detailed and easier to read view of a particular team.
 class DetailedTeamViewController: UIViewController {
 
-    public var selectedTeam: TeamSeasonData?
+    /// The selected team to display.
+    public var selectedTeam: TeamSeasonStats?
+    /// The position of the team in the subsections of the league.
     public var positions: [TeamFilter: Int]?
     
+    /// The image of the team's logo.
     @IBOutlet weak private var teamImage: UIImageView!
+    /// The label for the team's name.
     @IBOutlet weak private var teamName: UILabel!
+    /// The label for the team's conference position.
     @IBOutlet weak private var conferenceLabel: UILabel!
+    /// The label for the team's record.
     @IBOutlet weak private var recordLabel: UILabel!
+    /// The label for the team's league position.
     @IBOutlet weak private var leagueLabel: UILabel!
+    /// The label for the team's division position.
     @IBOutlet weak private var divisionLabel: UILabel!
     
     override func viewDidLoad() {
@@ -25,6 +34,7 @@ class DetailedTeamViewController: UIViewController {
         buildViewController()
     }
     
+    /// Build the view controller when this view loads.
     private func buildViewController() {
         guard let selectedTeam = selectedTeam, let positions = positions else {
             return
@@ -42,7 +52,8 @@ class DetailedTeamViewController: UIViewController {
     }
 }
 
-extension Int { // get ordinal values from integers (1st, 2nd, 3rd .. etc) src: https://stackoverflow.com/questions/3312935/nsnumberformatter-and-th-st-nd-rd-ordinal-number-endings
+extension Int {
+    /// Get ordinal values from integers (1st, 2nd, 3rd .. etc).   [Source found here.]( https://stackoverflow.com/questions/3312935/nsnumberformatter-and-th-st-nd-rd-ordinal-number-endings)
     var ordinal: String {
         var suffix = ""
         let ones: Int = self % 10

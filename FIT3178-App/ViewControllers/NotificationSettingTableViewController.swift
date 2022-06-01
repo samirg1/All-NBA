@@ -7,26 +7,34 @@
 
 import UIKit
 
+/// Custom cell to display a notification setting and a switch.
 class NotifcationSwitchTableCell: UITableViewCell {
+    /// Label describing the setting.
     @IBOutlet weak var label: UILabel!
+    /// Switch used to determine if the setting is on or off.
     @IBOutlet weak var cellSwitch: UISwitch!
 }
 
+/// Custom class to be able to edit the notification settings in the App.
 class NotificationSettingTableViewController: UITableViewController {
-    
+    /// Variable to access the ``AppDelegate`` in the App.
     private let appDelegate = UIApplication.shared.delegate as! AppDelegate
-    
+    /// The sections of the table view.
     private let sections = ["User Settings", "App Settings"]
-    
+    /// The row titles of the rows in the table view.
     private let rows = [
         ["Change notifcation settings", "Test notification"],
         ["Game alerts", "Favourites only"]
     ]
-    
+    /// The setting cell identifier.
     private let settingCellIdentifer = "settingsCell"
+    /// The option cell identifier.
     private let optionCellIdentifier = "optionCell"
+    /// The section that houses the user settings.
     private let userSettingSection = 0
+    /// The row that links to the device's settings. [Source found here.](https://stackoverflow.com/questions/42848539/opening-apps-notification-settings-in-the-settings-app)
     private let settingsRow = 0
+    /// The row that houses the game alert switch.
     private let gameAlertRow = 0
 
     override func viewDidLoad() {
@@ -34,6 +42,9 @@ class NotificationSettingTableViewController: UITableViewController {
         getNotificationSettings(update: false)
     }
 
+    /// Action to update the ``AppDelegate`` on changes to the notification settings.
+    /// - Parameters:
+    ///     - sender: The triggerer of this action.
     @IBAction func switchChanged(_ sender: Any) {
         let sender = sender as! UISwitch
         if sender.tag == gameAlertRow {
@@ -91,12 +102,12 @@ class NotificationSettingTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row == settingsRow {
+        if indexPath.row == settingsRow { // go to settings
             if let appSettings = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(appSettings) {
                 UIApplication.shared.open(appSettings)
-            } // src: https://stackoverflow.com/questions/42848539/opening-apps-notification-settings-in-the-settings-app
+            }
         }
-        else {
+        else { // queue a dummy notification
             let content = UNMutableNotificationContent()
             content.title = "Game Alert (TEST)"
             content.body = "--- vs --- starting soon"
@@ -108,15 +119,4 @@ class NotificationSettingTableViewController: UITableViewController {
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

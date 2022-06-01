@@ -4,42 +4,63 @@
 //
 //  Created by Samir Gupta on 28/4/22.
 //
-//  This view shows a detailed summary of each player and their major statistical categories from a particular game
 
 import UIKit
 
+/// The different sorting filters to be applied to the players.
 private enum SortFilters: String {
+    /// No sorting mechanism (initial value).
     case none = "none"
+    /// Sorting by points scored.
     case points = "pts"
+    /// Sorting by rebounds acquired.
     case rebounds = "reb"
+    /// Sorting by assists acquired.
     case assists = "ast"
+    /// Sorting by amount of steals.
     case steals = "stl"
+    /// Sorting by amount of blocks.
     case blocks = "blk"
+    /// Sorting by amount of turnovers.
     case turnovers = "tov"
+    /// Sorting by field goal percentage.
     case percentage = "pct"
 }
 
+/// Custom cell to display a statstic or header for the major statistics.
 class PlayerGameStatsCollectionViewCell: UICollectionViewCell {
+    /// The label housing a statistic or header.
     @IBOutlet weak var label: UILabel!
 }
 
+/// Custom cell to display the names of the players and the header for this column.
 class PlayerGameNameCollectionViewCell: UICollectionViewCell {
+    /// The label housing the name or header for names.
     @IBOutlet weak var nameLabel: UILabel!
 }
 
+/// Custom collection view to display a simplistic overview of the players statistics from a particular game.
 class PlayersGameStatsCollectionViewController: UICollectionViewController {
-    
+    /// The column headers of the view.
     private let cellHeaders = ["NAME", "PTS", "REB", "AST", "STL", "BLK", "TOV", "PCT"]
+    /// The cell identifier of the cell that houses a stat.
     private let statIdentifier = "statCell"
+    /// The cell identifier of the cell that houses a name.
     private let nameIdentifier = "nameCell"
-    
-    public var playerGameStats: [PlayerGameStatsData] = [PlayerGameStatsData]()
-    private var sortedGameStats: [PlayerGameStatsData] = [PlayerGameStatsData]()
-    private var selectedPlayer: PlayerGameStatsData?
-    
-    private var sortingKey : SortFilters = SortFilters.none
+    /// The section housing the headers.
     private let HEADER_SECTION = 0
+    /// The items that house the names.
     private let NAME_ITEM = 0
+    
+    /// The collection of player's game stats.
+    public var playerGameStats: [PlayerGameStats] = []
+    /// The sorted collection of the player's game stats.
+    private var sortedGameStats: [PlayerGameStats] = []
+    /// The selected player (if any).
+    private var selectedPlayer: PlayerGameStats?
+    /// The current sorting key.
+    private var sortingKey : SortFilters = SortFilters.none
+    /// The segue identifier to segue to ``DetailedPlayerGameCollectionViewController``.
     private let detailedSegue = "playerGameDetail"
     
     override func viewDidLoad() {
@@ -50,6 +71,7 @@ class PlayersGameStatsCollectionViewController: UICollectionViewController {
         navigationController?.navigationBar.backgroundColor = .systemBackground
     }
     
+    /// Configure the layout of this collection view.
     private func configureLayout() -> UICollectionViewLayout {
         let contentInsets = NSDirectionalEdgeInsets(top: 1, leading: 1, bottom: 1, trailing: 1)
         
@@ -80,6 +102,9 @@ class PlayersGameStatsCollectionViewController: UICollectionViewController {
         return UICollectionViewCompositionalLayout(section: entire)
     }
     
+    /// Sort the players.
+    /// - Parameters:
+    ///     - clicked: The sort filter that was clicked.
     private func sortPlayerGameStats(clicked: SortFilters) {
         if sortingKey == clicked {
             sortedGameStats.reverse()
@@ -111,7 +136,6 @@ class PlayersGameStatsCollectionViewController: UICollectionViewController {
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
-
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return cellHeaders.count * (playerGameStats.count + 1)
@@ -188,7 +212,8 @@ class PlayersGameStatsCollectionViewController: UICollectionViewController {
         return indexPath.item != NAME_ITEM
     }
     
-    // MARK: - Navigation
+    // MARK: Navigation
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == detailedSegue {
             let destination = segue.destination as! DetailedPlayerGameCollectionViewController

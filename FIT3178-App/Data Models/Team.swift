@@ -1,5 +1,5 @@
 //
-//  TeamData.swift
+//  Team.swift
 //  FIT3178-App
 //
 //  Created by Samir Gupta on 19/4/22.
@@ -7,21 +7,24 @@
 
 import UIKit
 
-class TeamData: NSObject, Codable { // stores the data for a specific team from API
+/// Class representing an NBA team.
+class Team: NSObject, Codable {
+    /// The ID of the team.
     var id : Int
-    
+    /// The 3 character abbreviation of the team.
     var abbreviation : String?
+    /// The team's full name.
     var fullName : String?
-    var nickname : String?
-    
+    /// The team's conference.
     var conference : String?
+    /// The team's division.
     var division : String?
     
+    /// The coding keys required for decoding and encoding.
     private enum CodingKeys: String, CodingKey {
         case id
         case abbreviation
         case fullName = "full_name"
-        case nickname = "name"
         case conference
         case division
     }
@@ -32,7 +35,6 @@ class TeamData: NSObject, Codable { // stores the data for a specific team from 
         id = try container.decode(Int.self, forKey: .id)
         abbreviation = try container.decode(String?.self, forKey: .abbreviation)
         fullName = try container.decode(String?.self, forKey: .fullName)
-        nickname = try container.decode(String?.self, forKey: .nickname)
         conference = try container.decode(String?.self, forKey: .conference)
         division = try container.decode(String?.self, forKey: .division)
     }
@@ -42,8 +44,18 @@ class TeamData: NSObject, Codable { // stores the data for a specific team from 
         try container.encode(id, forKey: .id)
         try container.encode(abbreviation, forKey: .abbreviation)
         try container.encode(fullName, forKey: .fullName)
-        try container.encode(nickname, forKey: .nickname)
         try container.encode(conference, forKey: .conference)
         try container.encode(division, forKey: .division)
+    }
+}
+
+/// Class to store a collection of teams
+class TeamCollection: NSObject, Decodable {
+    /// The teams housed by this collection.
+    var teams: [Team]?
+    
+    /// Coding keys required for decoding.
+    private enum CodingKeys: String, CodingKey {
+        case teams = "data"
     }
 }
