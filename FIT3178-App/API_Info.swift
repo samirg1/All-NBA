@@ -79,6 +79,7 @@ public let API_ERROR_CODE_MESSAGES = [
 /// Error message used when there is an error decoding data.
 public let JSON_DECODER_ERROR_TITLE = "Error decoding API data"
 
+// MARK: Requesting Data
 
 /// Request specific data from the API.
 /// - Parameters:

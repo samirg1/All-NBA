@@ -76,7 +76,6 @@ class AddFavouritesTableViewController: UITableViewController, UISearchBarDelega
             
             indicator.startAnimating()
             Task {
-                URLSession.shared.invalidateAndCancel()
                 let (data, error) = await requestData(path: .teams, queries: [:])
                 guard let data = data else {
                     displayMessage_sgup0027(title: error!.title, message: error!.message)
@@ -132,7 +131,6 @@ class AddFavouritesTableViewController: UITableViewController, UISearchBarDelega
     
     private func getPlayerData(_ searchText: String) {
         Task {
-            URLSession.shared.invalidateAndCancel()
             let (data, error) = await requestData(path: .players, queries: [.search: searchText])
             guard let data = data else {
                 displayMessage_sgup0027(title: error!.title, message: error!.message)

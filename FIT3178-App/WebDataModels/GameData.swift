@@ -9,6 +9,7 @@ import UIKit
 
 class GameData: NSObject, Decodable { // used to store a specific game's data from the API
     var id: Int
+    var date: String
     
     var homeTeam : TeamData
     var awayTeam : TeamData
@@ -21,6 +22,7 @@ class GameData: NSObject, Decodable { // used to store a specific game's data fr
     
     private enum DataKeys: String, CodingKey {
         case id
+        case date
         case homeTeam = "home_team"
         case awayTeam = "visitor_team"
         case homeScore = "home_team_score"
@@ -34,6 +36,7 @@ class GameData: NSObject, Decodable { // used to store a specific game's data fr
         let container = try decoder.container(keyedBy: DataKeys.self)
         
         id = try container.decode(Int.self, forKey: .id)
+        
         homeTeam = try container.decode(TeamData.self, forKey: .homeTeam)
         awayTeam = try container.decode(TeamData.self, forKey: .awayTeam)
         homeScore = try container.decode(Int.self, forKey: .homeScore)
@@ -41,5 +44,6 @@ class GameData: NSObject, Decodable { // used to store a specific game's data fr
         period = try container.decode(Int?.self, forKey: .period)
         time = try container.decode(String?.self, forKey: .time)
         status = try container.decode(String?.self, forKey: .status)
+        date = try container.decode(String.self, forKey: .date)
     }
 }

@@ -90,7 +90,6 @@ class DetailedGameTableViewController: UITableViewController {
             reloaded = !toBeReloaded
             toBeReloaded = false
             Task {
-                URLSession.shared.invalidateAndCancel()
                 let (data, error) = await requestData(path: .stats, queries: [.game_ids : "\(game.id)", .per_page: maxAmountOfPlayers])
                 guard let data = data else {
                     displayMessage_sgup0027(title: error!.title, message: error!.message)

@@ -11,15 +11,17 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
     /// Variable that determines whether the notifications have been enabled on the current device.
-    public var notificationsEnabled: Bool = false
+    public var notificationsEnabled: Bool = true
+    
+    public var gameAlertNotifcations: Bool = true
+    
+    public var favouritesOnlyNotifications: Bool = false
     
     /// Variable that determines the identifier of the timezone that the App will show times and dates in.
     public var currentTimeZoneIdentifier = TimeZone.current.identifier
     
     public var favouriteTeams: [TeamData] = []
     public var favouritePlayers: [PlayerData] = []
-    
-    
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -43,8 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 notificationCenter.delegate = self
             }
         }
-        
-        
+        getNotificationSettings(update: false)
         return true
     }
 

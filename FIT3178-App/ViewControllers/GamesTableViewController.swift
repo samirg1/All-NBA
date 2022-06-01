@@ -70,9 +70,19 @@ class GamesTableViewController: UITableViewController {
     
     // MARK: Notificatino Handling
     private func addNotifications() {
-        guard appDelegate.notificationsEnabled == true else { return }
+        if !appDelegate.notificationsEnabled || !appDelegate.gameAlertNotifcations {
+            return
+        }
         
         for game in selectedDateGames {
+            if appDelegate.favouritesOnlyNotifications {
+                if !appDelegate.favouriteTeams.contains(where: { team in team.id == game.homeTeam.id || team.id == game.awayTeam.id}) {
+                    continue
+                }
+                if !appDelegate.favouritePlayers.contains(where: { player in player.team.id == game.homeTeam.id || player.team.id == game.awayTeam.id }) {
+                    continue
+                }
+            }
             guard let status = game.status else { continue }
             if !status.hasSuffix("ET") { continue }
             let timeString = convertTo24HourTime(string: status)
@@ -138,8 +148,6 @@ class GamesTableViewController: UITableViewController {
             
             
             Task {
-                URLSession.shared.invalidateAndCancel()
-                
                 let (data, error) = await requestData(path: .games, queries: [.dates : API_date_string])
                 guard let data = data else {
                     displayMessage_sgup0027(title: error!.title, message: error!.message)

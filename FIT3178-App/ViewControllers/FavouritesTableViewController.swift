@@ -15,7 +15,9 @@ class FavouritePlayerTableCell: UITableViewCell {
 }
 
 class FavouriteTeamTableCell: UITableViewCell {
-    
+    @IBOutlet weak var teamNameLabel: UILabel!
+    @IBOutlet weak var recentGameScoreLabel: UILabel!
+    @IBOutlet weak var recentGameStatusLabel: UILabel!
 }
 
 
@@ -30,9 +32,10 @@ class FavouritesTableViewController: UITableViewController {
     private let playerSection = 0
     private let teamSection = 1
     private let infoSection = 2
+    private let sectionHeaders = ["PLAYERS", "TEAMS", ""]
     
     private var playerData: [FavouritePlayerDetails] = []
-    private var recentTeamGames: [GameData] = []
+    private var teamData: [FavouriteTeamDetails] = []
     
     private lazy var indicator: UIActivityIndicatorView = {
         var indicator = UIActivityIndicatorView()
@@ -50,66 +53,58 @@ class FavouritesTableViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         getFavourites()
         indicator.startAnimating()
-        playerData.removeAll()
-        recentTeamGames.removeAll()
-        updatePlayerContainers()
+        updateFavouriteContainers()
     }
     
-    func updatePlayerContainers() {
+    func updateFavouriteContainers() {
+        playerData.removeAll()
+        teamData.removeAll()
+        
         for player in appDelegate.favouritePlayers {
             let newPlayer = FavouritePlayerDetails(player.id)
             getPlayerSeasonStats(player: newPlayer)
             getPlayersLastGame(player: newPlayer)
         }
+        for team in appDelegate.favouriteTeams {
+            let newTeam = FavouriteTeamDetails(team.id)
+            getTeamsLastGame(team: newTeam)
+        }
     }
     
     func getPlayerSeasonStats(player: FavouritePlayerDetails) {
-        let fileName = "\(player.id)" + FileManagerFiles.player_season_stats_suffix.rawValue
-        if doesFileExist(name: fileName) {
-            if let data = getFileData(name: fileName) {
-                return decodePlayerSeasonStats(data: data, player: player)
-            }
-            return displayMessage_sgup0027(title: FILE_MANAGER_DATA_ERROR_TITLE, message: FILE_MANAGER_DATA_ERROR_MESSAGE)
-        }
-        else {
-            indicator.startAnimating()
-            Task {
-                URLSession.shared.invalidateAndCancel()
-                let (data, error) = await requestData(path: .averages, queries: [.player_ids : "\(player.id)"])
-                guard let data = data else {
-                    displayMessage_sgup0027(title: error!.title, message: error!.message)
-                    indicator.stopAnimating()
-                    return
-                }
-                
-                // update/create a file to persistently store the data retrieved
-                setFileData(name: fileName, data: data)
-                decodePlayerSeasonStats(data: data, player: player)
+        indicator.startAnimating()
+        Task {
+            let (data, error) = await requestData(path: .averages, queries: [.player_ids : "\(player.id)"])
+            guard let data = data else {
+                displayMessage_sgup0027(title: error!.title, message: error!.message)
                 indicator.stopAnimating()
+                return
             }
-        }
-    }
-    
-    func decodePlayerSeasonStats(data: Data, player: FavouritePlayerDetails) {
-        do {
-            let decoder = JSONDecoder()
-            let collection = try decoder.decode(PlayerSeasonStatCollection.self, from: data)
-            if let players = collection.players {
-                player.seasonStats = players[0]
-                if !player.isNil(){ playerData.append(player) }
+            
+            do {
+                let decoder = JSONDecoder()
+                let collection = try decoder.decode(PlayerSeasonStatCollection.self, from: data)
+                if let players = collection.players {
+                    player.seasonStats = players[0]
+                    if !player.isNil(){ playerData.append(player) }
+                }
+                tableView.reloadData()
             }
-            tableView.reloadData()
-        }
-        catch let error {
-            displayMessage_sgup0027(title: JSON_DECODER_ERROR_TITLE, message: error.localizedDescription)
+            catch let error {
+                displayMessage_sgup0027(title: JSON_DECODER_ERROR_TITLE, message: error.localizedDescription)
+            }
+            indicator.stopAnimating()
         }
     }
     
     func getPlayersLastGame(player: FavouritePlayerDetails) {
         indicator.startAnimating()
         Task {
-            URLSession.shared.invalidateAndCancel()
-            let (data, error) = await requestData(path: .stats, queries: [.player_ids: "\(player.id)", .seasons: currentSeason, .per_page: "82"])
+            let formatter = DateFormatter()
+            formatter.dateFormat = "YYYY"
+            let year = formatter.string(from: Date())
+            
+            let (data, error) = await requestData(path: .stats, queries: [.player_ids: "\(player.id)", .start_date: year+"-01-01", .per_page: "100"])
             guard let data = data else {
                 displayMessage_sgup0027(title: error!.title, message: error!.message)
                 indicator.stopAnimating()
@@ -119,9 +114,7 @@ class FavouritesTableViewController: UITableViewController {
                 let decoder = JSONDecoder()
                 let collection = try decoder.decode(PlayerGameStatsCollectionData.self, from: data)
                 if let playerStats = collection.playersGameStats {
-                    let sortedGames = playerStats.sorted { p1, p2 in
-                        return p1.gameDate < p2.gameDate
-                    }
+                    let sortedGames = playerStats.sorted { p1, p2 in return p1.gameDate < p2.gameDate }
                     player.recentGame = sortedGames.last!
                     if !player.isNil(){ playerData.append(player) }
                 }
@@ -134,8 +127,36 @@ class FavouritesTableViewController: UITableViewController {
         }
     }
     
+    func getTeamsLastGame(team: FavouriteTeamDetails) {
+        indicator.startAnimating()
+        Task {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "YYYY"
+            let year = formatter.string(from: Date())
+            
+            let (data, error) = await requestData(path: .games, queries: [.team_ids: "\(team.id)", .start_date: year+"-01-01", .per_page: "100"])
+            guard let data = data else {
+                displayMessage_sgup0027(title: error!.title, message: error!.message)
+                indicator.stopAnimating()
+                return
+            }
+            do {
+                let decoder = JSONDecoder()
+                let collection = try decoder.decode(GameCollection.self, from: data)
+                if let games = collection.games {
+                    let sortedGames = games.sorted { p1, p2 in return p1.date < p2.date }
+                    team.recentGame = sortedGames.last!
+                    teamData.append(team)
+                }
+                tableView.reloadData()
+                indicator.stopAnimating()
+            }
+            catch let error {
+                displayMessage_sgup0027(title: JSON_DECODER_ERROR_TITLE, message: error.localizedDescription)
+            }
+        }
+    }
     
-
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -154,9 +175,9 @@ class FavouritesTableViewController: UITableViewController {
             return c
         }
         else if section == teamSection {
-            return recentTeamGames.count
+            return teamData.count
         }
-        if c == 0 && recentTeamGames.count == 0 {
+        if c == 0 && teamData.count == 0 {
             return 1
         }
         return 0
@@ -184,55 +205,24 @@ class FavouritesTableViewController: UITableViewController {
             return cell
         }
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: playerCellIdentifier, for: indexPath)
-        // Configure the cell...
-
+        let cell = tableView.dequeueReusableCell(withIdentifier: teamCellIdentifier, for: indexPath) as! FavouriteTeamTableCell
+        let team = teamData[indexPath.row]
+        guard let game = team.recentGame else {
+            return cell
+        }
+        cell.teamNameLabel.text = team.id == game.homeTeam.id ? game.homeTeam.fullName : game.awayTeam.fullName
+        cell.recentGameScoreLabel.text = "\(game.homeTeam.abbreviation!) \(game.homeScore) vs \(game.awayScore) \(game.awayTeam.abbreviation!)"
+        cell.recentGameStatusLabel.text = game.status
         return cell
     }
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if section == playerSection && playerData.isEmpty {
+            return nil
+        }
+        if section == teamSection && teamData.isEmpty {
+            return nil
+        }
+        return sectionHeaders[section]
     }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

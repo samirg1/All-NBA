@@ -130,7 +130,6 @@ class StandingsTableViewController: UITableViewController {
             indicator.startAnimating()
             teamFilterMenu.isEnabled = false
             Task {
-                URLSession.shared.invalidateAndCancel()
                 let (data, error) = await requestData(path: .teams, queries: [:])
                 guard let data = data else {
                     displayMessage_sgup0027(title: error!.title, message: error!.message)
@@ -173,7 +172,6 @@ class StandingsTableViewController: UITableViewController {
         }
         else {
             Task {
-                URLSession.shared.invalidateAndCancel()
                 let queries: [API_QUERIES: String] = [
                     .team_ids : "\(team.id)",
                     .seasons : season.YEAR.rawValue,
