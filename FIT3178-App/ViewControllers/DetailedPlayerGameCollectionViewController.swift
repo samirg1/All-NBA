@@ -38,7 +38,9 @@ private enum PlayerStatSections: String {
     
     /// Function to return a localised string of the enum raw value.
     /// - Returns: The localised string.
-    func localizedString() -> String {
+    ///
+    /// Source found [here.](https://stackoverflow.com/questions/28213693/enum-with-localized-string-in-swift)
+    fileprivate func localizedString() -> String {
         return NSLocalizedString(self.rawValue, comment: "")
     }
 }
