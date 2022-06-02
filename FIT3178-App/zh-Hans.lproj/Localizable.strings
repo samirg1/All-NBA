@@ -1,0 +1,95 @@
+/* 
+  Localizable.strings
+  All-NBA
+
+  Created by Samir Gupta on 2/6/2022.
+  
+*/
+
+"Invalid server request."="无效的服务器请求。";
+"Server request was not found."="未找到服务器请求";
+"Invalid server request format."="服务器请求格式无效。";
+"Too many server requests."="服务器请求过多。";
+"Internal server error."="内部服务器错误。";
+"Server currently unavailable."="服务器当前不可用。";
+"Error decoding API data."="解码 API 数据时出错。";
+"Unable to retrieve information"="无法检索信息";
+"Invalid URL."="无效的网址。";
+"An error occured whilst retrieving data"="检索数据时发生错误";
+"An error occured fetching data"="提取数据时发生错误";
+"Stored file data is invalid."="存储的文件数据无效。";
+"Dismiss"="解雇";
+
+"Favourites" = "收藏夹";
+"No favourites yet."="还没有收藏夹。";
+"Click 'Edit' to add some."="单击“编辑”添加一些。";
+"Click the '+' to add some."="单击“+”添加一些。";
+
+"Games"="游戏";
+"Today"="今天";
+"Game Alert"="游戏警报";
+" starting soon"=" 马上开始";
+"Start"="开始";
+"End"="结尾";
+"Final"="最后";
+"No games on this date"="该日期没有比赛";
+
+"Points"="积分";
+"Rebounds"="篮板球";
+"3-pt field goals"="3分射门得分";
+"Field Goals"="射门得分";
+"Free Throws"="罚球";
+"Assists"="助攻";
+"Blocks"="块";
+"Steals"="抢断";
+"Turnovers"="营业额";
+"Fouls"="犯规";
+"Minutes"="分钟";
+"2-Pointers"="2-指针";
+"3-Pointers"="三分球";
+
+"PLAYERS"="球员";
+"TEAMS"="团队";
+"Players >"="球员 >";
+"NAME"="姓名";
+"Players"="球员";
+"Teams"="团队";
+"Standings"="积分榜";
+
+"Conference"="会议";
+"Division"= "分配";
+"League"="联盟";
+"East"="东方";
+"West"="西方";
+"Eastern"="东";
+"Western"="西";
+"Atlantic"="大西洋";
+"Central"="中央";
+"Southeast"="东南";
+"Northwest"="西北";
+"Pacific"="太平洋";
+"Southwest"="西南";
+"in"="在";
+
+"Record"="记录";
+"At Home"="在家";
+"Away"="离开";
+
+"Notifications"="通知";
+"Settings"="设置";
+
+"User Settings"="用户设置";
+"App Settings"="应用设置";
+"Change notifcation settings"="更改通知设置";
+"Game alerts"="游戏提醒";
+"Test notification"="测试通知";
+"Favourites only"="仅收藏夹";
+"Notifcations are currently: "="目前的通知是：";
+"On"="上";
+"Off"="离开";
+"Game Alert (TEST)"="游戏警报（测试）";
+"--- vs --- starting soon"="--- vs --- 即将开始";
+
+"Add"="添加";
+"Search players"="搜索球员";
+

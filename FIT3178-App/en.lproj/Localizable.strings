@@ -1,0 +1,94 @@
+/* 
+  Localizable.strings
+  All-NBA
+
+  Created by Samir Gupta on 2/6/2022.
+  
+*/
+
+"Invalid server request."="Invalid server request.";
+"Server request was not found."="Server request was not found.";
+"Invalid server request format."="Invalid server request format.";
+"Too many server requests."="Too many server requests.";
+"Internal server error."="Internal server error.";
+"Server currently unavailable."="Server currently unavailable.";
+"Error decoding API data."="Error decoding API data.";
+"Unable to retrieve information"="Unable to retrieve information";
+"Invalid URL."="Invalid URL.";
+"An error occured whilst retrieving data"="An error occured whilst retrieving data";
+"An error occured fetching data"="An error occured fetching data";
+"Stored file data is invalid."="Stored file data is invalid.";
+"Dismiss"="Dismiss";
+
+"Favourites" = "Favourites";
+"No favourites yet."="No favourites yet.";
+"Click 'Edit' to add some."="Click 'Edit' to add some.";
+"Click the '+' to add some."="Click the '+' to add some.";
+
+"Games"="Games";
+"Today"="Today";
+"Game Alert"="Game Alert";
+" starting soon"=" starting soon";
+"Start"="Start";
+"End"="End";
+"Final"="Final";
+"No games on this date"="No games on this date";
+
+"Points"="Points";
+"Rebounds"="Rebounds";
+"3-pt field goals"="3-pt field goals";
+"Field Goals"="Field Goals";
+"Free Throws"="Free Throws";
+"Assists"="Assists";
+"Blocks"="Blocks";
+"Steals"="Steals";
+"Turnovers"="Turnovers";
+"Fouls"="Fouls";
+"Minutes"="Minutes";
+"2-Pointers"="2-Pointers";
+"3-Pointers"="3-Pointers";
+
+"PLAYERS"="PLAYERS";
+"TEAMS"="TEAMS";
+"Players >"="Players >";
+"NAME"="NAME";
+"Players"="Players";
+"Teams"="Teams";
+"Standings"="Standings";
+
+"Conference"="Conference";
+"Division"= "Division";
+"League"="League";
+"East"="East";
+"West"="West";
+"Eastern"="Eastern";
+"Western"="Western";
+"Atlantic"="Atlantic";
+"Central"="Central";
+"Southeast"="Southeast";
+"Northwest"="Northwest";
+"Pacific"="Pacific";
+"Southwest"="Southwest";
+"in"="in";
+
+"Record"="Record";
+"At Home"="At Home";
+"Away"="Away";
+
+"Notifications"="Notifications";
+"Settings"="Settings";
+
+"User Settings"="User Settings";
+"App Settings"="App Settings";
+"Change notifcation settings"="Change notifcation settings";
+"Game alerts"="Game alerts";
+"Test notification"="Test notification";
+"Favourites only"="Favourites only";
+"Notifcations are currently: "="Notifcations are currently: ";
+"On"="On";
+"Off"="Off";
+"Game Alert (TEST)"="Game Alert (TEST)";
+"--- vs --- starting soon"="--- vs --- starting soon";
+
+"Add"="Add";
+"Search players"="Search players";

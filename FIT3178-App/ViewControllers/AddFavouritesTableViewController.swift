@@ -18,7 +18,7 @@ class AddFavouritesTableViewController: UITableViewController, UISearchBarDelega
     /// The identifier of the result cell.
     private let cellIdentifier = "resultCell"
     /// The default title of the 'Add' button.
-    private let DEFAULT_ADD_BUTTON_TITLE = "Add"
+    private let DEFAULT_ADD_BUTTON_TITLE = NSLocalizedString("Add", comment: "add")
     /// The collection of players returned by the search.
     private var players: [Player] = []
     /// The collection of all teams to choose from.
@@ -46,7 +46,7 @@ class AddFavouritesTableViewController: UITableViewController, UISearchBarDelega
         let searchController = UISearchController(searchResultsController: nil)
         searchController.searchBar.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Search players"
+        searchController.searchBar.placeholder = NSLocalizedString("Search players", comment: "search_players")
         searchController.searchBar.showsCancelButton = false
         return searchController
     }()
@@ -223,7 +223,7 @@ class AddFavouritesTableViewController: UITableViewController, UISearchBarDelega
         else {
             let team = teams[indexPath.row]
             content.text = team.fullName
-            content.secondaryText = team.conference
+            content.secondaryText = NSLocalizedString(team.conference!, comment: "")
         }
         
         cell.contentConfiguration = content

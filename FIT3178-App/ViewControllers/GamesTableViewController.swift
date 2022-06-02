@@ -143,8 +143,8 @@ class GamesTableViewController: UITableViewController {
     ///     - title: The title game to add to the notification.
     private func createGameNotification(date: DateComponents, title: String) {
         let content = UNMutableNotificationContent()
-        content.title = "Game Alert"
-        content.body = title + " starting soon"
+        content.title = NSLocalizedString("Game Alert", comment: "game_alert")
+        content.body = title + NSLocalizedString(" starting soon", comment: "starting_soon")
         
         let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: false)
         
@@ -381,17 +381,17 @@ class GamesTableViewController: UITableViewController {
                 }
                 if time == "" && status.hasSuffix("Qtr") { // if the game is at the start/end of a quarter
                     if game.awayScore == 0 && game.homeScore == 0 { // if game is at start of first quarter
-                        cell.timeLabel.text = "Start"
+                        cell.timeLabel.text = NSLocalizedString("Start", comment: "Start")
                     }
                     else { // otherwise game is at end of quater
-                        cell.timeLabel.text = "End"
+                        cell.timeLabel.text = NSLocalizedString("End", comment: "End")
                     }
                     
                 } else {
                     cell.timeLabel.text = time
                     cell.timeLabel.backgroundColor = UIColor.systemGreen
                 }
-                cell.statusLabel.text = status
+                cell.statusLabel.text = NSLocalizedString(status, comment: "")
             }
             
             cell.awayTeamImage.image = UIImage(named: awayAbb)
@@ -402,13 +402,14 @@ class GamesTableViewController: UITableViewController {
         else {
             let cell = tableView.dequeueReusableCell(withIdentifier: INFO_CELL_IDENTIFIER, for: indexPath)
             if selectedDateGames.count == 0 {
-                cell.textLabel?.text = "No games on this date"
+                cell.textLabel?.text = NSLocalizedString("No games on this date", comment: "no_games")
             }
             return cell
         }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.section == INFO_SECTION { return }
         let game = selectedDateGames[indexPath.row]
         selectedGame = game
         selectedGameTitle = game.awayTeam.abbreviation! + " vs " + game.homeTeam.abbreviation!

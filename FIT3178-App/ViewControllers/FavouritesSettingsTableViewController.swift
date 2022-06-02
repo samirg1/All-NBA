@@ -12,7 +12,7 @@ class FavouritesSettingsTableViewController: UITableViewController {
     /// Variable to access the ``AppDelegate`` of the App.
     private let appDelegate = UIApplication.shared.delegate as! AppDelegate
     /// The section headers of the table view.
-    private let sectionHeaders = ["PLAYERS", "TEAMS", ""]
+    private let sectionHeaders = [NSLocalizedString("PLAYERS", comment: "players"), NSLocalizedString("TEAMS", comment: "teams"), ""]
     /// The section that houses the user's favourite players.
     private let playersSection = 0
     /// The section that houses the user's favourite teams.
@@ -63,10 +63,10 @@ class FavouritesSettingsTableViewController: UITableViewController {
         case teamSection:
             let team = appDelegate.favouriteTeams[indexPath.row]
             content.text = team.fullName
-            content.secondaryText = team.conference
+            content.secondaryText = NSLocalizedString(team.conference!, comment: "")
         default:
-            content.text = "No favourites yet"
-            content.secondaryText = "Click the '+' to add some"
+            content.text = NSLocalizedString("No favourites yet.", comment: "no_favs_yet")
+            content.secondaryText = NSLocalizedString("Click the '+' to add some.", comment: "click_+_to_add")
         }
         
         cell.contentConfiguration = content

@@ -27,6 +27,7 @@
 		375E69EF2846EA44000B28C9 /* TeamAbbreviations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 375E69EE2846EA44000B28C9 /* TeamAbbreviations.swift */; };
 		375E69F32846FD32000B28C9 /* FavouritePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 375E69F22846FD32000B28C9 /* FavouritePlayer.swift */; };
 		375E69F528470FEC000B28C9 /* FavouriteTeam.swift in Sources */ = {isa = PBXBuildFile; fileRef = 375E69F428470FEC000B28C9 /* FavouriteTeam.swift */; };
+		375E69FB2848D819000B28C9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 375E69FD2848D819000B28C9 /* Localizable.strings */; };
 		377DE88D281A2107009D3BE2 /* PlayersGameStatsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 377DE88C281A2107009D3BE2 /* PlayersGameStatsCollectionViewController.swift */; };
 		378D30EF28333497000D2E69 /* DetailedPlayerGameCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 378D30EE28333497000D2E69 /* DetailedPlayerGameCollectionViewController.swift */; };
 		3794FD5927E821190090BE26 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3794FD5827E821190090BE26 /* AppDelegate.swift */; };
@@ -60,6 +61,11 @@
 		375E69EE2846EA44000B28C9 /* TeamAbbreviations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamAbbreviations.swift; sourceTree = "<group>"; };
 		375E69F22846FD32000B28C9 /* FavouritePlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavouritePlayer.swift; sourceTree = "<group>"; };
 		375E69F428470FEC000B28C9 /* FavouriteTeam.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteTeam.swift; sourceTree = "<group>"; };
+		375E69F82848D379000B28C9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
+		375E69FC2848D819000B28C9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		375E69FE2848DA20000B28C9 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		375E69FF2848DA20000B28C9 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
+		375E6A002848DA20000B28C9 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		377DE88C281A2107009D3BE2 /* PlayersGameStatsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayersGameStatsCollectionViewController.swift; sourceTree = "<group>"; };
 		378D30EE28333497000D2E69 /* DetailedPlayerGameCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedPlayerGameCollectionViewController.swift; sourceTree = "<group>"; };
 		3794FD5527E821190090BE26 /* All-NBA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "All-NBA.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -154,6 +160,7 @@
 				3794FD6127E8211B0090BE26 /* Assets.xcassets */,
 				3794FD6327E8211B0090BE26 /* LaunchScreen.storyboard */,
 				3794FD5E27E821190090BE26 /* Main.storyboard */,
+				375E69FD2848D819000B28C9 /* Localizable.strings */,
 				3794FD5827E821190090BE26 /* AppDelegate.swift */,
 				3794FD5A27E821190090BE26 /* SceneDelegate.swift */,
 				375E69F62847477A000B28C9 /* Data Files */,
@@ -205,6 +212,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 3794FD4C27E821190090BE26;
 			productRefGroup = 3794FD5627E821190090BE26 /* Products */;
@@ -222,6 +230,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3794FD6527E8211B0090BE26 /* LaunchScreen.storyboard in Resources */,
+				375E69FB2848D819000B28C9 /* Localizable.strings in Resources */,
 				3794FD6227E8211B0090BE26 /* Assets.xcassets in Resources */,
 				3794FD6027E821190090BE26 /* Main.storyboard in Resources */,
 			);
@@ -267,10 +276,21 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		375E69FD2848D819000B28C9 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				375E69FC2848D819000B28C9 /* en */,
+				375E6A002848DA20000B28C9 /* zh-Hans */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		3794FD5E27E821190090BE26 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				3794FD5F27E821190090BE26 /* Base */,
+				375E69F82848D379000B28C9 /* en */,
+				375E69FF2848DA20000B28C9 /* zh-Hans */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -279,6 +299,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				3794FD6427E8211B0090BE26 /* Base */,
+				375E69FE2848DA20000B28C9 /* zh-Hans */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -290,6 +311,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -351,6 +373,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";

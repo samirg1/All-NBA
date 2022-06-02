@@ -1,0 +1,447 @@
+
+/* Class = "UINavigationItem"; title = "Standings"; ObjectID = "04X-tB-BXA"; */
+"04X-tB-BXA.title" = "Standings";
+
+/* Class = "UILabel"; accessibilityHint = "click for more detail on player"; ObjectID = "0oK-MB-rum"; */
+"0oK-MB-rum.accessibilityHint" = "click for more detail on player";
+
+/* Class = "UILabel"; accessibilityLabel = "player stat"; ObjectID = "0oK-MB-rum"; */
+"0oK-MB-rum.accessibilityLabel" = "player stat";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "0oK-MB-rum"; */
+"0oK-MB-rum.text" = "Label";
+
+/* Class = "UILabel"; accessibilityLabel = "recent game label"; ObjectID = "1VE-vw-ai3"; */
+"1VE-vw-ai3.accessibilityLabel" = "recent game label";
+
+/* Class = "UILabel"; text = "Recent Game"; ObjectID = "1VE-vw-ai3"; */
+"1VE-vw-ai3.text" = "Recent Game";
+
+/* Class = "UICommand"; title = "Division"; ObjectID = "1Xt-eD-CIi"; */
+"1Xt-eD-CIi.title" = "Division";
+
+/* Class = "UILabel"; accessibilityLabel = "date label"; ObjectID = "1ad-Zg-3vD"; */
+"1ad-Zg-3vD.accessibilityLabel" = "date label";
+
+/* Class = "UILabel"; text = "Date"; ObjectID = "1ad-Zg-3vD"; */
+"1ad-Zg-3vD.text" = "Date";
+
+/* Class = "UIButton"; configuration.title = "Players >"; ObjectID = "1ly-9T-0Nl"; */
+"1ly-9T-0Nl.configuration.title" = "Players >";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "1ly-9T-0Nl"; */
+"1ly-9T-0Nl.normalTitle" = "Button";
+
+/* Class = "UILabel"; accessibilityLabel = "team name"; ObjectID = "1p1-gm-Ry0"; */
+"1p1-gm-Ry0.accessibilityLabel" = "team name";
+
+/* Class = "UILabel"; text = "Team Name"; ObjectID = "1p1-gm-Ry0"; */
+"1p1-gm-Ry0.text" = "Team Name";
+
+/* Class = "UIImageView"; accessibilityLabel = "team logo"; ObjectID = "1zQ-UC-n8J"; */
+"1zQ-UC-n8J.accessibilityLabel" = "team logo";
+
+/* Class = "UILabel"; accessibilityLabel = "team games behind"; ObjectID = "34W-sp-cr8"; */
+"34W-sp-cr8.accessibilityLabel" = "team games behind";
+
+/* Class = "UILabel"; text = "GB: 0.0"; ObjectID = "34W-sp-cr8"; */
+"34W-sp-cr8.text" = "GB: 0.0";
+
+/* Class = "UITableViewCell"; accessibilityHint = "click for more detail"; ObjectID = "3uZ-Tl-qle"; */
+"3uZ-Tl-qle.accessibilityHint" = "click for more detail";
+
+/* Class = "UITableViewCell"; accessibilityLabel = "setting cell"; ObjectID = "3uZ-Tl-qle"; */
+"3uZ-Tl-qle.accessibilityLabel" = "setting cell";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "57B-LP-61Q"; */
+"57B-LP-61Q.normalTitle" = "Button";
+
+/* Class = "UILabel"; accessibilityLabel = "team recent game status"; ObjectID = "5S6-KM-i1I"; */
+"5S6-KM-i1I.accessibilityLabel" = "team recent game status";
+
+/* Class = "UILabel"; text = "Status"; ObjectID = "5S6-KM-i1I"; */
+"5S6-KM-i1I.text" = "Status";
+
+/* Class = "UIImageView"; accessibilityLabel = "team image 2"; ObjectID = "6Uk-d9-M63"; */
+"6Uk-d9-M63.accessibilityLabel" = "team image 2";
+
+/* Class = "UITabBarItem"; title = "Standings"; ObjectID = "6Yk-Wn-L3R"; */
+"6Yk-Wn-L3R.title" = "Standings";
+
+/* Class = "UITableViewController"; title = "Games"; ObjectID = "7Tj-aM-Q5A"; */
+"7Tj-aM-Q5A.title" = "Games";
+
+/* Class = "UILabel"; accessibilityLabel = "no favourites title"; ObjectID = "8Hw-f1-Tam"; */
+"8Hw-f1-Tam.accessibilityLabel" = "no favourites title";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "8Hw-f1-Tam"; */
+"8Hw-f1-Tam.text" = "Title";
+
+/* Class = "UISwitch"; accessibilityHint = "change preference of app setting"; ObjectID = "9aM-uZ-r72"; */
+"9aM-uZ-r72.accessibilityHint" = "change preference of app setting";
+
+/* Class = "UISwitch"; accessibilityLabel = "app setting switch"; ObjectID = "9aM-uZ-r72"; */
+"9aM-uZ-r72.accessibilityLabel" = "app setting switch";
+
+/* Class = "UILabel"; accessibilityLabel = "team league standings"; ObjectID = "9eT-9x-1RC"; */
+"9eT-9x-1RC.accessibilityLabel" = "team league standings";
+
+/* Class = "UILabel"; text = "League"; ObjectID = "9eT-9x-1RC"; */
+"9eT-9x-1RC.text" = "League";
+
+/* Class = "UINavigationItem"; title = "Notifications"; ObjectID = "9rk-YC-z19"; */
+"9rk-YC-z19.title" = "Notifications";
+
+/* Class = "UILabel"; accessibilityLabel = "time label"; ObjectID = "Bbd-m4-b6q"; */
+"Bbd-m4-b6q.accessibilityLabel" = "time label";
+
+/* Class = "UILabel"; text = "Time"; ObjectID = "Bbd-m4-b6q"; */
+"Bbd-m4-b6q.text" = "Time";
+
+/* Class = "UINavigationItem"; title = "Settings"; ObjectID = "C4z-ih-zai"; */
+"C4z-ih-zai.title" = "Settings";
+
+/* Class = "UILabel"; accessibilityLabel = "game score label"; ObjectID = "C6P-Kv-f62"; */
+"C6P-Kv-f62.accessibilityLabel" = "game score label";
+
+/* Class = "UILabel"; text = "Score"; ObjectID = "C6P-Kv-f62"; */
+"C6P-Kv-f62.text" = "Score";
+
+/* Class = "UILabel"; accessibilityLabel = "game status label"; ObjectID = "CCq-O2-HK3"; */
+"CCq-O2-HK3.accessibilityLabel" = "game status label";
+
+/* Class = "UILabel"; text = "Status"; ObjectID = "CCq-O2-HK3"; */
+"CCq-O2-HK3.text" = "Status";
+
+/* Class = "UITableViewCell"; accessibilityHint = "tap on cell to view more detail"; ObjectID = "CyG-oU-6W8"; */
+"CyG-oU-6W8.accessibilityHint" = "tap on cell to view more detail";
+
+/* Class = "UITableViewCell"; accessibilityLabel = "team cell"; ObjectID = "CyG-oU-6W8"; */
+"CyG-oU-6W8.accessibilityLabel" = "team cell";
+
+/* Class = "UILabel"; accessibilityLabel = "Player's season stats"; ObjectID = "E4E-Tw-PCz"; */
+"E4E-Tw-PCz.accessibilityLabel" = "Player's season stats";
+
+/* Class = "UILabel"; text = "00.00 PPG - 00.00 APG - 00.00 RPG"; ObjectID = "E4E-Tw-PCz"; */
+"E4E-Tw-PCz.text" = "00.00 PPG - 00.00 APG - 00.00 RPG";
+
+/* Class = "UILabel"; accessibilityLabel = "home team record"; ObjectID = "EP9-s7-gP3"; */
+"EP9-s7-gP3.accessibilityLabel" = "home team record";
+
+/* Class = "UILabel"; text = "H20-10"; ObjectID = "EP9-s7-gP3"; */
+"EP9-s7-gP3.text" = "H20-10";
+
+/* Class = "UIImageView"; accessibilityLabel = "home image"; ObjectID = "EgY-W5-nMq"; */
+"EgY-W5-nMq.accessibilityLabel" = "home image";
+
+/* Class = "UISegmentedControl"; Eq2-Qd-JdF.segmentTitles[0] = "Players"; ObjectID = "Eq2-Qd-JdF"; */
+"Eq2-Qd-JdF.segmentTitles[0]" = "Players";
+
+/* Class = "UISegmentedControl"; Eq2-Qd-JdF.segmentTitles[1] = "Teams"; ObjectID = "Eq2-Qd-JdF"; */
+"Eq2-Qd-JdF.segmentTitles[1]" = "Teams";
+
+/* Class = "UINavigationItem"; title = "Game"; ObjectID = "F3V-X0-2ic"; */
+"F3V-X0-2ic.title" = "Game";
+
+/* Class = "UITableViewCell"; accessibilityHint = "swipe to delete a favourite"; ObjectID = "FVf-aO-tx4"; */
+"FVf-aO-tx4.accessibilityHint" = "swipe to delete a favourite";
+
+/* Class = "UITableViewCell"; accessibilityLabel = "favourite cell"; ObjectID = "FVf-aO-tx4"; */
+"FVf-aO-tx4.accessibilityLabel" = "favourite cell";
+
+/* Class = "UITableViewCell"; accessibilityHint = "click to view detailed game"; ObjectID = "Far-X9-hL5"; */
+"Far-X9-hL5.accessibilityHint" = "click to view detailed game";
+
+/* Class = "UITableViewCell"; accessibilityLabel = "game cell"; ObjectID = "Far-X9-hL5"; */
+"Far-X9-hL5.accessibilityLabel" = "game cell";
+
+/* Class = "UILabel"; accessibilityLabel = "numerical value"; ObjectID = "FcA-H1-qIr"; */
+"FcA-H1-qIr.accessibilityLabel" = "numerical value";
+
+/* Class = "UILabel"; text = "13"; ObjectID = "FcA-H1-qIr"; */
+"FcA-H1-qIr.text" = "13";
+
+/* Class = "UILabel"; accessibilityLabel = "team conference standings"; ObjectID = "GR5-Sv-4no"; */
+"GR5-Sv-4no.accessibilityLabel" = "team conference standings";
+
+/* Class = "UILabel"; text = "Conference"; ObjectID = "GR5-Sv-4no"; */
+"GR5-Sv-4no.text" = "Conference";
+
+/* Class = "UILabel"; accessibilityLabel = "Previous game summary"; ObjectID = "Ges-0i-OES"; */
+"Ges-0i-OES.accessibilityLabel" = "Previous game summary";
+
+/* Class = "UILabel"; text = "XXX 000 vs 000 XXX"; ObjectID = "Ges-0i-OES"; */
+"Ges-0i-OES.text" = "XXX 000 vs 000 XXX";
+
+/* Class = "UILabel"; accessibilityLabel = "team away record"; ObjectID = "Gvt-W7-l0h"; */
+"Gvt-W7-l0h.accessibilityLabel" = "team away record";
+
+/* Class = "UILabel"; text = "A20-32"; ObjectID = "Gvt-W7-l0h"; */
+"Gvt-W7-l0h.text" = "A20-32";
+
+/* Class = "UITabBarItem"; title = "Games"; ObjectID = "HiK-d8-hUD"; */
+"HiK-d8-hUD.title" = "Games";
+
+/* Class = "UIMenu"; title = "Season"; ObjectID = "JHC-Gi-kro"; */
+"JHC-Gi-kro.title" = "Season";
+
+/* Class = "UINavigationItem"; title = "Favourites"; ObjectID = "JLw-vp-YD8"; */
+"JLw-vp-YD8.title" = "Favourites";
+
+/* Class = "UILabel"; accessibilityLabel = "Favourite player name"; ObjectID = "K4K-i4-t6O"; */
+"K4K-i4-t6O.accessibilityLabel" = "Favourite player name";
+
+/* Class = "UILabel"; text = "Name"; ObjectID = "K4K-i4-t6O"; */
+"K4K-i4-t6O.text" = "Name";
+
+/* Class = "UILabel"; accessibilityLabel = "player name"; ObjectID = "LSU-p4-8ub"; */
+"LSU-p4-8ub.accessibilityLabel" = "player name";
+
+/* Class = "UILabel"; text = "Josh Giddey"; ObjectID = "LSU-p4-8ub"; */
+"LSU-p4-8ub.text" = "Josh Giddey";
+
+/* Class = "UITableViewCell"; accessibilityHint = "click to add to selected cells to add to favourites"; ObjectID = "Lb2-QF-8u8"; */
+"Lb2-QF-8u8.accessibilityHint" = "click to add to selected cells to add to favourites";
+
+/* Class = "UITableViewCell"; accessibilityLabel = "possible favourite cell"; ObjectID = "Lb2-QF-8u8"; */
+"Lb2-QF-8u8.accessibilityLabel" = "possible favourite cell";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "LjH-5S-VjG"; */
+"LjH-5S-VjG.normalTitle" = "Button";
+
+/* Class = "UIImageView"; accessibilityLabel = "away image"; ObjectID = "Lop-bw-ye2"; */
+"Lop-bw-ye2.accessibilityLabel" = "away image";
+
+/* Class = "UITableViewCell"; accessibilityHint = "click to view user setting"; ObjectID = "MDm-62-Hp6"; */
+"MDm-62-Hp6.accessibilityHint" = "click to view user setting";
+
+/* Class = "UITableViewCell"; accessibilityLabel = "user setting cell"; ObjectID = "MDm-62-Hp6"; */
+"MDm-62-Hp6.accessibilityLabel" = "user setting cell";
+
+/* Class = "UILabel"; accessibilityLabel = "home abbreviation"; ObjectID = "NVg-hz-76W"; */
+"NVg-hz-76W.accessibilityLabel" = "home abbreviation";
+
+/* Class = "UILabel"; text = "Home"; ObjectID = "NVg-hz-76W"; */
+"NVg-hz-76W.text" = "Home";
+
+/* Class = "UILabel"; accessibilityLabel = "team record"; ObjectID = "OKw-LE-WVO"; */
+"OKw-LE-WVO.accessibilityLabel" = "team record";
+
+/* Class = "UILabel"; text = "40-42"; ObjectID = "OKw-LE-WVO"; */
+"OKw-LE-WVO.text" = "40-42";
+
+/* Class = "UILabel"; accessibilityLabel = "setting title"; ObjectID = "PDj-TU-TO1"; */
+"PDj-TU-TO1.accessibilityLabel" = "setting title";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "PDj-TU-TO1"; */
+"PDj-TU-TO1.text" = "Title";
+
+/* Class = "UILabel"; accessibilityLabel = "team recent game summary"; ObjectID = "QdH-YB-10X"; */
+"QdH-YB-10X.accessibilityLabel" = "team recent game summary";
+
+/* Class = "UILabel"; text = "XXX 000 vs 000 XXX"; ObjectID = "QdH-YB-10X"; */
+"QdH-YB-10X.text" = "XXX 000 vs 000 XXX";
+
+/* Class = "UIImageView"; accessibilityLabel = "team image 1"; ObjectID = "QoH-WR-d99"; */
+"QoH-WR-d99.accessibilityLabel" = "team image 1";
+
+/* Class = "UILabel"; accessibilityLabel = "team abbreviation"; ObjectID = "RDa-qB-yd9"; */
+"RDa-qB-yd9.accessibilityLabel" = "team abbreviation";
+
+/* Class = "UILabel"; text = "ATL"; ObjectID = "RDa-qB-yd9"; */
+"RDa-qB-yd9.text" = "ATL";
+
+/* Class = "UILabel"; accessibilityLabel = "user notification sub info"; ObjectID = "Tdf-Ca-UMt"; */
+"Tdf-Ca-UMt.accessibilityLabel" = "user notification sub info";
+
+/* Class = "UILabel"; text = "Subtitle"; ObjectID = "Tdf-Ca-UMt"; */
+"Tdf-Ca-UMt.text" = "Subtitle";
+
+/* Class = "UITabBarItem"; title = "Favourites"; ObjectID = "TlM-oG-wCC"; */
+"TlM-oG-wCC.title" = "Favourites";
+
+/* Class = "UILabel"; accessibilityLabel = "status label"; ObjectID = "UPZ-lo-CMn"; */
+"UPZ-lo-CMn.accessibilityLabel" = "status label";
+
+/* Class = "UILabel"; text = "Status"; ObjectID = "UPZ-lo-CMn"; */
+"UPZ-lo-CMn.text" = "Status";
+
+/* Class = "UILabel"; accessibilityLabel = "favourite team name"; ObjectID = "WpJ-N4-OTt"; */
+"WpJ-N4-OTt.accessibilityLabel" = "favourite team name";
+
+/* Class = "UILabel"; text = "Team Name"; ObjectID = "WpJ-N4-OTt"; */
+"WpJ-N4-OTt.text" = "Team Name";
+
+/* Class = "UINavigationItem"; title = "Favourites"; ObjectID = "WrU-08-M6h"; */
+"WrU-08-M6h.title" = "Favourites";
+
+/* Class = "UILabel"; accessibilityLabel = "home stat"; ObjectID = "Wuy-V5-JhA"; */
+"Wuy-V5-JhA.accessibilityLabel" = "home stat";
+
+/* Class = "UILabel"; accessibilityLabel = "away stat"; ObjectID = "YMD-oM-Dq7"; */
+"YMD-oM-Dq7.accessibilityLabel" = "away stat";
+
+/* Class = "UINavigationItem"; title = "Players"; ObjectID = "b3n-V6-Qf9"; */
+"b3n-V6-Qf9.title" = "Players";
+
+/* Class = "UIImageView"; accessibilityLabel = "home team logo"; ObjectID = "bBi-DK-4Ug"; */
+"bBi-DK-4Ug.accessibilityLabel" = "home team logo";
+
+/* Class = "UINavigationItem"; title = "Games"; ObjectID = "cbK-Pa-h84"; */
+"cbK-Pa-h84.title" = "Games";
+
+/* Class = "UITabBarItem"; title = "Settings"; ObjectID = "d94-dB-j3y"; */
+"d94-dB-j3y.title" = "Settings";
+
+/* Class = "UILabel"; accessibilityLabel = "stat title"; ObjectID = "dZ5-Fk-oeh"; */
+"dZ5-Fk-oeh.accessibilityLabel" = "stat title";
+
+/* Class = "UILabel"; text = "Rebounds"; ObjectID = "dZ5-Fk-oeh"; */
+"dZ5-Fk-oeh.text" = "Rebounds";
+
+/* Class = "UILabel"; accessibilityLabel = "team division standings"; ObjectID = "e2L-ei-wrJ"; */
+"e2L-ei-wrJ.accessibilityLabel" = "team division standings";
+
+/* Class = "UILabel"; text = "Division"; ObjectID = "e2L-ei-wrJ"; */
+"e2L-ei-wrJ.text" = "Division";
+
+/* Class = "UINavigationItem"; title = "Favourites"; ObjectID = "eh1-KX-ISh"; */
+"eh1-KX-ISh.title" = "Favourites";
+
+/* Class = "UILabel"; accessibilityLabel = "no favourites subtitle"; ObjectID = "f3W-rp-0Js"; */
+"f3W-rp-0Js.accessibilityLabel" = "no favourites subtitle";
+
+/* Class = "UILabel"; text = "Subtitle"; ObjectID = "f3W-rp-0Js"; */
+"f3W-rp-0Js.text" = "Subtitle";
+
+/* Class = "UICommand"; title = "2021/22"; ObjectID = "hi3-Fa-RVz"; */
+"hi3-Fa-RVz.title" = "2021/22";
+
+/* Class = "UIBarButtonItem"; title = "Today"; ObjectID = "hlK-Oq-h28"; */
+"hlK-Oq-h28.title" = "Today";
+
+/* Class = "UILabel"; accessibilityLabel = "Player season stat label"; ObjectID = "irr-2f-fIs"; */
+"irr-2f-fIs.accessibilityLabel" = "Player season stat label";
+
+/* Class = "UILabel"; text = "Season Stats"; ObjectID = "irr-2f-fIs"; */
+"irr-2f-fIs.text" = "Season Stats";
+
+/* Class = "UICollectionViewController"; title = "Player Game"; ObjectID = "js5-QG-Whl"; */
+"js5-QG-Whl.title" = "Player Game";
+
+/* Class = "UICommand"; title = "League"; ObjectID = "k5I-1p-teg"; */
+"k5I-1p-teg.title" = "League";
+
+/* Class = "UIImageView"; accessibilityLabel = "away team logo"; ObjectID = "lOU-FR-925"; */
+"lOU-FR-925.accessibilityLabel" = "away team logo";
+
+/* Class = "UILabel"; accessibilityLabel = "possible favourite title"; ObjectID = "lhZ-fD-e8T"; */
+"lhZ-fD-e8T.accessibilityLabel" = "possible favourite title";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "lhZ-fD-e8T"; */
+"lhZ-fD-e8T.text" = "Title";
+
+/* Class = "UIImageView"; accessibilityLabel = "big team logo"; ObjectID = "lvX-V0-ads"; */
+"lvX-V0-ads.accessibilityLabel" = "big team logo";
+
+/* Class = "UILabel"; accessibilityLabel = "favourite subtitle"; ObjectID = "mQ1-Wu-HlM"; */
+"mQ1-Wu-HlM.accessibilityLabel" = "favourite subtitle";
+
+/* Class = "UILabel"; text = "Subtitle"; ObjectID = "mQ1-Wu-HlM"; */
+"mQ1-Wu-HlM.text" = "Subtitle";
+
+/* Class = "UIMenu"; title = "Filter"; ObjectID = "mY7-XJ-hq6"; */
+"mY7-XJ-hq6.title" = "Filter";
+
+/* Class = "UILabel"; accessibilityLabel = "possible favourite subtitle"; ObjectID = "nGl-Uo-56E"; */
+"nGl-Uo-56E.accessibilityLabel" = "possible favourite subtitle";
+
+/* Class = "UILabel"; text = "Subtitle"; ObjectID = "nGl-Uo-56E"; */
+"nGl-Uo-56E.text" = "Subtitle";
+
+/* Class = "UILabel"; accessibilityHint = "click for more detail on player"; ObjectID = "nf6-pc-PNW"; */
+"nf6-pc-PNW.accessibilityHint" = "click for more detail on player";
+
+/* Class = "UILabel"; accessibilityLabel = "player name"; ObjectID = "nf6-pc-PNW"; */
+"nf6-pc-PNW.accessibilityLabel" = "player name";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "nf6-pc-PNW"; */
+"nf6-pc-PNW.text" = "Label";
+
+/* Class = "UILabel"; accessibilityLabel = "away abbreviation"; ObjectID = "qCW-Vf-Mz8"; */
+"qCW-Vf-Mz8.accessibilityLabel" = "away abbreviation";
+
+/* Class = "UILabel"; text = "Away"; ObjectID = "qCW-Vf-Mz8"; */
+"qCW-Vf-Mz8.text" = "Away";
+
+/* Class = "UILabel"; accessibilityLabel = "stat detail"; ObjectID = "qKS-Wp-aHs"; */
+"qKS-Wp-aHs.accessibilityLabel" = "stat detail";
+
+/* Class = "UILabel"; text = "(3off 10def)"; ObjectID = "qKS-Wp-aHs"; */
+"qKS-Wp-aHs.text" = "(3off 10def)";
+
+/* Class = "UILabel"; accessibilityLabel = "game time label"; ObjectID = "qhf-va-wm3"; */
+"qhf-va-wm3.accessibilityLabel" = "game time label";
+
+/* Class = "UILabel"; text = "Time"; ObjectID = "qhf-va-wm3"; */
+"qhf-va-wm3.text" = "Time";
+
+/* Class = "UILabel"; accessibilityLabel = "team recent game label"; ObjectID = "r95-0z-cwX"; */
+"r95-0z-cwX.accessibilityLabel" = "team recent game label";
+
+/* Class = "UILabel"; text = "Recent Game"; ObjectID = "r95-0z-cwX"; */
+"r95-0z-cwX.text" = "Recent Game";
+
+/* Class = "UIViewController"; title = "TeamView"; ObjectID = "rAw-dx-X6x"; */
+"rAw-dx-X6x.title" = "TeamView";
+
+/* Class = "UILabel"; accessibilityLabel = "app setting label"; ObjectID = "rXQ-Ie-6fd"; */
+"rXQ-Ie-6fd.accessibilityLabel" = "app setting label";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "rXQ-Ie-6fd"; */
+"rXQ-Ie-6fd.text" = "Label";
+
+/* Class = "UILabel"; accessibilityLabel = "user notification info"; ObjectID = "rac-bw-AY8"; */
+"rac-bw-AY8.accessibilityLabel" = "user notification info";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "rac-bw-AY8"; */
+"rac-bw-AY8.text" = "Title";
+
+/* Class = "UICommand"; title = "Conference"; ObjectID = "s49-Bk-X65"; */
+"s49-Bk-X65.title" = "Conference";
+
+/* Class = "UILabel"; accessibilityLabel = "Player's recent game stats"; ObjectID = "sMz-01-eJw"; */
+"sMz-01-eJw.accessibilityLabel" = "Player's recent game stats";
+
+/* Class = "UILabel"; text = "00 PTS - 00 AST - 00 REB"; ObjectID = "sMz-01-eJw"; */
+"sMz-01-eJw.text" = "00 PTS - 00 AST - 00 REB";
+
+/* Class = "UILabel"; accessibilityLabel = "favourite title"; ObjectID = "tM0-KC-Kk9"; */
+"tM0-KC-Kk9.accessibilityLabel" = "favourite title";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "tM0-KC-Kk9"; */
+"tM0-KC-Kk9.text" = "Title";
+
+/* Class = "UILabel"; accessibilityLabel = "team position"; ObjectID = "u1j-Zn-OLb"; */
+"u1j-Zn-OLb.accessibilityLabel" = "team position";
+
+/* Class = "UILabel"; text = "1"; ObjectID = "u1j-Zn-OLb"; */
+"u1j-Zn-OLb.text" = "1";
+
+/* Class = "UIBarButtonItem"; title = "Add"; ObjectID = "vCT-C4-SG5"; */
+"vCT-C4-SG5.title" = "Add";
+
+/* Class = "UILabel"; accessibilityLabel = "team percentage"; ObjectID = "vYp-n7-SNn"; */
+"vYp-n7-SNn.accessibilityLabel" = "team percentage";
+
+/* Class = "UILabel"; text = "1.000"; ObjectID = "vYp-n7-SNn"; */
+"vYp-n7-SNn.text" = "1.000";
+
+/* Class = "UILabel"; accessibilityLabel = "team record"; ObjectID = "wdQ-Ss-3SU"; */
+"wdQ-Ss-3SU.accessibilityLabel" = "team record";
+
+/* Class = "UILabel"; text = "Record"; ObjectID = "wdQ-Ss-3SU"; */
+"wdQ-Ss-3SU.text" = "Record";
+
+/* Class = "UICommand"; title = "2020/21"; ObjectID = "yaG-Vl-7Tg"; */
+"yaG-Vl-7Tg.title" = "2020/21";

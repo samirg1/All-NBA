@@ -42,7 +42,7 @@ class PlayerGameNameCollectionViewCell: UICollectionViewCell {
 /// Custom collection view to display a simplistic overview of the players statistics from a particular game.
 class PlayersGameStatsCollectionViewController: UICollectionViewController {
     /// The column headers of the view.
-    private let cellHeaders = ["NAME", "PTS", "REB", "AST", "STL", "BLK", "TOV", "PCT"]
+    private let cellHeaders = [NSLocalizedString("NAME", comment: "name"), "PTS", "REB", "AST", "STL", "BLK", "TOV", "PCT"]
     /// The cell identifier of the cell that houses a stat.
     private let statIdentifier = "statCell"
     /// The cell identifier of the cell that houses a name.

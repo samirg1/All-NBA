@@ -1037,7 +1037,7 @@
                                     <outlet property="seasonStatsLabel" destination="E4E-Tw-PCz" id="QM0-dx-w0t"/>
                                 </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="teamCell" rowHeight="133" id="nFh-dE-fWu" customClass="FavouriteTeamTableCell" customModule="All_NBA" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="teamCell" rowHeight="133" id="nFh-dE-fWu" customClass="FavouriteTeamTableCell" customModule="All_NBA" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="251.5" width="414" height="133"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="nFh-dE-fWu" id="xD4-Qt-k9a">
@@ -1466,7 +1466,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="favouriteType" destination="Eq2-Qd-JdF" id="Eah-3I-n1W"/>
+                        <outlet property="favouriteType" destination="Eq2-Qd-JdF" id="vzb-Np-pK5"/>
                         <outlet property="saveButtonOutlet" destination="vCT-C4-SG5" id="nRz-M6-D1w"/>
                     </connections>
                 </tableViewController>
@@ -1496,7 +1496,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="jKg-Rs-aXz"/>
+        <segue reference="1GM-AF-dUZ"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="ATL" width="300" height="300"/>

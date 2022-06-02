@@ -18,6 +18,12 @@ public enum TeamFilter: String {
     case DIVISION = "Division"
     /// The league filter (i.e. no filter).
     case LEAGUE = "League"
+    
+    /// Function to return a localised string of the enum raw value.
+    /// - Returns: The localised string.
+    func localizedString() -> String {
+        return NSLocalizedString(self.rawValue, comment: "")
+    }
 }
 
 /// Stores the conferences of the NBA.
@@ -26,6 +32,12 @@ private enum Conferences: String {
     case EAST = "East"
     /// The western conference.
     case WEST = "West"
+    
+    /// Function to return a localised string of the enum raw value.
+    /// - Returns: The localised string.
+    func localizedString() -> String {
+        return NSLocalizedString(self.rawValue, comment: "")
+    }
 }
 
 /// Stores the divisions of the NBA.
@@ -42,6 +54,12 @@ private enum Divisions: String {
     case PACIFIC = "Pacific"
     /// The Southwest division.
     case SOUTHWEST = "Southwest"
+    
+    /// Function to return a localised string of the enum raw value.
+    /// - Returns: The localised string.
+    func localizedString() -> String {
+        return NSLocalizedString(self.rawValue, comment: "")
+    }
 }
 
 /// Stores the 2021/22 season info
@@ -133,9 +151,9 @@ class StandingsTableViewController: UITableViewController {
         }
         
         teamFilterMenu.menu = UIMenu(children: [
-            UIAction(title: TeamFilter.LEAGUE.rawValue, state: .on, handler: optionsClosure),
-            UIAction(title: TeamFilter.CONFERENCE.rawValue, handler: optionsClosure),
-            UIAction(title: TeamFilter.DIVISION.rawValue, handler: optionsClosure)
+            UIAction(title: TeamFilter.LEAGUE.localizedString(), state: .on, handler: optionsClosure),
+            UIAction(title: TeamFilter.CONFERENCE.localizedString(), handler: optionsClosure),
+            UIAction(title: TeamFilter.DIVISION.localizedString(), handler: optionsClosure)
         ])
     }
     
@@ -369,13 +387,13 @@ class StandingsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if teamFilter == TeamFilter.CONFERENCE {
-            return Array(conferenceTeams.keys)[section].rawValue
+            return Array(conferenceTeams.keys)[section].localizedString()
         }
         else if teamFilter == TeamFilter.DIVISION {
-            return Array(divisionTeams.keys)[section].rawValue
+            return Array(divisionTeams.keys)[section].localizedString()
         }
         else {
-            return TeamFilter.LEAGUE.rawValue
+            return TeamFilter.LEAGUE.localizedString()
         }
     }
     

@@ -45,10 +45,10 @@ class DetailedTeamViewController: UIViewController {
 
         teamImage.image = UIImage(named: selectedTeam.team.abbreviation!)
         teamName.text = selectedTeam.team.fullName
-        conferenceLabel.text = "\n\(confPos.ordinal) in \(selectedTeam.team.conference!)ern \(TeamFilter.CONFERENCE.rawValue)"
-        divisionLabel.text =  "\(divPos.ordinal) in \(selectedTeam.team.division!) \(TeamFilter.DIVISION.rawValue)"
-        leagueLabel.text = "\(leaguePos.ordinal) in \(TeamFilter.LEAGUE.rawValue)"
-        recordLabel.text = "Record\n\(selectedTeam.wins)-\(selectedTeam.losses)\nAt Home\n\(selectedTeam.homeWins)-\(selectedTeam.homeLosses)\nAway\n\(selectedTeam.awayWins)-\(selectedTeam.awayLosses)"
+        conferenceLabel.text = "\n\(confPos.ordinal) \(NSLocalizedString("in", comment: "")) \(NSLocalizedString(selectedTeam.team.conference! + "ern", comment: "")) \(TeamFilter.CONFERENCE.localizedString())"
+        divisionLabel.text =  "\(divPos.ordinal) \(NSLocalizedString("in", comment: "")) \(NSLocalizedString(selectedTeam.team.division!, comment: "")) \(TeamFilter.DIVISION.localizedString())"
+        leagueLabel.text = "\(leaguePos.ordinal) \(NSLocalizedString("in", comment: "")) \(TeamFilter.LEAGUE.localizedString())"
+        recordLabel.text = NSLocalizedString("Record", comment: "record") + "\n\(selectedTeam.wins)-\(selectedTeam.losses)\n"+NSLocalizedString("At Home", comment: "at_home")+"\n\(selectedTeam.homeWins)-\(selectedTeam.homeLosses)\n"+NSLocalizedString("Away", comment: "away")+"\n\(selectedTeam.awayWins)-\(selectedTeam.awayLosses)"
     }
 }
 

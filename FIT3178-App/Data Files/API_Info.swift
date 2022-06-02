@@ -68,16 +68,16 @@ public enum HTTP_ERROR_CODES: Int {
 
 /// A dictionary storing key value pairs of the error codes returned by the API, and appropriate error messages to display to the user in response to the error code.
 public let API_ERROR_CODE_MESSAGES = [
-    HTTP_ERROR_CODES.bad_request.rawValue: "Invalid server request.",
-    HTTP_ERROR_CODES.not_found.rawValue: "Server request was not found.",
-    HTTP_ERROR_CODES.not_acceptable.rawValue: "Invalid server request format.",
-    HTTP_ERROR_CODES.too_many_requests.rawValue: "Too many server requests.",
-    HTTP_ERROR_CODES.server_error.rawValue: "Internal server error.",
-    HTTP_ERROR_CODES.service_unavailable.rawValue: "Server currently unavailable."
+    HTTP_ERROR_CODES.bad_request.rawValue: NSLocalizedString("Invalid server request.", comment: "bad_request"),
+    HTTP_ERROR_CODES.not_found.rawValue: NSLocalizedString("Server request was not found.", comment: "not_found" ),
+    HTTP_ERROR_CODES.not_acceptable.rawValue: NSLocalizedString("Invalid server request format.", comment: "not_acceptable"),
+    HTTP_ERROR_CODES.too_many_requests.rawValue: NSLocalizedString("Too many server requests.", comment: "too_many_requests"),
+    HTTP_ERROR_CODES.server_error.rawValue: NSLocalizedString("Internal server error.", comment: "server_error"),
+    HTTP_ERROR_CODES.service_unavailable.rawValue: NSLocalizedString("Server currently unavailable.", comment: "service_unavailable")
 ]
 
 /// Error message used when there is an error decoding data.
-public let JSON_DECODER_ERROR_TITLE = "Error decoding API data"
+public let JSON_DECODER_ERROR_TITLE = NSLocalizedString("Error decoding API data.", comment: "error_decoding_data")
 
 // MARK: Requesting Data
 
@@ -97,19 +97,19 @@ public func requestData(path: API_URL_PATHS, queries: [API_QUERIES:String]) asyn
     gamesURL.queryItems = query_items
     
     guard let requestURL = gamesURL.url else {
-        return (nil, ("Unable to retrieve information", "Invalid URL."))
+        return (nil, (NSLocalizedString("Unable to retrieve information", comment: "unable_to_retrieve"), NSLocalizedString("Invalid URL.", comment: "invalid_url")))
     }
     
     let urlRequest = URLRequest(url: requestURL)
     do {
         let (data, response) = try await URLSession.shared.data(for: urlRequest)
         if let response = response as? HTTPURLResponse, response.statusCode != HTTP_ERROR_CODES.success.rawValue  {
-            return (nil, ("An error occured whilst retrieving data", API_ERROR_CODE_MESSAGES[response.statusCode]!))
+            return (nil, (NSLocalizedString("An error occured whilst retrieving data", comment: "error_retrieving_data"), API_ERROR_CODE_MESSAGES[response.statusCode]!))
         }
         
         return (data, nil)
     }
     catch let error {
-        return (nil, ("An error occured whilst retrieving data", error.localizedDescription))
+        return (nil, (NSLocalizedString("An error occured whilst retrieving data", comment: "error_retrieving_data"), error.localizedDescription))
     }
 }

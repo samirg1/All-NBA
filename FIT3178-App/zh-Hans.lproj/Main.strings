@@ -1,0 +1,447 @@
+
+/* Class = "UINavigationItem"; title = "Standings"; ObjectID = "04X-tB-BXA"; */
+"04X-tB-BXA.title" = "积分榜";
+
+/* Class = "UILabel"; accessibilityHint = "click for more detail on player"; ObjectID = "0oK-MB-rum"; */
+"0oK-MB-rum.accessibilityHint" = "点击查看更多播放器详情";
+
+/* Class = "UILabel"; accessibilityLabel = "player stat"; ObjectID = "0oK-MB-rum"; */
+"0oK-MB-rum.accessibilityLabel" = "球员数据";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "0oK-MB-rum"; */
+"0oK-MB-rum.text" = "标签";
+
+/* Class = "UILabel"; accessibilityLabel = "recent game label"; ObjectID = "1VE-vw-ai3"; */
+"1VE-vw-ai3.accessibilityLabel" = "最近的游戏标签";
+
+/* Class = "UILabel"; text = "Recent Game"; ObjectID = "1VE-vw-ai3"; */
+"1VE-vw-ai3.text" = "最近的比赛";
+
+/* Class = "UICommand"; title = "Division"; ObjectID = "1Xt-eD-CIi"; */
+"1Xt-eD-CIi.title" = "分配";
+
+/* Class = "UILabel"; accessibilityLabel = "date label"; ObjectID = "1ad-Zg-3vD"; */
+"1ad-Zg-3vD.accessibilityLabel" = "日期标签";
+
+/* Class = "UILabel"; text = "Date"; ObjectID = "1ad-Zg-3vD"; */
+"1ad-Zg-3vD.text" = "日期";
+
+/* Class = "UIButton"; configuration.title = "Players >"; ObjectID = "1ly-9T-0Nl"; */
+"1ly-9T-0Nl.configuration.title" = "玩家 >";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "1ly-9T-0Nl"; */
+"1ly-9T-0Nl.normalTitle" = "按钮";
+
+/* Class = "UILabel"; accessibilityLabel = "team name"; ObjectID = "1p1-gm-Ry0"; */
+"1p1-gm-Ry0.accessibilityLabel" = "队名";
+
+/* Class = "UILabel"; text = "Team Name"; ObjectID = "1p1-gm-Ry0"; */
+"1p1-gm-Ry0.text" = "队名";
+
+/* Class = "UIImageView"; accessibilityLabel = "team logo"; ObjectID = "1zQ-UC-n8J"; */
+"1zQ-UC-n8J.accessibilityLabel" = "队徽";
+
+/* Class = "UILabel"; accessibilityLabel = "team games behind"; ObjectID = "34W-sp-cr8"; */
+"34W-sp-cr8.accessibilityLabel" = "团队比赛落后";
+
+/* Class = "UILabel"; text = "GB: 0.0"; ObjectID = "34W-sp-cr8"; */
+"34W-sp-cr8.text" = "GB: 0.0";
+
+/* Class = "UITableViewCell"; accessibilityHint = "click for more detail"; ObjectID = "3uZ-Tl-qle"; */
+"3uZ-Tl-qle.accessibilityHint" = "点击了解更多详情";
+
+/* Class = "UITableViewCell"; accessibilityLabel = "setting cell"; ObjectID = "3uZ-Tl-qle"; */
+"3uZ-Tl-qle.accessibilityLabel" = "设置单元格";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "57B-LP-61Q"; */
+"57B-LP-61Q.normalTitle" = "按钮";
+
+/* Class = "UILabel"; accessibilityLabel = "team recent game status"; ObjectID = "5S6-KM-i1I"; */
+"5S6-KM-i1I.accessibilityLabel" = "球队近期比赛状态";
+
+/* Class = "UILabel"; text = "Status"; ObjectID = "5S6-KM-i1I"; */
+"5S6-KM-i1I.text" = "地位";
+
+/* Class = "UIImageView"; accessibilityLabel = "team image 2"; ObjectID = "6Uk-d9-M63"; */
+"6Uk-d9-M63.accessibilityLabel" = "团队形象 2";
+
+/* Class = "UITabBarItem"; title = "Standings"; ObjectID = "6Yk-Wn-L3R"; */
+"6Yk-Wn-L3R.title" = "积分榜";
+
+/* Class = "UITableViewController"; title = "Games"; ObjectID = "7Tj-aM-Q5A"; */
+"7Tj-aM-Q5A.title" = "游戏";
+
+/* Class = "UILabel"; accessibilityLabel = "no favourites title"; ObjectID = "8Hw-f1-Tam"; */
+"8Hw-f1-Tam.accessibilityLabel" = "没有收藏标题";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "8Hw-f1-Tam"; */
+"8Hw-f1-Tam.text" = "标题";
+
+/* Class = "UISwitch"; accessibilityHint = "change preference of app setting"; ObjectID = "9aM-uZ-r72"; */
+"9aM-uZ-r72.accessibilityHint" = "更改应用设置的偏好";
+
+/* Class = "UISwitch"; accessibilityLabel = "app setting switch"; ObjectID = "9aM-uZ-r72"; */
+"9aM-uZ-r72.accessibilityLabel" = "应用设置开关";
+
+/* Class = "UILabel"; accessibilityLabel = "team league standings"; ObjectID = "9eT-9x-1RC"; */
+"9eT-9x-1RC.accessibilityLabel" = "球队联赛积分榜";
+
+/* Class = "UILabel"; text = "League"; ObjectID = "9eT-9x-1RC"; */
+"9eT-9x-1RC.text" = "联盟";
+
+/* Class = "UINavigationItem"; title = "Notifications"; ObjectID = "9rk-YC-z19"; */
+"9rk-YC-z19.title" = "通知";
+
+/* Class = "UILabel"; accessibilityLabel = "time label"; ObjectID = "Bbd-m4-b6q"; */
+"Bbd-m4-b6q.accessibilityLabel" = "时间标签";
+
+/* Class = "UILabel"; text = "Time"; ObjectID = "Bbd-m4-b6q"; */
+"Bbd-m4-b6q.text" = "时间";
+
+/* Class = "UINavigationItem"; title = "Settings"; ObjectID = "C4z-ih-zai"; */
+"C4z-ih-zai.title" = "设置";
+
+/* Class = "UILabel"; accessibilityLabel = "game score label"; ObjectID = "C6P-Kv-f62"; */
+"C6P-Kv-f62.accessibilityLabel" = "游戏分数标签";
+
+/* Class = "UILabel"; text = "Score"; ObjectID = "C6P-Kv-f62"; */
+"C6P-Kv-f62.text" = "分数";
+
+/* Class = "UILabel"; accessibilityLabel = "game status label"; ObjectID = "CCq-O2-HK3"; */
+"CCq-O2-HK3.accessibilityLabel" = "游戏状态标签";
+
+/* Class = "UILabel"; text = "Status"; ObjectID = "CCq-O2-HK3"; */
+"CCq-O2-HK3.text" = "地位";
+
+/* Class = "UITableViewCell"; accessibilityHint = "tap on cell to view more detail"; ObjectID = "CyG-oU-6W8"; */
+"CyG-oU-6W8.accessibilityHint" = "点击单元格以查看更多详细信息";
+
+/* Class = "UITableViewCell"; accessibilityLabel = "team cell"; ObjectID = "CyG-oU-6W8"; */
+"CyG-oU-6W8.accessibilityLabel" = "团队细胞";
+
+/* Class = "UILabel"; accessibilityLabel = "Player's season stats"; ObjectID = "E4E-Tw-PCz"; */
+"E4E-Tw-PCz.accessibilityLabel" = "球员赛季数据";
+
+/* Class = "UILabel"; text = "00.00 PPG - 00.00 APG - 00.00 RPG"; ObjectID = "E4E-Tw-PCz"; */
+"E4E-Tw-PCz.text" = "00.00 PPG - 00.00 APG - 00.00 RPG";
+
+/* Class = "UILabel"; accessibilityLabel = "home team record"; ObjectID = "EP9-s7-gP3"; */
+"EP9-s7-gP3.accessibilityLabel" = "主队战绩";
+
+/* Class = "UILabel"; text = "H20-10"; ObjectID = "EP9-s7-gP3"; */
+"EP9-s7-gP3.text" = "H20-10";
+
+/* Class = "UIImageView"; accessibilityLabel = "home image"; ObjectID = "EgY-W5-nMq"; */
+"EgY-W5-nMq.accessibilityLabel" = "家庭形象";
+
+/* Class = "UISegmentedControl"; Eq2-Qd-JdF.segmentTitles[0] = "Players"; ObjectID = "Eq2-Qd-JdF"; */
+"Eq2-Qd-JdF.segmentTitles[0]" = "球员";
+
+/* Class = "UISegmentedControl"; Eq2-Qd-JdF.segmentTitles[1] = "Teams"; ObjectID = "Eq2-Qd-JdF"; */
+"Eq2-Qd-JdF.segmentTitles[1]" = "团队";
+
+/* Class = "UINavigationItem"; title = "Game"; ObjectID = "F3V-X0-2ic"; */
+"F3V-X0-2ic.title" = "游戏";
+
+/* Class = "UITableViewCell"; accessibilityHint = "swipe to delete a favourite"; ObjectID = "FVf-aO-tx4"; */
+"FVf-aO-tx4.accessibilityHint" = "滑动删除收藏夹";
+
+/* Class = "UITableViewCell"; accessibilityLabel = "favourite cell"; ObjectID = "FVf-aO-tx4"; */
+"FVf-aO-tx4.accessibilityLabel" = "最喜欢的细胞";
+
+/* Class = "UITableViewCell"; accessibilityHint = "click to view detailed game"; ObjectID = "Far-X9-hL5"; */
+"Far-X9-hL5.accessibilityHint" = "点击查看详细比赛";
+
+/* Class = "UITableViewCell"; accessibilityLabel = "game cell"; ObjectID = "Far-X9-hL5"; */
+"Far-X9-hL5.accessibilityLabel" = "游戏单元";
+
+/* Class = "UILabel"; accessibilityLabel = "numerical value"; ObjectID = "FcA-H1-qIr"; */
+"FcA-H1-qIr.accessibilityLabel" = "数值";
+
+/* Class = "UILabel"; text = "13"; ObjectID = "FcA-H1-qIr"; */
+"FcA-H1-qIr.text" = "13";
+
+/* Class = "UILabel"; accessibilityLabel = "team conference standings"; ObjectID = "GR5-Sv-4no"; */
+"GR5-Sv-4no.accessibilityLabel" = "团队会议积分榜";
+
+/* Class = "UILabel"; text = "Conference"; ObjectID = "GR5-Sv-4no"; */
+"GR5-Sv-4no.text" = "会议";
+
+/* Class = "UILabel"; accessibilityLabel = "Previous game summary"; ObjectID = "Ges-0i-OES"; */
+"Ges-0i-OES.accessibilityLabel" = "上一场比赛总结";
+
+/* Class = "UILabel"; text = "XXX 000 vs 000 XXX"; ObjectID = "Ges-0i-OES"; */
+"Ges-0i-OES.text" = "XXX 000 vs 000 XXX";
+
+/* Class = "UILabel"; accessibilityLabel = "team away record"; ObjectID = "Gvt-W7-l0h"; */
+"Gvt-W7-l0h.accessibilityLabel" = "球队客场记录";
+
+/* Class = "UILabel"; text = "A20-32"; ObjectID = "Gvt-W7-l0h"; */
+"Gvt-W7-l0h.text" = "A20-32";
+
+/* Class = "UITabBarItem"; title = "Games"; ObjectID = "HiK-d8-hUD"; */
+"HiK-d8-hUD.title" = "游戏";
+
+/* Class = "UIMenu"; title = "Season"; ObjectID = "JHC-Gi-kro"; */
+"JHC-Gi-kro.title" = "季节";
+
+/* Class = "UINavigationItem"; title = "Favourites"; ObjectID = "JLw-vp-YD8"; */
+"JLw-vp-YD8.title" = "收藏夹";
+
+/* Class = "UILabel"; accessibilityLabel = "Favourite player name"; ObjectID = "K4K-i4-t6O"; */
+"K4K-i4-t6O.accessibilityLabel" = "最喜欢的球员名字";
+
+/* Class = "UILabel"; text = "Name"; ObjectID = "K4K-i4-t6O"; */
+"K4K-i4-t6O.text" = "姓名";
+
+/* Class = "UILabel"; accessibilityLabel = "player name"; ObjectID = "LSU-p4-8ub"; */
+"LSU-p4-8ub.accessibilityLabel" = "选手姓名";
+
+/* Class = "UILabel"; text = "Josh Giddey"; ObjectID = "LSU-p4-8ub"; */
+"LSU-p4-8ub.text" = "Josh Giddey";
+
+/* Class = "UITableViewCell"; accessibilityHint = "click to add to selected cells to add to favourites"; ObjectID = "Lb2-QF-8u8"; */
+"Lb2-QF-8u8.accessibilityHint" = "单击以添加到选定的单元格以添加到收藏夹";
+
+/* Class = "UITableViewCell"; accessibilityLabel = "possible favourite cell"; ObjectID = "Lb2-QF-8u8"; */
+"Lb2-QF-8u8.accessibilityLabel" = "可能最喜欢的细胞";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "LjH-5S-VjG"; */
+"LjH-5S-VjG.normalTitle" = "按钮";
+
+/* Class = "UIImageView"; accessibilityLabel = "away image"; ObjectID = "Lop-bw-ye2"; */
+"Lop-bw-ye2.accessibilityLabel" = "离开图片";
+
+/* Class = "UITableViewCell"; accessibilityHint = "click to view user setting"; ObjectID = "MDm-62-Hp6"; */
+"MDm-62-Hp6.accessibilityHint" = "点击查看用户设置";
+
+/* Class = "UITableViewCell"; accessibilityLabel = "user setting cell"; ObjectID = "MDm-62-Hp6"; */
+"MDm-62-Hp6.accessibilityLabel" = "用户设置单元格";
+
+/* Class = "UILabel"; accessibilityLabel = "home abbreviation"; ObjectID = "NVg-hz-76W"; */
+"NVg-hz-76W.accessibilityLabel" = "家庭缩写";
+
+/* Class = "UILabel"; text = "Home"; ObjectID = "NVg-hz-76W"; */
+"NVg-hz-76W.text" = "家";
+
+/* Class = "UILabel"; accessibilityLabel = "team record"; ObjectID = "OKw-LE-WVO"; */
+"OKw-LE-WVO.accessibilityLabel" = "团队记录";
+
+/* Class = "UILabel"; text = "40-42"; ObjectID = "OKw-LE-WVO"; */
+"OKw-LE-WVO.text" = "40-42";
+
+/* Class = "UILabel"; accessibilityLabel = "setting title"; ObjectID = "PDj-TU-TO1"; */
+"PDj-TU-TO1.accessibilityLabel" = "设置标题";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "PDj-TU-TO1"; */
+"PDj-TU-TO1.text" = "标题";
+
+/* Class = "UILabel"; accessibilityLabel = "team recent game summary"; ObjectID = "QdH-YB-10X"; */
+"QdH-YB-10X.accessibilityLabel" = "球队近期比赛总结";
+
+/* Class = "UILabel"; text = "XXX 000 vs 000 XXX"; ObjectID = "QdH-YB-10X"; */
+"QdH-YB-10X.text" = "XXX 000 vs 000 XXX";
+
+/* Class = "UIImageView"; accessibilityLabel = "team image 1"; ObjectID = "QoH-WR-d99"; */
+"QoH-WR-d99.accessibilityLabel" = "团队形象 1";
+
+/* Class = "UILabel"; accessibilityLabel = "team abbreviation"; ObjectID = "RDa-qB-yd9"; */
+"RDa-qB-yd9.accessibilityLabel" = "团队缩写";
+
+/* Class = "UILabel"; text = "ATL"; ObjectID = "RDa-qB-yd9"; */
+"RDa-qB-yd9.text" = "ATL";
+
+/* Class = "UILabel"; accessibilityLabel = "user notification sub info"; ObjectID = "Tdf-Ca-UMt"; */
+"Tdf-Ca-UMt.accessibilityLabel" = "用户通知子信息";
+
+/* Class = "UILabel"; text = "Subtitle"; ObjectID = "Tdf-Ca-UMt"; */
+"Tdf-Ca-UMt.text" = "字幕";
+
+/* Class = "UITabBarItem"; title = "Favourites"; ObjectID = "TlM-oG-wCC"; */
+"TlM-oG-wCC.title" = "收藏夹";
+
+/* Class = "UILabel"; accessibilityLabel = "status label"; ObjectID = "UPZ-lo-CMn"; */
+"UPZ-lo-CMn.accessibilityLabel" = "状态标签";
+
+/* Class = "UILabel"; text = "Status"; ObjectID = "UPZ-lo-CMn"; */
+"UPZ-lo-CMn.text" = "地位";
+
+/* Class = "UILabel"; accessibilityLabel = "favourite team name"; ObjectID = "WpJ-N4-OTt"; */
+"WpJ-N4-OTt.accessibilityLabel" = "最喜欢的队名";
+
+/* Class = "UILabel"; text = "Team Name"; ObjectID = "WpJ-N4-OTt"; */
+"WpJ-N4-OTt.text" = "队名";
+
+/* Class = "UINavigationItem"; title = "Favourites"; ObjectID = "WrU-08-M6h"; */
+"WrU-08-M6h.title" = "收藏夹";
+
+/* Class = "UILabel"; accessibilityLabel = "home stat"; ObjectID = "Wuy-V5-JhA"; */
+"Wuy-V5-JhA.accessibilityLabel" = "家庭统计";
+
+/* Class = "UILabel"; accessibilityLabel = "away stat"; ObjectID = "YMD-oM-Dq7"; */
+"YMD-oM-Dq7.accessibilityLabel" = "客场统计";
+
+/* Class = "UINavigationItem"; title = "Players"; ObjectID = "b3n-V6-Qf9"; */
+"b3n-V6-Qf9.title" = "球员";
+
+/* Class = "UIImageView"; accessibilityLabel = "home team logo"; ObjectID = "bBi-DK-4Ug"; */
+"bBi-DK-4Ug.accessibilityLabel" = "主队队徽";
+
+/* Class = "UINavigationItem"; title = "Games"; ObjectID = "cbK-Pa-h84"; */
+"cbK-Pa-h84.title" = "游戏";
+
+/* Class = "UITabBarItem"; title = "Settings"; ObjectID = "d94-dB-j3y"; */
+"d94-dB-j3y.title" = "设置";
+
+/* Class = "UILabel"; accessibilityLabel = "stat title"; ObjectID = "dZ5-Fk-oeh"; */
+"dZ5-Fk-oeh.accessibilityLabel" = "统计标题";
+
+/* Class = "UILabel"; text = "Rebounds"; ObjectID = "dZ5-Fk-oeh"; */
+"dZ5-Fk-oeh.text" = "篮板球";
+
+/* Class = "UILabel"; accessibilityLabel = "team division standings"; ObjectID = "e2L-ei-wrJ"; */
+"e2L-ei-wrJ.accessibilityLabel" = "分队积分榜";
+
+/* Class = "UILabel"; text = "Division"; ObjectID = "e2L-ei-wrJ"; */
+"e2L-ei-wrJ.text" = "分配";
+
+/* Class = "UINavigationItem"; title = "Favourites"; ObjectID = "eh1-KX-ISh"; */
+"eh1-KX-ISh.title" = "收藏夹";
+
+/* Class = "UILabel"; accessibilityLabel = "no favourites subtitle"; ObjectID = "f3W-rp-0Js"; */
+"f3W-rp-0Js.accessibilityLabel" = "没有收藏字幕";
+
+/* Class = "UILabel"; text = "Subtitle"; ObjectID = "f3W-rp-0Js"; */
+"f3W-rp-0Js.text" = "字幕";
+
+/* Class = "UICommand"; title = "2021/22"; ObjectID = "hi3-Fa-RVz"; */
+"hi3-Fa-RVz.title" = "2021/22";
+
+/* Class = "UIBarButtonItem"; title = "Today"; ObjectID = "hlK-Oq-h28"; */
+"hlK-Oq-h28.title" = "今天";
+
+/* Class = "UILabel"; accessibilityLabel = "Player season stat label"; ObjectID = "irr-2f-fIs"; */
+"irr-2f-fIs.accessibilityLabel" = "球员赛季数据标签";
+
+/* Class = "UILabel"; text = "Season Stats"; ObjectID = "irr-2f-fIs"; */
+"irr-2f-fIs.text" = "赛季数据";
+
+/* Class = "UICollectionViewController"; title = "Player Game"; ObjectID = "js5-QG-Whl"; */
+"js5-QG-Whl.title" = "玩家游戏";
+
+/* Class = "UICommand"; title = "League"; ObjectID = "k5I-1p-teg"; */
+"k5I-1p-teg.title" = "联盟";
+
+/* Class = "UIImageView"; accessibilityLabel = "away team logo"; ObjectID = "lOU-FR-925"; */
+"lOU-FR-925.accessibilityLabel" = "客场队徽";
+
+/* Class = "UILabel"; accessibilityLabel = "possible favourite title"; ObjectID = "lhZ-fD-e8T"; */
+"lhZ-fD-e8T.accessibilityLabel" = "可能最喜欢的标题";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "lhZ-fD-e8T"; */
+"lhZ-fD-e8T.text" = "标题";
+
+/* Class = "UIImageView"; accessibilityLabel = "big team logo"; ObjectID = "lvX-V0-ads"; */
+"lvX-V0-ads.accessibilityLabel" = "大队徽";
+
+/* Class = "UILabel"; accessibilityLabel = "favourite subtitle"; ObjectID = "mQ1-Wu-HlM"; */
+"mQ1-Wu-HlM.accessibilityLabel" = "最喜欢的字幕";
+
+/* Class = "UILabel"; text = "Subtitle"; ObjectID = "mQ1-Wu-HlM"; */
+"mQ1-Wu-HlM.text" = "字幕";
+
+/* Class = "UIMenu"; title = "Filter"; ObjectID = "mY7-XJ-hq6"; */
+"mY7-XJ-hq6.title" = "筛选";
+
+/* Class = "UILabel"; accessibilityLabel = "possible favourite subtitle"; ObjectID = "nGl-Uo-56E"; */
+"nGl-Uo-56E.accessibilityLabel" = "可能最喜欢的字幕";
+
+/* Class = "UILabel"; text = "Subtitle"; ObjectID = "nGl-Uo-56E"; */
+"nGl-Uo-56E.text" = "字幕";
+
+/* Class = "UILabel"; accessibilityHint = "click for more detail on player"; ObjectID = "nf6-pc-PNW"; */
+"nf6-pc-PNW.accessibilityHint" = "点击查看更多播放器详情";
+
+/* Class = "UILabel"; accessibilityLabel = "player name"; ObjectID = "nf6-pc-PNW"; */
+"nf6-pc-PNW.accessibilityLabel" = "选手姓名";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "nf6-pc-PNW"; */
+"nf6-pc-PNW.text" = "标签";
+
+/* Class = "UILabel"; accessibilityLabel = "away abbreviation"; ObjectID = "qCW-Vf-Mz8"; */
+"qCW-Vf-Mz8.accessibilityLabel" = "离开缩写";
+
+/* Class = "UILabel"; text = "Away"; ObjectID = "qCW-Vf-Mz8"; */
+"qCW-Vf-Mz8.text" = "离开";
+
+/* Class = "UILabel"; accessibilityLabel = "stat detail"; ObjectID = "qKS-Wp-aHs"; */
+"qKS-Wp-aHs.accessibilityLabel" = "统计细节";
+
+/* Class = "UILabel"; text = "(3off 10def)"; ObjectID = "qKS-Wp-aHs"; */
+"qKS-Wp-aHs.text" = "(3off 10def)";
+
+/* Class = "UILabel"; accessibilityLabel = "game time label"; ObjectID = "qhf-va-wm3"; */
+"qhf-va-wm3.accessibilityLabel" = "比赛时间标签";
+
+/* Class = "UILabel"; text = "Time"; ObjectID = "qhf-va-wm3"; */
+"qhf-va-wm3.text" = "时间";
+
+/* Class = "UILabel"; accessibilityLabel = "team recent game label"; ObjectID = "r95-0z-cwX"; */
+"r95-0z-cwX.accessibilityLabel" = "团队最近的游戏标签";
+
+/* Class = "UILabel"; text = "Recent Game"; ObjectID = "r95-0z-cwX"; */
+"r95-0z-cwX.text" = "最近的比赛";
+
+/* Class = "UIViewController"; title = "TeamView"; ObjectID = "rAw-dx-X6x"; */
+"rAw-dx-X6x.title" = "团队视角";
+
+/* Class = "UILabel"; accessibilityLabel = "app setting label"; ObjectID = "rXQ-Ie-6fd"; */
+"rXQ-Ie-6fd.accessibilityLabel" = "应用设置标签";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "rXQ-Ie-6fd"; */
+"rXQ-Ie-6fd.text" = "标签";
+
+/* Class = "UILabel"; accessibilityLabel = "user notification info"; ObjectID = "rac-bw-AY8"; */
+"rac-bw-AY8.accessibilityLabel" = "用户通知信息";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "rac-bw-AY8"; */
+"rac-bw-AY8.text" = "标题";
+
+/* Class = "UICommand"; title = "Conference"; ObjectID = "s49-Bk-X65"; */
+"s49-Bk-X65.title" = "会议";
+
+/* Class = "UILabel"; accessibilityLabel = "Player's recent game stats"; ObjectID = "sMz-01-eJw"; */
+"sMz-01-eJw.accessibilityLabel" = "玩家最近的比赛数据";
+
+/* Class = "UILabel"; text = "00 PTS - 00 AST - 00 REB"; ObjectID = "sMz-01-eJw"; */
+"sMz-01-eJw.text" = "00 PTS - 00 AST - 00 REB";
+
+/* Class = "UILabel"; accessibilityLabel = "favourite title"; ObjectID = "tM0-KC-Kk9"; */
+"tM0-KC-Kk9.accessibilityLabel" = "最喜欢的标题";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "tM0-KC-Kk9"; */
+"tM0-KC-Kk9.text" = "标题";
+
+/* Class = "UILabel"; accessibilityLabel = "team position"; ObjectID = "u1j-Zn-OLb"; */
+"u1j-Zn-OLb.accessibilityLabel" = "团队位置";
+
+/* Class = "UILabel"; text = "1"; ObjectID = "u1j-Zn-OLb"; */
+"u1j-Zn-OLb.text" = "1";
+
+/* Class = "UIBarButtonItem"; title = "Add"; ObjectID = "vCT-C4-SG5"; */
+"vCT-C4-SG5.title" = "添加";
+
+/* Class = "UILabel"; accessibilityLabel = "team percentage"; ObjectID = "vYp-n7-SNn"; */
+"vYp-n7-SNn.accessibilityLabel" = "团队百分比";
+
+/* Class = "UILabel"; text = "1.000"; ObjectID = "vYp-n7-SNn"; */
+"vYp-n7-SNn.text" = "1.000";
+
+/* Class = "UILabel"; accessibilityLabel = "team record"; ObjectID = "wdQ-Ss-3SU"; */
+"wdQ-Ss-3SU.accessibilityLabel" = "团队记录";
+
+/* Class = "UILabel"; text = "Record"; ObjectID = "wdQ-Ss-3SU"; */
+"wdQ-Ss-3SU.text" = "记录";
+
+/* Class = "UICommand"; title = "2020/21"; ObjectID = "yaG-Vl-7Tg"; */
+"yaG-Vl-7Tg.title" = "2020/21";

@@ -35,6 +35,12 @@ private enum PlayerStatSections: String {
     case ft = "Free Throws"
     /// Collection of all of the statistical categories to display.
     static var allItems = [points, rebounds, assists, steals, blocks, minutes, turnovers, fouls, twos, threes, fg, ft]
+    
+    /// Function to return a localised string of the enum raw value.
+    /// - Returns: The localised string.
+    func localizedString() -> String {
+        return NSLocalizedString(self.rawValue, comment: "")
+    }
 }
 
 /// Custom class to provide a header for this page.
@@ -146,7 +152,7 @@ class DetailedPlayerGameCollectionViewController: UICollectionViewController {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: statCell, for: indexPath) as! PlayerStatCollectionViewCell
         cell.backgroundColor = .systemBackground
         let header = PlayerStatSections.allItems[indexPath.item-1]
-        cell.statTitleLabel.text = header.rawValue
+        cell.statTitleLabel.text = header.localizedString()
         switch header {
         case .points:
             cell.numberLabel.text = "\(player.pts)"

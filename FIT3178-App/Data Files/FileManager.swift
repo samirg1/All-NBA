@@ -18,9 +18,9 @@ private var cacheDirectoryPath: URL = {
 }()
 
 /// Error title used when the data stored in `FileManager` is invalid.
-public let FILE_MANAGER_DATA_ERROR_TITLE = "An error occured fetching data"
+public let FILE_MANAGER_DATA_ERROR_TITLE = NSLocalizedString("An error occured fetching data", comment: "error_fetching_data")
 /// Error message used when the data stored in `FileManager` is invalid.
-public let FILE_MANAGER_DATA_ERROR_MESSAGE = "Stored file data is invalid."
+public let FILE_MANAGER_DATA_ERROR_MESSAGE = NSLocalizedString("Stored file data is invalid.", comment: "invalid_file_data")
 
 
 /// Stores the currently used FileManager file names/suffixes.

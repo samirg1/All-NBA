@@ -15,6 +15,12 @@ private enum SettingSections: String {
     case notifications = "Notifications"
     /// Variable to hold all sections.
     static var all = [favourties, notifications]
+    
+    /// Function to return a localised string of the enum raw value.
+    /// - Returns: The localised string.
+    func localizedString() -> String {
+        return NSLocalizedString(self.rawValue, comment: "")
+    }
 }
 
 /// Custom class to allow user to change their experience with the app.
@@ -46,7 +52,7 @@ class SettingsTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: sectionCellIdentifier, for: indexPath)
 
         var content = cell.defaultContentConfiguration()
-        content.text = SettingSections.all[indexPath.row].rawValue
+        content.text = SettingSections.all[indexPath.row].localizedString()
         cell.contentConfiguration = content
 
         return cell

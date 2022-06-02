@@ -20,11 +20,11 @@ class NotificationSettingTableViewController: UITableViewController {
     /// Variable to access the ``AppDelegate`` in the App.
     private let appDelegate = UIApplication.shared.delegate as! AppDelegate
     /// The sections of the table view.
-    private let sections = ["User Settings", "App Settings"]
+    private let sections = [NSLocalizedString("User Settings", comment: "user_settings"), NSLocalizedString("App Settings", comment: "app_settings")]
     /// The row titles of the rows in the table view.
     private let rows = [
-        ["Change notifcation settings", "Test notification"],
-        ["Game alerts", "Favourites only"]
+        [NSLocalizedString("Change notifcation settings", comment: "change_notifications"), NSLocalizedString("Test notification", comment: "test_notifications")],
+        [NSLocalizedString("Game alerts", comment: "game_alerts"), NSLocalizedString("Favourites only", comment: "favourites_only")]
     ]
     /// The setting cell identifier.
     private let settingCellIdentifer = "settingsCell"
@@ -74,8 +74,8 @@ class NotificationSettingTableViewController: UITableViewController {
             content.text = rows[indexPath.section][indexPath.row]
             
             if indexPath.row == settingsRow {
-                var subtitle = "Notifcations are currently: "
-                subtitle += appDelegate.notificationsEnabled ? "On" : "Off"
+                var subtitle = NSLocalizedString("Notifcations are currently: ", comment: "notifcation_currently")
+                subtitle += appDelegate.notificationsEnabled ? NSLocalizedString("On", comment: "on") : NSLocalizedString("Off", comment: "off")
                 content.secondaryText = subtitle
             }
             
@@ -113,8 +113,8 @@ class NotificationSettingTableViewController: UITableViewController {
         }
         else { // queue a dummy notification
             let content = UNMutableNotificationContent()
-            content.title = "Game Alert (TEST)"
-            content.body = "--- vs --- starting soon"
+            content.title = NSLocalizedString("Game Alert (TEST)", comment: "game_alert_test")
+            content.body = NSLocalizedString("--- vs --- starting soon", comment: "test_alert_body")
             
             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
             let request = UNNotificationRequest(identifier: "testNotification", content: content, trigger: trigger)

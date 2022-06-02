@@ -13,27 +13,33 @@ import UIKit
 /// Storage of major statistical categories of NBA games to be displayed by this view controller.
 private enum StatSections: String {
     /// The amount of points scored.
-    case pts = "points"
+    case pts = "Points"
     /// The amount of rebounds secured.
-    case reb = "rebounds"
+    case reb = "Rebounds"
     /// The amount of 3-pointers shot.
     case fg3 = "3-pt field goals"
     /// The amount of shots taken.
-    case fg = "field goals"
+    case fg = "Field Goals"
     /// The amount of free throws taken.
-    case ft = "free throws"
+    case ft = "Free Throws"
     /// The amount of assists acured.
-    case assists = "assists"
+    case assists = "Assists"
     /// The amount of blocks.
-    case blocks = "blocks"
+    case blocks = "Blocks"
     /// The amount of steals.
-    case steals = "steals"
+    case steals = "Steals"
     /// The amount of turnovers.
-    case turnovers = "turnovers"
+    case turnovers = "Turnovers"
     /// The amount of fouls.
-    case fouls = "fouls"
+    case fouls = "Fouls"
     /// A collection of the main statistical categories of NBA games.
     static let mainVals = [pts, reb, fg3, fg, ft, assists, blocks, steals, turnovers, fouls]
+    
+    /// Function to return a localised string of the enum raw value.
+    /// - Returns: The localised string.
+    func localizedString() -> String {
+        return NSLocalizedString(self.rawValue, comment: "")
+    }
 }
 
 /// Custom table cell to show a summary of the game.
@@ -269,7 +275,7 @@ class DetailedGameTableViewController: UITableViewController {
                 cell.statusLabel.text = APItoCurrentTimeZoneDisplay(string: status)
             }
             else {
-                cell.statusLabel.text = status
+                cell.statusLabel.text = NSLocalizedString(status, comment: "")
             }
             
             return cell
@@ -319,7 +325,7 @@ class DetailedGameTableViewController: UITableViewController {
         if section == SECTION_SCORES {
             return .none
         }
-        return StatSections.mainVals[section-1].rawValue
+        return StatSections.mainVals[section-1].localizedString()
     }
     
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {

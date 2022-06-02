@@ -52,7 +52,7 @@ class FavouritesTableViewController: UITableViewController {
     /// The sections of the table that houses other information.
     private let infoSection = 2
     /// The section headers of the table.
-    private let sectionHeaders = ["PLAYERS", "TEAMS", ""]
+    private let sectionHeaders = [NSLocalizedString("PLAYERS", comment: "players_header"), NSLocalizedString("TEAMS", comment: "teams_header"), ""]
     
     /// The current player data that has been retrieved.
     private var playerData: [FavouritePlayer] = []
@@ -216,8 +216,8 @@ class FavouritesTableViewController: UITableViewController {
         if indexPath.section == infoSection {
             let cell = tableView.dequeueReusableCell(withIdentifier: infoCellIdentifier, for: indexPath)
             var content = cell.defaultContentConfiguration()
-            content.text = "No favourites yet."
-            content.secondaryText = "Click 'Edit' to add some."
+            content.text = NSLocalizedString("No favourites yet.", comment: "no_favourites_yet")
+            content.secondaryText = NSLocalizedString("Click 'Edit' to add some.", comment: "edit_to_add_favourites")
             cell.contentConfiguration = content
             return cell
         }
@@ -240,7 +240,12 @@ class FavouritesTableViewController: UITableViewController {
         }
         cell.teamNameLabel.text = team.id == game.homeTeam.id ? game.homeTeam.fullName : game.awayTeam.fullName
         cell.recentGameScoreLabel.text = "\(game.homeTeam.abbreviation!) \(game.homeScore) vs \(game.awayScore) \(game.awayTeam.abbreviation!)"
-        cell.recentGameStatusLabel.text = game.status
+        if game.status!.hasSuffix("T") {
+            cell.recentGameStatusLabel.text = APItoCurrentTimeZoneDisplay(string: game.status!)
+        }
+        else {
+            cell.recentGameStatusLabel.text = NSLocalizedString(game.status!, comment: "")
+        }
         return cell
     }
     
