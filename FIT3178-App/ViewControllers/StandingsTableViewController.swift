@@ -23,7 +23,7 @@ public enum TeamFilter: String {
     /// - Returns: The localised string.
     ///
     /// Source found [here.](https://stackoverflow.com/questions/28213693/enum-with-localized-string-in-swift)
-    fileprivate func localizedString() -> String {
+    public func localizedString() -> String {
         return NSLocalizedString(self.rawValue, comment: "")
     }
 }
@@ -39,7 +39,7 @@ private enum Conferences: String {
     /// - Returns: The localised string.
     ///
     /// Source found [here.](https://stackoverflow.com/questions/28213693/enum-with-localized-string-in-swift)
-    fileprivate func localizedString() -> String {
+    public func localizedString() -> String {
         return NSLocalizedString(self.rawValue, comment: "")
     }
 }
@@ -63,7 +63,7 @@ private enum Divisions: String {
     /// - Returns: The localised string.
     ///
     /// Source found [here.](https://stackoverflow.com/questions/28213693/enum-with-localized-string-in-swift)
-    fileprivate func localizedString() -> String {
+    public func localizedString() -> String {
         return NSLocalizedString(self.rawValue, comment: "")
     }
 }

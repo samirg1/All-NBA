@@ -83,6 +83,8 @@
 "Change notifcation settings"="Change notifcation settings";
 "Game alerts"="Game alerts";
 "Test notification"="Test notification";
+"Can't test notifications"="Can't test notifications";
+"Notifications are turned off"="Notifications are turned off";
 "Favourites only"="Favourites only";
 "Notifcations are currently: "="Notifcations are currently: ";
 "On"="On";
@@ -92,3 +94,12 @@
 
 "Add"="Add";
 "Search players"="Search players";
+
+"About"="About";
+"Other"="Other";
+"Credits"="Credits";
+"Contact"="Contact";
+"Help"="Help";
+"All-NBA was designed as part of a University project to deliver a personalised and effective way to keep up to date in the NBA. Live scores and stats with options for personalisations to enable a quick and easy use of the App to find the information you desire."="All-NBA was designed as part of a University project to deliver a personalised and effective way to keep up to date in the NBA. Live scores and stats with options for personalisations to enable a quick and easy use of the App to find the information you desire.";
+"- Monash University"="- Monash University";
+"For any feedback and enquires feel free to make contact.\nEmail: srgupta@bigpond.com\nSocials: samir.g1"="For any feedback and enquires feel free to make contact.\nEmail: srgupta@bigpond.com\nSocials: samir.g1";

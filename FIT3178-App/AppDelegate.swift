@@ -11,7 +11,7 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
     /// Variable that determines whether the notifications have been enabled on the current device.
-    public var notificationsEnabled: Bool = true
+    public var notificationsEnabled: Bool = false
     /// Variable to determine whether or not the user has elected to allow Game Alert notifications.
     public var gameAlertNotifcations: Bool = true
     /// Variable to determine whether or not the user has elected to only allow Game Alert notifications from their favourite teams and players.

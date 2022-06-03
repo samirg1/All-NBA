@@ -112,6 +112,10 @@ class NotificationSettingTableViewController: UITableViewController {
             }
         }
         else { // queue a dummy notification
+            if !appDelegate.notificationsEnabled {
+                tableView.deselectRow(at: indexPath, animated: true)
+                return displaySimpleMessage(title: NSLocalizedString("Can't test notifications", comment: ""), message: NSLocalizedString("Notifications are turned off", comment: ""))
+            }
             let content = UNMutableNotificationContent()
             content.title = NSLocalizedString("Game Alert (TEST)", comment: "game_alert_test")
             content.body = NSLocalizedString("--- vs --- starting soon", comment: "test_alert_body")

@@ -83,6 +83,8 @@
 "Change notifcation settings"="更改通知设置";
 "Game alerts"="游戏提醒";
 "Test notification"="测试通知";
+"Can't test notifications"="无法测试通知";
+"Notifications are turned off"="通知已关闭";
 "Favourites only"="仅收藏夹";
 "Notifcations are currently: "="目前的通知是：";
 "On"="上";
@@ -93,3 +95,11 @@
 "Add"="添加";
 "Search players"="搜索球员";
 
+"About"="关于";
+"Other"="其他";
+"Credits"="学分";
+"Contact"="接触";
+"Help"="帮助";
+"All-NBA was designed as part of a University project to deliver a personalised and effective way to keep up to date in the NBA. Live scores and stats with options for personalisations to enable a quick and easy use of the App to find the information you desire."="All-NBA 是作为大学项目的一部分而设计的，旨在提供一种个性化且有效的方式来跟上 NBA 的最新动态。带有个性化选项的实时比分和统计数据可让您快速轻松地使用该应用程序来查找您想要的信息。";
+"- Monash University"="- Monash University";
+"For any feedback and enquires feel free to make contact.\nEmail: srgupta@bigpond.com\nSocials: samir.g1"="如有任何反馈和查询，请随时联系。\n电子邮件: srgupta@bigpond.com\n社交: samir.g1;

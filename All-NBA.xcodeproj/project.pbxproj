@@ -35,6 +35,7 @@
 		3794FD6027E821190090BE26 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3794FD5E27E821190090BE26 /* Main.storyboard */; };
 		3794FD6227E8211B0090BE26 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3794FD6127E8211B0090BE26 /* Assets.xcassets */; };
 		3794FD6527E8211B0090BE26 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3794FD6327E8211B0090BE26 /* LaunchScreen.storyboard */; };
+		37D6A9B02849ADDD000D5760 /* AboutTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D6A9AF2849ADDD000D5760 /* AboutTableViewController.swift */; };
 		37F615972810179200E3E3F9 /* DetailedGameTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F615962810179200E3E3F9 /* DetailedGameTableViewController.swift */; };
 		37F6159928101BD200E3E3F9 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F6159828101BD200E3E3F9 /* Player.swift */; };
 		37F6159B28101DA700E3E3F9 /* PlayerGameStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F6159A28101DA700E3E3F9 /* PlayerGameStats.swift */; };
@@ -63,7 +64,6 @@
 		375E69F428470FEC000B28C9 /* FavouriteTeam.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouriteTeam.swift; sourceTree = "<group>"; };
 		375E69F82848D379000B28C9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Main.strings; sourceTree = "<group>"; };
 		375E69FC2848D819000B28C9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		375E69FE2848DA20000B28C9 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		375E69FF2848DA20000B28C9 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		375E6A002848DA20000B28C9 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		377DE88C281A2107009D3BE2 /* PlayersGameStatsCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayersGameStatsCollectionViewController.swift; sourceTree = "<group>"; };
@@ -75,6 +75,9 @@
 		3794FD6127E8211B0090BE26 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3794FD6427E8211B0090BE26 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3794FD6627E8211B0090BE26 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		37D6A9AC2848FE50000D5760 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		37D6A9AE2848FE53000D5760 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		37D6A9AF2849ADDD000D5760 /* AboutTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutTableViewController.swift; sourceTree = "<group>"; };
 		37F615962810179200E3E3F9 /* DetailedGameTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailedGameTableViewController.swift; sourceTree = "<group>"; };
 		37F6159828101BD200E3E3F9 /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		37F6159A28101DA700E3E3F9 /* PlayerGameStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerGameStats.swift; sourceTree = "<group>"; };
@@ -102,8 +105,9 @@
 				3750ABC1282158C0008B2135 /* StandingsTableViewController.swift */,
 				3750ABC72824F6E5008B2135 /* DetailedTeamViewController.swift */,
 				374DE302283E3214008CAC34 /* SettingsTableViewController.swift */,
-				375E69D92841B35E000B28C9 /* FavouritesSettingsTableViewController.swift */,
 				375E69DB2841B36F000B28C9 /* NotificationSettingTableViewController.swift */,
+				37D6A9AF2849ADDD000D5760 /* AboutTableViewController.swift */,
+				375E69D92841B35E000B28C9 /* FavouritesSettingsTableViewController.swift */,
 				375E69DD2841B381000B28C9 /* AddFavouritesTableViewController.swift */,
 			);
 			path = ViewControllers;
@@ -254,6 +258,7 @@
 				3750ABC82824F6E5008B2135 /* DetailedTeamViewController.swift in Sources */,
 				375E69E92846338C000B28C9 /* PlayerSeasonStats.swift in Sources */,
 				375E69DA2841B35E000B28C9 /* FavouritesSettingsTableViewController.swift in Sources */,
+				37D6A9B02849ADDD000D5760 /* AboutTableViewController.swift in Sources */,
 				3750ABCF2828BAC4008B2135 /* TeamGameStats.swift in Sources */,
 				3750ABC428223491008B2135 /* TeamSeasonStats.swift in Sources */,
 				37F615972810179200E3E3F9 /* DetailedGameTableViewController.swift in Sources */,
@@ -299,7 +304,8 @@
 			isa = PBXVariantGroup;
 			children = (
 				3794FD6427E8211B0090BE26 /* Base */,
-				375E69FE2848DA20000B28C9 /* zh-Hans */,
+				37D6A9AC2848FE50000D5760 /* en */,
+				37D6A9AE2848FE53000D5760 /* zh-Hans */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";

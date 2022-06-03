@@ -110,10 +110,9 @@ class GamesTableViewController: UITableViewController {
         for game in selectedDateGames {
             if appDelegate.favouritesOnlyNotifications { // if user has selected to only get favourite team notifications
                 if !appDelegate.favouriteTeams.contains(where: { team in team.id == game.homeTeam.id || team.id == game.awayTeam.id}) {
-                    continue
-                }
-                if !appDelegate.favouritePlayers.contains(where: { player in player.team.id == game.homeTeam.id || player.team.id == game.awayTeam.id }) {
-                    continue
+                    if !appDelegate.favouritePlayers.contains(where: { player in player.team.id == game.homeTeam.id || player.team.id == game.awayTeam.id }) {
+                        continue
+                    }
                 }
             }
             guard let status = game.status else { continue }
@@ -331,7 +330,7 @@ class GamesTableViewController: UITableViewController {
         if section == GAMES_SECTION {
             return selectedDateGames.count
         }
-        if selectedDateGames.count == 0 {
+        if selectedDateGames.isEmpty {
             return 1
         }
         else {
