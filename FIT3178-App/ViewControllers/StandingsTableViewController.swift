@@ -214,9 +214,9 @@ class StandingsTableViewController: UITableViewController {
             let decoder = JSONDecoder()
             let collection = try decoder.decode(TeamCollection.self, from: data)
             if let teams = collection.teams {
-                    for team in teams {
-                        getTeamSeasonGameData(team: team, reload: reload)
-                    }
+                for team in teams {
+                    getTeamSeasonGameData(team: team, reload: reload)
+                }
             }
         }
         catch let error {

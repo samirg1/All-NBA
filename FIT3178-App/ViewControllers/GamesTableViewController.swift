@@ -40,15 +40,12 @@ class GamesTableViewController: UITableViewController {
     /// Variable to access the ``AppDelegate`` of this App.
     private let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
-    /// Variable to determine whether this view controller has reloaded.
-    public var reloaded = false
-    /// Variable to determine wthere this view controller needs to be reloaded.
-    public var toBeReloaded = false
-    
     /// The selected date to show games for.
     private var selectedDate = String()
     /// The games on the selected data.
     private var selectedDateGames = [Game]()
+    /// List of dates with available games.
+    private var availableGameDates = [String:Bool]()
     /// The game that the user has selected.
     private var selectedGame : Game?
     /// The title of the game the user has selected.
@@ -91,12 +88,7 @@ class GamesTableViewController: UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if toBeReloaded {
-            manualRefreshGames(self)
-        }
-        else {
-            reloaded = false
-        }
+        getGameData(reload: false)
     }
     
     // MARK: Notification Handling
@@ -161,44 +153,41 @@ class GamesTableViewController: UITableViewController {
     ///     - reload: Whether or not data should be reloaded regardless of whether a file exists or not.
     private func getGameData(reload: Bool) {
         dateLabel.text = getNewDateText(date: selectedDate)
-        selectedDateGames.removeAll()
         
         // determines whether file exists or whether the user has selected to reload
         let fileName = selectedDate + FileManagerFiles.date_game_collection_suffix.rawValue
-        if doesFileExist(name: fileName) && !reload {
+        if doesFileExist(name: fileName) {
             // if file exists (and user hasn't reloaded) retrieve data, decode it and update views
-            if let data = getFileData(name: fileName) {
-                return decodeGameData(data: data)
+            guard let data = getFileData(name: fileName) else {
+                return displaySimpleMessage(title: FILE_MANAGER_DATA_ERROR_TITLE, message: FILE_MANAGER_DATA_ERROR_MESSAGE)
             }
-            return displaySimpleMessage(title: FILE_MANAGER_DATA_ERROR_TITLE, message: FILE_MANAGER_DATA_ERROR_MESSAGE)
+            decodeGameData(data: data)
         }
         else {
-            
-            // otherwise start the indicator and call the API
-            indicator.startAnimating()
-            
-            reloaded = !toBeReloaded
-            toBeReloaded = false
-            
-            // get the date to search games for in the correct timezone and format
-            let API_date = convertTimeZones(string: selectedDate, from: TimeZoneIdentifiers.aus_melb.rawValue, to: TimeZoneIdentifiers.usa_nyk.rawValue, format: DateFormats.API)
-            let formatter = DateFormatter()
-            formatter.dateFormat = DateFormats.API.rawValue
-            let API_date_string = formatter.string(from: API_date)
-            
-            
-            Task {
-                let (data, error) = await requestData(path: .games, queries: [.dates : API_date_string])
-                guard let data = data else {
-                    displaySimpleMessage(title: error!.title, message: error!.message)
-                    indicator.stopAnimating()
-                    return
-                }
-                
-                // update/create a file to persistently store the data retrieved
-                setFileData(name: fileName, data: data)
-                decodeGameData(data: data)
+            indicator.startAnimating() // call noisily if no file exists
+        }
+        
+        // call silently if user hasn't selected to reload
+        if reload { indicator.startAnimating() }
+        
+        // get the date to search games for in the correct timezone and format
+        let API_date = convertTimeZones(string: selectedDate, from: TimeZoneIdentifiers.aus_melb.rawValue, to: TimeZoneIdentifiers.usa_nyk.rawValue, format: DateFormats.API)
+        let formatter = DateFormatter()
+        formatter.dateFormat = DateFormats.API.rawValue
+        let API_date_string = formatter.string(from: API_date)
+        
+        
+        Task {
+            let (data, error) = await requestData(path: .games, queries: [.dates : API_date_string])
+            guard let data = data else {
+                displaySimpleMessage(title: error!.title, message: error!.message)
+                indicator.stopAnimating()
+                return
             }
+            
+            // update/create a file to persistently store the data retrieved
+            setFileData(name: fileName, data: data)
+            decodeGameData(data: data)
         }
     }
     
@@ -206,6 +195,7 @@ class GamesTableViewController: UITableViewController {
     /// - Parameters:
     ///     - data: The data to decode.
     private func decodeGameData(data: Data){ // decodes data of all games and updates view
+        selectedDateGames.removeAll()
         do {
             let decoder = JSONDecoder()
             let collection = try decoder.decode(GameCollection.self, from: data)
@@ -238,7 +228,7 @@ class GamesTableViewController: UITableViewController {
     @IBAction private func resetToday(_ sender: Any) {
         selectedDate = getTodaysDate()
         defaultMenuBuild()
-        getGameData(reload: toBeReloaded)
+        getGameData(reload: false)
     }
     
     // MARK: Dates, Titles and Menus
@@ -423,7 +413,6 @@ class GamesTableViewController: UITableViewController {
             let destination = segue.destination as! DetailedGameTableViewController
             destination.game = selectedGame
             destination.gameTitle = selectedGameTitle
-            destination.toBeReloaded = reloaded
         }
     }
 }

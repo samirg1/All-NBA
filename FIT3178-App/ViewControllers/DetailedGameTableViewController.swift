@@ -71,11 +71,6 @@ class StatsTableViewCell: UITableViewCell {
 /// This class displays the teams statistics side by side for a simplistic and easily readable analysis of the game.
 class DetailedGameTableViewController: UITableViewController {
     
-    /// Variable to determine if this view has been reloaded.
-    public var reloaded = false
-    /// Variable to determine if this view needs to be reloaded.
-    public var toBeReloaded = false
-    
     /// The game title of the game being displayed.
     public var gameTitle : String?
     /// The game being displayed.
@@ -117,20 +112,17 @@ class DetailedGameTableViewController: UITableViewController {
         super.viewDidLoad()
         navigationItem.title = gameTitle
         futureGameCheck()
-        getTeamsStats(reload: toBeReloaded)
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        if let gameViewController = navigationController?.topViewController as? GamesTableViewController {
-            gameViewController.toBeReloaded = reloaded
-        }
+    override func viewWillAppear(_ animated: Bool) {
+        getTeamsStats(reload: false)
     }
     
     // MARK: Retrieving and Decoding Data
     
     /// Gets teams stats of each team involved in the game.
     /// - Parameters:
-    ///     - reload: Whether or not the data should be reloaded regardless of if a file exists or not.
+    ///     - reload: Whether or not the data should be updated noisily (with indicator) or not.
     private func getTeamsStats(reload: Bool) { // gets the teams stats
         guard let game = game else {
             return // don't do anything if game does not exist
@@ -138,19 +130,21 @@ class DetailedGameTableViewController: UITableViewController {
 
         // check if data has been stored previously
         let fileName = "\(game.id)" + FileManagerFiles.team_game_stats_suffix.rawValue
-        if doesFileExist(name: fileName) && !reload {
+        if doesFileExist(name: fileName) {
             // if so, decode and update the view
-            if let data = getFileData(name: fileName) {
-                return decodePlayersStats(data: data, game: game)
+           guard let data = getFileData(name: fileName) else {
+               return displaySimpleMessage(title: FILE_MANAGER_DATA_ERROR_TITLE, message: FILE_MANAGER_DATA_ERROR_MESSAGE)
             }
-            return displaySimpleMessage(title: FILE_MANAGER_DATA_ERROR_TITLE, message: FILE_MANAGER_DATA_ERROR_MESSAGE)
+            decodePlayersStats(data: data, game: game)
         }
         else {
+            indicator.startAnimating() // noisily update view if no file exists yet
+        }
+        
+        // silently update view if user has not selected to reload
+        if reload { indicator.startAnimating() }
             
             // otherwise call the API
-            indicator.startAnimating()
-            reloaded = !toBeReloaded
-            toBeReloaded = false
             Task {
                 let (data, error) = await requestData(path: .stats, queries: [.game_ids : "\(game.id)", .per_page: maxAmountOfPlayers])
                 guard let data = data else {
@@ -163,7 +157,6 @@ class DetailedGameTableViewController: UITableViewController {
                 setFileData(name: fileName, data: data)
                 decodePlayersStats(data: data, game: game)
             }
-        }
     }
     
     /// Decoding the player's stats after retrieval of data from the API.
