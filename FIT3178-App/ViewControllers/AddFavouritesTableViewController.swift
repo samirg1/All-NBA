@@ -91,7 +91,7 @@ class AddFavouritesTableViewController: UITableViewController, UISearchBarDelega
             // otherwise use API to get data
             indicator.startAnimating()
             Task {
-                let (data, error) = await requestData(path: .teams, queries: [:]) // get data
+                let (data, error) = await requestData(path: .teams, queries: []) // get data
                 guard let data = data else {
                     displaySimpleMessage(title: error!.title, message: error!.message)
                     indicator.stopAnimating()
@@ -150,7 +150,7 @@ class AddFavouritesTableViewController: UITableViewController, UISearchBarDelega
     ///     - searchText: The text to match player names to.
     private func getPlayerData(_ searchText: String) {
         Task {
-            let (data, error) = await requestData(path: .players, queries: [.search: searchText]) // get players based on search text
+            let (data, error) = await requestData(path: .players, queries: [(.search, searchText)]) // get players based on search text
             guard let data = data else {
                 displaySimpleMessage(title: error!.title, message: error!.message)
                 indicator.stopAnimating()

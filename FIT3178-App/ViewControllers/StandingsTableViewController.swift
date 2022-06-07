@@ -190,7 +190,7 @@ class StandingsTableViewController: UITableViewController {
             indicator.startAnimating()
             teamFilterMenu.isEnabled = false
             Task {
-                let (data, error) = await requestData(path: .teams, queries: [:]) // get data
+                let (data, error) = await requestData(path: .teams, queries: []) // get data
                 guard let data = data else {
                     displaySimpleMessage(title: error!.title, message: error!.message)
                     indicator.stopAnimating()
@@ -240,12 +240,12 @@ class StandingsTableViewController: UITableViewController {
         }
         else { // otherwise call API
             Task {
-                let queries: [API_QUERIES: String] = [
-                    .team_ids : "\(team.id)",
-                    .seasons : season.YEAR.rawValue,
-                    .per_page : MAX_GAMES_IN_SEASON,
-                    .start_date : season.START.rawValue,
-                    .end_date : season.END.rawValue
+                let queries: [(API_QUERIES, String)] = [
+                    (.team_ids, "\(team.id)"),
+                    (.seasons, season.YEAR.rawValue),
+                    (.per_page, MAX_GAMES_IN_SEASON),
+                    (.start_date, season.START.rawValue),
+                    (.end_date, season.END.rawValue)
                 ]
                 
                 let (data, error) = await requestData(path: .games, queries: queries) // get data

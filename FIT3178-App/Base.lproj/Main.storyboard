@@ -732,17 +732,6 @@
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <toolbar key="tableFooterView" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="LP7-aE-T90">
-                            <rect key="frame" x="0.0" y="206" width="414" height="44"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                            <items>
-                                <barButtonItem systemItem="refresh" id="a1Q-sx-t0R">
-                                    <connections>
-                                        <action selector="manualRefreshGames:" destination="7Tj-aM-Q5A" id="Ijs-aQ-zt1"/>
-                                    </connections>
-                                </barButtonItem>
-                            </items>
-                        </toolbar>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="gamesCell" id="Far-X9-hL5" customClass="GamesTableViewCell" customModule="All_NBA" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="93.5" width="414" height="50.5"/>
@@ -867,19 +856,10 @@
                                     <action selector="changeDateButton:" destination="7Tj-aM-Q5A" id="58N-tH-GY3"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem id="deB-o0-acp">
-                                <button key="customView" opaque="NO" contentMode="scaleToFill" selected="YES" showsMenuAsPrimaryAction="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" changesSelectionAsPrimaryAction="YES" role="primary" id="57B-LP-61Q">
-                                    <rect key="frame" x="71" y="7" width="92" height="30"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <menu key="menu" title="Season" identifier="seasonMenu" id="JHC-Gi-kro">
-                                        <menuOptions key="menuOptions" displayInline="YES" destructive="YES" singleSelection="YES"/>
-                                        <children>
-                                            <command title="2021/22" menuElementState="on" id="hi3-Fa-RVz"/>
-                                            <command title="2020/21" id="yaG-Vl-7Tg"/>
-                                        </children>
-                                    </menu>
-                                    <state key="normal" title="Button"/>
-                                </button>
+                            <barButtonItem systemItem="refresh" id="a1Q-sx-t0R">
+                                <connections>
+                                    <action selector="manualRefreshGames:" destination="7Tj-aM-Q5A" id="Ijs-aQ-zt1"/>
+                                </connections>
                             </barButtonItem>
                         </leftBarButtonItems>
                         <rightBarButtonItems>
@@ -898,8 +878,10 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="dateLabel" destination="1ad-Zg-3vD" id="KGh-ss-ELD"/>
-                        <outlet property="menuButton" destination="57B-LP-61Q" id="TgF-d4-w3Z"/>
-                        <outlet property="refreshToolbar" destination="LP7-aE-T90" id="jYJ-R1-Z6p"/>
+                        <outlet property="forwardGestureOutlet" destination="5SY-94-c03" id="3tc-sR-eMh"/>
+                        <outlet property="forwardOutlet" destination="28B-hC-85h" id="gdi-1h-Wd2"/>
+                        <outlet property="rewindGestureOutlet" destination="ASk-ld-kLT" id="Blr-z0-P92"/>
+                        <outlet property="rewindOutlet" destination="jfp-Wo-law" id="zxk-n8-XdS"/>
                         <outlet property="todayButtonOutlet" destination="hlK-Oq-h28" id="3kN-Yo-cCs"/>
                         <segue destination="ZY6-Zh-zha" kind="show" identifier="gameSelectSegue" id="ZCN-5k-mh5"/>
                     </connections>

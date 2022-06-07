@@ -10,8 +10,10 @@ import UIKit
 
 /// Holds the formats used throughout the App.
 public enum DateFormats: String {
-    /// The format that is used by the App's API (e.g. 2022-04-12).
+    /// The shortened format that is used by the App's API (e.g. 2022-04-12).
     case API = "yyyy-MM-dd"
+    /// The full formatting API format (e.g. 2022-04-12T08:00.000Z).
+    case fullAPI = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
     /// The format used to display the Day, Date and Month to the user (e.g. Tuesday, 12 April).
     case display = "EEEE, d MMM"
     /// The format used for 24-hour time (e.g. 08:00 or 20:00).

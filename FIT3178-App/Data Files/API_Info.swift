@@ -84,16 +84,16 @@ public let JSON_DECODER_ERROR_TITLE = NSLocalizedString("Error decoding API data
 /// Request specific data from the API.
 /// - Parameters:
 ///     - path: The path of the URL.
-///     - queries: A dictionary of key/value pairs of API queries.
+///     - queries: A list of tuple pairs containing the query and the value.
 /// - Returns: A tuple containing the data (if any), and the error title and message (if any).
-public func requestData(path: API_URL_PATHS, queries: [API_QUERIES:String]) async -> (Data?, (title: String, message: String)?) {
+public func requestData(path: API_URL_PATHS, queries: [(API_QUERIES,String)]) async -> (Data?, (title: String, message: String)?) {
     var gamesURL = URLComponents()
     gamesURL.scheme = "https"
     gamesURL.host = "www.balldontlie.io"
     gamesURL.path = "/api/v1/" + path.rawValue
     
     var query_items: [URLQueryItem] = [] // build query items
-    for q in queries { query_items.append(URLQueryItem(name: q.key.rawValue, value: q.value)) }
+    for q in queries { query_items.append(URLQueryItem(name: q.0.rawValue, value: q.1)) }
     gamesURL.queryItems = query_items
     
     guard let requestURL = gamesURL.url else { // make sure URL is valid

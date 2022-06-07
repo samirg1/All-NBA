@@ -46,6 +46,8 @@ class GamesTableViewController: UITableViewController {
     private var selectedDateGames = [Game]()
     /// List of dates with available games.
     private var availableGameDates = [String:Bool]()
+    /// The amount of days to check each side of the `selectedDate` for games.
+    private let gamesToCheck = 14
     /// The game that the user has selected.
     private var selectedGame : Game?
     /// The title of the game the user has selected.
@@ -62,22 +64,18 @@ class GamesTableViewController: UITableViewController {
     /// The section that houses extra info.
     private let INFO_SECTION = 1
     
-    /// The menu button used to show and change the year.
-    @IBOutlet weak private var menuButton: UIButton!
     /// The button used to revert the date back to today's date.
     @IBOutlet weak private var todayButtonOutlet: UIBarButtonItem!
     /// The label that describes the current date.
     @IBOutlet weak private var dateLabel: UILabel!
-    /// The toolbar that houses a refresh button.
-    @IBOutlet weak private var refreshToolbar: UIToolbar!
     
     /// Indicator used to indicate when an asynchronous task is active.
     private lazy var indicator: UIActivityIndicatorView = {
         var indicator = UIActivityIndicatorView()
         indicator.style = UIActivityIndicatorView.Style.large
         indicator.translatesAutoresizingMaskIntoConstraints = false
-        self.refreshToolbar.addSubview(indicator) // set indicator in middle of the toolbar
-        NSLayoutConstraint.activate([ indicator.centerXAnchor.constraint(equalTo: refreshToolbar.centerXAnchor), indicator.centerYAnchor.constraint(equalTo: refreshToolbar.centerYAnchor) ])
+        self.tableView.addSubview(indicator) // set indicator in middle of the toolbar
+        NSLayoutConstraint.activate([ indicator.centerXAnchor.constraint(equalTo: tableView.centerXAnchor), indicator.centerYAnchor.constraint(equalTo: tableView.centerYAnchor) ])
         return indicator
     }()
     
@@ -149,6 +147,37 @@ class GamesTableViewController: UITableViewController {
         UNUserNotificationCenter.current().add(request, withCompletionHandler: nil) // add the new request
     }
     
+    // MARK: - Updating Date Changers
+    
+    /// Outlet for the rewind button.
+    @IBOutlet weak private var rewindOutlet: UIBarButtonItem!
+    /// Outlet for the rewind gesture.
+    @IBOutlet private var rewindGestureOutlet: UISwipeGestureRecognizer!
+    /// Outlet for the forward button.
+    @IBOutlet private weak var forwardOutlet: UIBarButtonItem!
+    /// Outlet for the forward gesture.
+    @IBOutlet private var forwardGestureOutlet: UISwipeGestureRecognizer!
+    
+    /// Function to update the UI elements that control the dates 'isEnabled' feature based on the games available.
+    private func updateDateChangers(){
+        rewindOutlet.isEnabled = false // set all to false as default
+        rewindGestureOutlet.isEnabled = false
+        forwardOutlet.isEnabled = false
+        forwardGestureOutlet.isEnabled = false
+        for (date, available) in availableGameDates {
+            // if games are not available on date, and the date isn't today continue
+            if !available && date != getTodaysDate() { continue }
+            if date > selectedDate { // found a game in the future
+                forwardOutlet.isEnabled = true
+                forwardGestureOutlet.isEnabled = true
+            }
+            else if date < selectedDate { // found a game in the past
+                rewindOutlet.isEnabled = true
+                rewindGestureOutlet.isEnabled = true
+            }
+        }
+    }
+    
     // MARK: - Retrieving and Decoding Data
     
     /// Get all the games on the selected date.
@@ -156,6 +185,22 @@ class GamesTableViewController: UITableViewController {
     ///     - reload: Whether or not data should be reloaded regardless of whether a file exists or not.
     private func getGameData(reload: Bool) {
         dateLabel.text = getNewDateText(date: selectedDate)
+        availableGameDates.removeAll()
+        
+        var queries: [(API_QUERIES, String)] = []
+        for change in -gamesToCheck...gamesToCheck { // find available games
+            let oldDate = DateFormatter().stringToDate(string: selectedDate, format: DateFormats.API, timezone: appDelegate.currentTimeZoneIdentifier)
+            let newDate = Calendar.current.date(byAdding: .day, value: change, to: oldDate)!
+            let newDateString = DateFormatter().dateToString(date: newDate, format: DateFormats.API, timezone: appDelegate.currentTimeZoneIdentifier)
+            
+            let API_date = convertTimeZones(string: newDateString, from: appDelegate.currentTimeZoneIdentifier, to: TimeZoneIdentifiers.usa_nyk.rawValue, format: DateFormats.API)
+            let formatter = DateFormatter()
+            formatter.dateFormat = DateFormats.API.rawValue
+            let API_date_string = formatter.string(from: API_date)
+            
+            queries.append((.dates, API_date_string)) // add to queries to search for
+            availableGameDates[API_date_string] = false // initialise the availability as false
+        }
         
         // determines whether file exists, display information (might be outdated quickly)
         let fileName = selectedDate + FileManagerFiles.date_game_collection_suffix.rawValue
@@ -174,14 +219,8 @@ class GamesTableViewController: UITableViewController {
         // call silently if user hasn't selected to reload
         if reload { indicator.startAnimating() }
         
-        // get the date to search games for in the correct timezone and format
-        let API_date = convertTimeZones(string: selectedDate, from: TimeZoneIdentifiers.aus_melb.rawValue, to: TimeZoneIdentifiers.usa_nyk.rawValue, format: DateFormats.API)
-        let formatter = DateFormatter()
-        formatter.dateFormat = DateFormats.API.rawValue
-        let API_date_string = formatter.string(from: API_date)
-        
         Task {
-            let (data, error) = await requestData(path: .games, queries: [.dates : API_date_string]) // get data
+            let (data, error) = await requestData(path: .games, queries: queries) // get data
             guard let data = data else { // deal with any errors
                 displaySimpleMessage(title: error!.title, message: error!.message)
                 indicator.stopAnimating()
@@ -203,7 +242,17 @@ class GamesTableViewController: UITableViewController {
             let decoder = JSONDecoder()
             let collection = try decoder.decode(GameCollection.self, from: data) // decode data
             if let games = collection.games {
-                selectedDateGames.append(contentsOf: games) // add games
+                for game in games {
+                    let localDate = convertTimeZones(string: game.date, from: TimeZoneIdentifiers.usa_nyk.rawValue, to: appDelegate.currentTimeZoneIdentifier, format: DateFormats.fullAPI)
+                    let formatter = DateFormatter()
+                    formatter.dateFormat = DateFormats.API.rawValue
+                    let localDateString = formatter.string(from: localDate)
+                    if localDateString == selectedDate {
+                        selectedDateGames.append(game) // add game if game is on current day
+                    }
+                    availableGameDates[localDateString] = true // we know now that there are available games on this date
+                }
+                updateDateChangers()
                 tableView.reloadData()
                 changeBadgeNumber()
                 indicator.stopAnimating()
@@ -230,7 +279,6 @@ class GamesTableViewController: UITableViewController {
     ///     - sender: The triggerer of this action.
     @IBAction private func resetToday(_ sender: Any) {
         selectedDate = getTodaysDate()
-        defaultMenuBuild()
         getGameData(reload: false)
     }
     
@@ -253,10 +301,24 @@ class GamesTableViewController: UITableViewController {
             }
         }
         
-        // get the current date, edit it and update the view accordingly
-        let oldDate = DateFormatter().stringToDate(string: selectedDate, format: DateFormats.API, timezone: appDelegate.currentTimeZoneIdentifier)
-        let newDate = Calendar.current.date(byAdding: .day, value: change, to: oldDate)!
-        selectedDate = DateFormatter().dateToString(date: newDate, format: DateFormats.API, timezone: appDelegate.currentTimeZoneIdentifier)
+        // get the current date and edit it
+        var oldDate = DateFormatter().stringToDate(string: selectedDate, format: DateFormats.API, timezone: appDelegate.currentTimeZoneIdentifier)
+        var newDate = Calendar.current.date(byAdding: .day, value: change, to: oldDate)!
+        var newDateString = DateFormatter().dateToString(date: newDate, format: DateFormats.API, timezone: appDelegate.currentTimeZoneIdentifier)
+        
+        while true { // keep going to find an date with a game
+            if let available = availableGameDates[newDateString] {
+                if available || newDateString == getTodaysDate() { break }
+                oldDate = DateFormatter().stringToDate(string: newDateString, format: DateFormats.API, timezone: appDelegate.currentTimeZoneIdentifier)
+                newDate = Calendar.current.date(byAdding: .day, value: change, to: oldDate)!
+                newDateString = DateFormatter().dateToString(date: newDate, format: DateFormats.API, timezone: appDelegate.currentTimeZoneIdentifier)
+            }
+            else {
+                return displaySimpleMessage(title: NSLocalizedString("Unexpected error occurred", comment: ""), message: NSLocalizedString("No games found past/before this date.", comment: ""))
+            }
+        }
+        
+        selectedDate = newDateString
         getGameData(reload: false)
     }
     
@@ -268,27 +330,6 @@ class GamesTableViewController: UITableViewController {
         todayButtonOutlet.isEnabled = getTodaysDate() != date
         let currentDate = DateFormatter().stringToDate(string: date, format: DateFormats.API, timezone: appDelegate.currentTimeZoneIdentifier)
         return DateFormatter().dateToString(date: currentDate, format: DateFormats.display, timezone: appDelegate.currentTimeZoneIdentifier)
-    }
-    
-    /// Builds the default menu for changing the year to display.
-    ///
-    /// Code source found [here.](https://developer.apple.com/forums/thread/683700)
-    private func defaultMenuBuild() {
-        // update the selected date
-        let optionsClosure = { (action: UIAction) in
-            let year = Int.init(action.title.split(separator: "/")[0])! + 1
-            let selectedDateSplit = self.selectedDate.split(separator: "-")
-            let oldYear = Int.init(selectedDateSplit[0])
-            if year != oldYear {
-                self.selectedDate = "\(year)-\(selectedDateSplit[1])-\(selectedDateSplit[2])"
-                self.getGameData(reload: false)
-            }
-        }
-        
-        menuButton.menu = UIMenu(children: [ // build the menu
-             UIAction(title: "2021/22", state: .on, handler: optionsClosure),
-             UIAction(title: "2020/21", handler: optionsClosure)
-        ])
     }
     
     /// Gets today's date as a string in API format.

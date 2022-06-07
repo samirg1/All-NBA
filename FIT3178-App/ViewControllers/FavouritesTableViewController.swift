@@ -100,7 +100,7 @@ class FavouritesTableViewController: UITableViewController {
     private func getPlayerSeasonStats(player: FavouritePlayer) {
         indicator.startAnimating()
         Task {
-            let (data, error) = await requestData(path: .averages, queries: [.player_ids : "\(player.id)"]) // request data
+            let (data, error) = await requestData(path: .averages, queries: [(.player_ids, "\(player.id)")]) // request data
             guard let data = data else { // if data is not found an error is present
                 displaySimpleMessage(title: error!.title, message: error!.message)
                 indicator.stopAnimating()
@@ -130,7 +130,7 @@ class FavouritesTableViewController: UITableViewController {
     private func getPlayersLastGame(player: FavouritePlayer) {
         indicator.startAnimating()
         Task {
-            let (data, error) = await requestData(path: .stats, queries: [.player_ids: "\(player.id)", .start_date: getCurrentYear(), .per_page: "100"]) // request data
+            let (data, error) = await requestData(path: .stats, queries: [(.player_ids, "\(player.id)"), (.start_date, getCurrentYear()), (.per_page, "100")]) // request data
             guard let data = data else { // if no data present then there was an error
                 displaySimpleMessage(title: error!.title, message: error!.message)
                 indicator.stopAnimating()
@@ -160,7 +160,7 @@ class FavouritesTableViewController: UITableViewController {
     private func getTeamsLastGame(team: FavouriteTeam) {
         indicator.startAnimating()
         Task {
-            let (data, error) = await requestData(path: .games, queries: [.team_ids: "\(team.id)", .start_date: getCurrentYear(), .per_page: "100"]) // get data
+            let (data, error) = await requestData(path: .games, queries: [(.team_ids, "\(team.id)"), (.start_date, getCurrentYear()), (.per_page, "100")]) // get data
             guard let data = data else { // if no data is present there was an error
                 displaySimpleMessage(title: error!.title, message: error!.message)
                 indicator.stopAnimating()

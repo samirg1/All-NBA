@@ -143,7 +143,7 @@ class DetailedGameTableViewController: UITableViewController {
             
         // call the API to create/update data
         Task {
-            let (data, error) = await requestData(path: .stats, queries: [.game_ids : "\(game.id)", .per_page: maxAmountOfPlayers]) // get data
+            let (data, error) = await requestData(path: .stats, queries: [(.game_ids, "\(game.id)"), (.per_page, maxAmountOfPlayers)]) // get data
             guard let data = data else {
                 displaySimpleMessage(title: error!.title, message: error!.message)
                 indicator.stopAnimating()
