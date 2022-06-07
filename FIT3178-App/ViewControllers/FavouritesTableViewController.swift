@@ -92,6 +92,7 @@ class FavouritesTableViewController: UITableViewController {
             let newTeam = FavouriteTeam(team.id)
             getTeamsLastGame(team: newTeam)
         }
+        tableView.reloadData()
     }
     
     /// Get a player's current season stat averages.
