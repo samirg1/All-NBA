@@ -78,8 +78,8 @@ class DetailedPlayerGameCollectionViewController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView.setCollectionViewLayout(configureLayout(), animated: false)
-        collectionView.backgroundColor = .systemGray3
+        collectionView.setCollectionViewLayout(configureLayout(), animated: false) // configure the layout
+        collectionView.backgroundColor = .systemGray3 // set the background colour
     }
     
     /// Given the total made and attempted shots and the total 3 point made and attempted shots, calculate the 2 point field goal percentage.
@@ -129,10 +129,8 @@ class DetailedPlayerGameCollectionViewController: UICollectionViewController {
     }
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
-
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return PlayerStatSections.allItems.count + 1
@@ -143,7 +141,7 @@ class DetailedPlayerGameCollectionViewController: UICollectionViewController {
             return collectionView.dequeueReusableCell(withReuseIdentifier: statCell, for: indexPath)
         }
 
-        if indexPath.item == HEADER_SECTION {
+        if indexPath.item == HEADER_SECTION { // the header section with player name and images
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: headerCell, for: indexPath) as! PlayerHeaderCollectionViewCell
             cell.nameLabel.text = player.playerFirstName + " " + player.playerLastName
             cell.firstImage.image = UIImage(named: player.teamAbbreviation)
@@ -151,6 +149,7 @@ class DetailedPlayerGameCollectionViewController: UICollectionViewController {
             cell.backgroundColor = .systemBackground
             return cell
         }
+        // otherwise a stat cell
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: statCell, for: indexPath) as! PlayerStatCollectionViewCell
         cell.backgroundColor = .systemBackground
         let header = PlayerStatSections.allItems[indexPath.item-1]

@@ -54,8 +54,8 @@ class AddFavouritesTableViewController: UITableViewController, UISearchBarDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         saveButtonOutlet.isEnabled = false
-        self.tableView.allowsMultipleSelection = true
-        navigationItem.searchController = searchController
+        self.tableView.allowsMultipleSelection = true // select mutliple favourites at a time
+        navigationItem.searchController = searchController // set up search bar
         navigationItem.hidesSearchBarWhenScrolling = false
     }
     
@@ -69,17 +69,18 @@ class AddFavouritesTableViewController: UITableViewController, UISearchBarDelega
     ///  - Parameters:
     ///     - sender: The triggerer of this action.
     @IBAction private func changeFavouriteType(_ sender: Any) {
-        updateSaveButton(selectedCount: 0)
+        updateSaveButton(selectedCount: 0) // reset save button title
         saveButtonOutlet.isEnabled = false
         if isPlayerSelected() {
-            teams.removeAll()
+            teams.removeAll() // if user has selected player, remove all teams and update
             navigationItem.searchController = searchController
             tableView.reloadData()
         }
-        else {
+        else { // otherwise get all teams and remove players
             navigationItem.searchController = nil
             players.removeAll()
             
+            // find if file exists
             let fileName = season.YEAR.rawValue + FileManagerFiles.all_teams_suffix.rawValue
             if doesFileExist(name: fileName) {
                 if let data = getFileData(name: fileName) {
@@ -87,10 +88,10 @@ class AddFavouritesTableViewController: UITableViewController, UISearchBarDelega
                 }
                 return displaySimpleMessage(title: FILE_MANAGER_DATA_ERROR_TITLE, message: FILE_MANAGER_DATA_ERROR_MESSAGE)
             }
-            
+            // otherwise use API to get data
             indicator.startAnimating()
             Task {
-                let (data, error) = await requestData(path: .teams, queries: [:])
+                let (data, error) = await requestData(path: .teams, queries: [:]) // get data
                 guard let data = data else {
                     displaySimpleMessage(title: error!.title, message: error!.message)
                     indicator.stopAnimating()
@@ -111,9 +112,9 @@ class AddFavouritesTableViewController: UITableViewController, UISearchBarDelega
     private func decodeTeams(data: Data) {
         do {
             let decoder = JSONDecoder()
-            let collection = try decoder.decode(TeamCollection.self, from: data)
+            let collection = try decoder.decode(TeamCollection.self, from: data) // decode data
             if let decodedTeams = collection.teams {
-                teams.append(contentsOf: decodedTeams)
+                teams.append(contentsOf: decodedTeams) // add teams to container
                 tableView.reloadData()
             }
         }
@@ -126,22 +127,22 @@ class AddFavouritesTableViewController: UITableViewController, UISearchBarDelega
     ///  - Parameters:
     ///     - sender: The triggerer of this action.
     @IBAction private func addFavourites(_ sender: Any) {
-        for path in tableView.indexPathsForSelectedRows! {
+        for path in tableView.indexPathsForSelectedRows! { // for each of the selected rows
             if isPlayerSelected() {
                 let player = players[path.row]
                 if !appDelegate.favouritePlayers.contains(where: { element in return element.id == player.id}) {
-                    appDelegate.favouritePlayers.append(player)
+                    appDelegate.favouritePlayers.append(player) // only add player if they aren't already in the favourites
                 }
             }
             else {
                 let team = teams[path.row]
                 if !appDelegate.favouriteTeams.contains(where: { element in return element.id == team.id}) {
-                    appDelegate.favouriteTeams.append(team)
+                    appDelegate.favouriteTeams.append(team) // only add team if they aren't already in the favourites
                 }
             }
         }
-        updateFavourites()
-        navigationController?.popViewController(animated: true)
+        updateFavourites() // update user favourites
+        navigationController?.popViewController(animated: true) // go back to favourites page
     }
     
     /// Using search text, get player data matching the search text.
@@ -149,7 +150,7 @@ class AddFavouritesTableViewController: UITableViewController, UISearchBarDelega
     ///     - searchText: The text to match player names to.
     private func getPlayerData(_ searchText: String) {
         Task {
-            let (data, error) = await requestData(path: .players, queries: [.search: searchText])
+            let (data, error) = await requestData(path: .players, queries: [.search: searchText]) // get players based on search text
             guard let data = data else {
                 displaySimpleMessage(title: error!.title, message: error!.message)
                 indicator.stopAnimating()
@@ -158,9 +159,9 @@ class AddFavouritesTableViewController: UITableViewController, UISearchBarDelega
             
             do {
                 let decoder = JSONDecoder()
-                let collection = try decoder.decode(PlayerCollection.self, from: data)
+                let collection = try decoder.decode(PlayerCollection.self, from: data) // decode players
                 if let searchedPlayers = collection.players {
-                    self.players.append(contentsOf: searchedPlayers)
+                    self.players.append(contentsOf: searchedPlayers) // add the players to the container
                     self.tableView.reloadData()
                 }
                 
@@ -176,14 +177,14 @@ class AddFavouritesTableViewController: UITableViewController, UISearchBarDelega
     /// - Parameters:
     ///     - searchBar: The searchbar that triggered this function.
     internal func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        if isPlayerSelected() { players.removeAll() }
+        if isPlayerSelected() { players.removeAll() } // clear all players first
         tableView.reloadData()
         
-        guard let searchText = searchBar.text else { return }
+        guard let searchText = searchBar.text else { return } // make sure there is text
         
-        navigationItem.searchController?.dismiss(animated: true)
+        navigationItem.searchController?.dismiss(animated: true) // dismiss search bar
         indicator.startAnimating()
-        getPlayerData(searchText)
+        getPlayerData(searchText) // get the player data from the search text
     }
     
     /// Update the save (add) button title to show the user how many items they have selected to add.
@@ -200,7 +201,6 @@ class AddFavouritesTableViewController: UITableViewController, UISearchBarDelega
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
@@ -215,12 +215,12 @@ class AddFavouritesTableViewController: UITableViewController, UISearchBarDelega
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
         var content = cell.defaultContentConfiguration()
 
-        if isPlayerSelected() {
+        if isPlayerSelected() { // player cell
             let player = players[indexPath.row]
             content.text = player.firstName + " " + player.lastName
             content.secondaryText = player.team.fullName
         }
-        else {
+        else { // team cell
             let team = teams[indexPath.row]
             content.text = team.fullName
             content.secondaryText = NSLocalizedString(team.conference!, comment: "")
@@ -232,7 +232,7 @@ class AddFavouritesTableViewController: UITableViewController, UISearchBarDelega
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         saveButtonOutlet.isEnabled = true
-        updateSaveButton(selectedCount: tableView.indexPathsForSelectedRows?.count ?? 0)
+        updateSaveButton(selectedCount: tableView.indexPathsForSelectedRows?.count ?? 0) // update save button
     }
     
     override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
@@ -240,6 +240,6 @@ class AddFavouritesTableViewController: UITableViewController, UISearchBarDelega
         if selected_rows?.count ?? 0 < 1 {
             saveButtonOutlet.isEnabled = false
         }
-        updateSaveButton(selectedCount: selected_rows?.count ?? 0)
+        updateSaveButton(selectedCount: selected_rows?.count ?? 0) // update save button
     }
 }

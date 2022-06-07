@@ -80,7 +80,7 @@ class SettingsTableViewController: UITableViewController {
             performSegue(withIdentifier: notificationsSectionSegue, sender: self)
         case .about:
             performSegue(withIdentifier: aboutSectionSegue, sender: self)
-        case .help:
+        case .help: // go to app's website
             if let url = URL(string: "https://all-nba-app.com/") {
                 UIApplication.shared.open(url)
             }

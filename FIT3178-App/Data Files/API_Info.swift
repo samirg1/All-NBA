@@ -92,24 +92,24 @@ public func requestData(path: API_URL_PATHS, queries: [API_QUERIES:String]) asyn
     gamesURL.host = "www.balldontlie.io"
     gamesURL.path = "/api/v1/" + path.rawValue
     
-    var query_items: [URLQueryItem] = []
+    var query_items: [URLQueryItem] = [] // build query items
     for q in queries { query_items.append(URLQueryItem(name: q.key.rawValue, value: q.value)) }
     gamesURL.queryItems = query_items
     
-    guard let requestURL = gamesURL.url else {
+    guard let requestURL = gamesURL.url else { // make sure URL is valid
         return (nil, (NSLocalizedString("Unable to retrieve information", comment: "unable_to_retrieve"), NSLocalizedString("Invalid URL.", comment: "invalid_url")))
     }
     
-    let urlRequest = URLRequest(url: requestURL)
+    let urlRequest = URLRequest(url: requestURL) // create request
     do {
-        let (data, response) = try await URLSession.shared.data(for: urlRequest)
-        if let response = response as? HTTPURLResponse, response.statusCode != HTTP_ERROR_CODES.success.rawValue  {
+        let (data, response) = try await URLSession.shared.data(for: urlRequest) // wait for response
+        if let response = response as? HTTPURLResponse, response.statusCode != HTTP_ERROR_CODES.success.rawValue  { // if response is not successful
             return (nil, (NSLocalizedString("An error occured whilst retrieving data", comment: "error_retrieving_data"), API_ERROR_CODE_MESSAGES[response.statusCode]!))
         }
         
-        return (data, nil)
+        return (data, nil) // if response is successful, return data
     }
-    catch let error {
+    catch let error { // catch any errors
         return (nil, (NSLocalizedString("An error occured whilst retrieving data", comment: "error_retrieving_data"), error.localizedDescription))
     }
 }

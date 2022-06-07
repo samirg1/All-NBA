@@ -100,22 +100,19 @@ class DetailedGameTableViewController: UITableViewController {
         var indicator = UIActivityIndicatorView()
         indicator.style = UIActivityIndicatorView.Style.large
         indicator.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(indicator)
-        NSLayoutConstraint.activate([
-            indicator.centerXAnchor.constraint(equalTo: tableView.centerXAnchor),
-            indicator.centerYAnchor.constraint(equalTo: tableView.centerYAnchor)
-        ])
+        self.tableView.addSubview(indicator) // set indicator to center of tableview
+        NSLayoutConstraint.activate([indicator.centerXAnchor.constraint(equalTo: tableView.centerXAnchor), indicator.centerYAnchor.constraint(equalTo: tableView.centerYAnchor)])
         return indicator
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = gameTitle
-        futureGameCheck()
+        futureGameCheck() // check if game is in future
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        getTeamsStats(reload: false)
+        getTeamsStats(reload: false) // reload quietly whenever user enters this view
     }
     
     // MARK: Retrieving and Decoding Data
@@ -123,12 +120,12 @@ class DetailedGameTableViewController: UITableViewController {
     /// Gets teams stats of each team involved in the game.
     /// - Parameters:
     ///     - reload: Whether or not the data should be updated noisily (with indicator) or not.
-    private func getTeamsStats(reload: Bool) { // gets the teams stats
+    private func getTeamsStats(reload: Bool) {
         guard let game = game else {
             return // don't do anything if game does not exist
         }
 
-        // check if data has been stored previously
+        // check if data has been stored previously, for quick retrieval of (possibly outdated) data
         let fileName = "\(game.id)" + FileManagerFiles.team_game_stats_suffix.rawValue
         if doesFileExist(name: fileName) {
             // if so, decode and update the view
@@ -144,19 +141,19 @@ class DetailedGameTableViewController: UITableViewController {
         // silently update view if user has not selected to reload
         if reload { indicator.startAnimating() }
             
-            // otherwise call the API
-            Task {
-                let (data, error) = await requestData(path: .stats, queries: [.game_ids : "\(game.id)", .per_page: maxAmountOfPlayers])
-                guard let data = data else {
-                    displaySimpleMessage(title: error!.title, message: error!.message)
-                    indicator.stopAnimating()
-                    return
-                }
-                
-                // update/create a file to persistently store the data retrieved
-                setFileData(name: fileName, data: data)
-                decodePlayersStats(data: data, game: game)
+        // call the API to create/update data
+        Task {
+            let (data, error) = await requestData(path: .stats, queries: [.game_ids : "\(game.id)", .per_page: maxAmountOfPlayers]) // get data
+            guard let data = data else {
+                displaySimpleMessage(title: error!.title, message: error!.message)
+                indicator.stopAnimating()
+                return
             }
+            
+            // update/create a file to persistently store the data retrieved
+            setFileData(name: fileName, data: data)
+            decodePlayersStats(data: data, game: game)
+        }
     }
     
     /// Decoding the player's stats after retrieval of data from the API.
@@ -166,9 +163,9 @@ class DetailedGameTableViewController: UITableViewController {
     private func decodePlayersStats(data: Data, game: Game) {
         do {
             let decoder = JSONDecoder()
-            let collection = try decoder.decode(PlayerGameStatsCollection.self, from: data)
+            let collection = try decoder.decode(PlayerGameStatsCollection.self, from: data) // decode data
             if let playersStats = collection.playersGameStats {
-                awayTeamGameData = TeamGameStats()
+                awayTeamGameData = TeamGameStats() // reinitialise the data containers
                 homeTeamGameData = TeamGameStats()
                 players.removeAll()
                 // for each player retrieved, add their stats to their team
@@ -181,11 +178,11 @@ class DetailedGameTableViewController: UITableViewController {
                         homeTeamGameData.addPlayerGameStats(player: player)
                     }
                 }
-                self.tableView.reloadData()
+                tableView.reloadData()
                 indicator.stopAnimating()
             }
         }
-        catch let error {
+        catch let error { // catch errors
             displaySimpleMessage(title: JSON_DECODER_ERROR_TITLE, message: error.localizedDescription)
             indicator.stopAnimating()
         }
@@ -194,7 +191,7 @@ class DetailedGameTableViewController: UITableViewController {
     /// Action to manually refresh the current game.
     /// - Parameters:
     ///     - sender: The triggerer of this action.
-    @IBAction private func refreshCurrentGame(_ sender: Any) { // manual refresh of the current game
+    @IBAction private func refreshCurrentGame(_ sender: Any) {
         getTeamsStats(reload: true)
     }
     
@@ -204,7 +201,7 @@ class DetailedGameTableViewController: UITableViewController {
     /// - Returns: Whether or not the game is in the future.
     private func isGameInFuture() -> Bool {
         if let game = game, let status = game.status {
-            return !status.hasSuffix("ET")
+            return status.hasSuffix("ET")
         }
         return false
     }
@@ -216,13 +213,13 @@ class DetailedGameTableViewController: UITableViewController {
     
     /// Check if the game being displayed is in the future and make necessary changes.
     private func futureGameCheck() {
-        if isGameInFuture() {
-            playersButton.isEnabled = true
-            playersGestureAction.isEnabled = true
-        }
-        else {
+        if isGameInFuture() { // if game is in future disable actions to go to PlayersGameStatsCollectionViewController
             playersButton.isEnabled = false
             playersGestureAction.isEnabled = false
+        }
+        else { // otherwise enable them
+            playersButton.isEnabled = true
+            playersGestureAction.isEnabled = true
         }
     }
     
@@ -232,12 +229,7 @@ class DetailedGameTableViewController: UITableViewController {
     ///     - attempted: The amount of shots attempted.
     /// - Returns: The integer percentage of made shots.
     private func getPercentageFromShots(made: Int, attempted: Int) -> Int {
-        if attempted == 0 {
-            return 0
-        }
-        else {
-            return (made*100)/attempted
-        }
+        return attempted == 0 ? 0 : (made*100)/attempted
     }
     
     // MARK: Gesture Actions
@@ -248,7 +240,7 @@ class DetailedGameTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return isGameInFuture() ? StatSections.mainVals.count : 1
+        return isGameInFuture() ? 1 : StatSections.mainVals.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -259,7 +251,7 @@ class DetailedGameTableViewController: UITableViewController {
         guard let game = game, let homeAbbr = game.homeTeam.abbreviation, let awayAbbr = game.awayTeam.abbreviation, let status = game.status, let time = game.time else {
             return tableView.dequeueReusableCell(withIdentifier: SCORES_CELL_IDENTIFIER, for: indexPath)
         }
-        if indexPath.section == SECTION_SCORES {
+        if indexPath.section == SECTION_SCORES { // main section
             let cell = tableView.dequeueReusableCell(withIdentifier: SCORES_CELL_IDENTIFIER, for: indexPath) as! ScoreTableViewCell
             cell.awayImage.image = UIImage(named: awayAbbr)
             cell.homeImage.image = UIImage(named: homeAbbr)
@@ -275,7 +267,7 @@ class DetailedGameTableViewController: UITableViewController {
             
             return cell
         }
-        else {
+        else { // otherwise a stat section
             let cell = tableView.dequeueReusableCell(withIdentifier: STATS_CELL_IDENTIFIER, for: indexPath) as! StatsTableViewCell
             
             let statSection = StatSections.mainVals[indexPath.section-1]

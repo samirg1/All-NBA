@@ -152,11 +152,11 @@ class StandingsTableViewController: UITableViewController {
     /// Code source [here.](https://developer.apple.com/forums/thread/683700)
     private func buildFilterMenu() {
         let optionsClosure = { (action: UIAction) in
-            self.teamFilter = TeamFilter(rawValue: action.title)!
+            self.teamFilter = TeamFilter(rawValue: action.title)! // change team filter
             self.tableView.reloadData()
         }
         
-        teamFilterMenu.menu = UIMenu(children: [
+        teamFilterMenu.menu = UIMenu(children: [ // build menu
             UIAction(title: TeamFilter.LEAGUE.localizedString(), state: .on, handler: optionsClosure),
             UIAction(title: TeamFilter.CONFERENCE.localizedString(), handler: optionsClosure),
             UIAction(title: TeamFilter.DIVISION.localizedString(), handler: optionsClosure)
@@ -170,7 +170,7 @@ class StandingsTableViewController: UITableViewController {
     /// - Parameters:
     ///     - reload: Whether to reload the data from the API regardless of whether a file exists or not.
     private func getTeamsData(reload: Bool) {
-        teamsData.removeAll()
+        teamsData.removeAll() // clear all data containers
         for (div, _) in divisionTeams {
             divisionTeams[div]?.removeAll()
         }
@@ -178,6 +178,7 @@ class StandingsTableViewController: UITableViewController {
             conferenceTeams[conf]?.removeAll()
         }
         
+        // check if file exists
         let fileName = season.YEAR.rawValue + FileManagerFiles.all_teams_suffix.rawValue
         if doesFileExist(name: fileName) && !reload {
             if let data = getFileData(name: fileName) {
@@ -185,11 +186,11 @@ class StandingsTableViewController: UITableViewController {
             }
             return displaySimpleMessage(title: FILE_MANAGER_DATA_ERROR_TITLE, message: FILE_MANAGER_DATA_ERROR_MESSAGE)
         }
-        else {
+        else { // if not get data from API
             indicator.startAnimating()
             teamFilterMenu.isEnabled = false
             Task {
-                let (data, error) = await requestData(path: .teams, queries: [:])
+                let (data, error) = await requestData(path: .teams, queries: [:]) // get data
                 guard let data = data else {
                     displaySimpleMessage(title: error!.title, message: error!.message)
                     indicator.stopAnimating()
@@ -212,14 +213,14 @@ class StandingsTableViewController: UITableViewController {
     private func decodeTeams(data: Data, reload: Bool) {
         do {
             let decoder = JSONDecoder()
-            let collection = try decoder.decode(TeamCollection.self, from: data)
+            let collection = try decoder.decode(TeamCollection.self, from: data) // decode data
             if let teams = collection.teams {
                 for team in teams {
-                    getTeamSeasonGameData(team: team, reload: reload)
+                    getTeamSeasonGameData(team: team, reload: reload) // for each team get their season data
                 }
             }
         }
-        catch let error {
+        catch let error { // catch any errors
             displaySimpleMessage(title: JSON_DECODER_ERROR_TITLE, message: error.localizedDescription)
             indicator.stopAnimating()
         }
@@ -230,14 +231,14 @@ class StandingsTableViewController: UITableViewController {
     ///     - team: The team to find data for.
     ///     - reload: Whether to reload the data from the API regardless of whether a file exists or not.
     private func getTeamSeasonGameData(team: Team, reload: Bool){
-        let fileName = "\(team.id)" + FileManagerFiles.team_season_games_suffix.rawValue
+        let fileName = "\(team.id)" + FileManagerFiles.team_season_games_suffix.rawValue // check if file exists
         if doesFileExist(name: fileName) && !reload {
             if let data = getFileData(name: fileName) {
                 return decodeTeamGames(data: data, team: team)
             }
             return displaySimpleMessage(title: FILE_MANAGER_DATA_ERROR_TITLE, message: FILE_MANAGER_DATA_ERROR_MESSAGE)
         }
-        else {
+        else { // otherwise call API
             Task {
                 let queries: [API_QUERIES: String] = [
                     .team_ids : "\(team.id)",
@@ -247,7 +248,7 @@ class StandingsTableViewController: UITableViewController {
                     .end_date : season.END.rawValue
                 ]
                 
-                let (data, error) = await requestData(path: .games, queries: queries)
+                let (data, error) = await requestData(path: .games, queries: queries) // get data
                 guard let data = data else {
                     displaySimpleMessage(title: error!.title, message: error!.message)
                     indicator.stopAnimating()
@@ -271,7 +272,7 @@ class StandingsTableViewController: UITableViewController {
         }
         do {
             let decoder = JSONDecoder()
-            let collection = try decoder.decode(GameCollection.self, from: data)
+            let collection = try decoder.decode(GameCollection.self, from: data) // decode data
             if let games = collection.games {
                 let teamData = TeamSeasonStats(withTeam: team)
                 for game in games {
@@ -279,8 +280,8 @@ class StandingsTableViewController: UITableViewController {
                 }
                 self.divisionTeams[Divisions.init(rawValue: division)!]!.append(teamData)
                 self.conferenceTeams[Conferences.init(rawValue: conference)!]!.append(teamData)
-                self.teamsData.append(teamData)
-                self.teamsData.sort(){ $0.pct > $1.pct }
+                self.teamsData.append(teamData) // add the team to the containers
+                self.teamsData.sort(){ $0.pct > $1.pct } // sort the teams based on their win percentage
                 for (divi, div_teams) in self.divisionTeams {
                     self.divisionTeams[divi] = div_teams.sorted() { $0.pct > $1.pct }
                 }

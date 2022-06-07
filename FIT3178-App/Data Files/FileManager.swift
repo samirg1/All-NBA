@@ -82,8 +82,8 @@ public func getFavourites() {
         if let data = data {
             do {
                 let decoder = JSONDecoder()
-                let collection = try decoder.decode([Team].self, from: data)
-                appDelegate.favouriteTeams = collection
+                let collection = try decoder.decode([Team].self, from: data) // decode file data
+                appDelegate.favouriteTeams = collection // update app delegate
             }
             catch let error {
                 print(error.localizedDescription)
@@ -97,8 +97,8 @@ public func getFavourites() {
         if let data = data {
             do {
                 let decoder = JSONDecoder()
-                let collection = try decoder.decode([Player].self, from: data)
-                appDelegate.favouritePlayers = collection
+                let collection = try decoder.decode([Player].self, from: data) // decode file data
+                appDelegate.favouritePlayers = collection // update app delegate
             }
             catch let error {
                 print(error.localizedDescription)
@@ -117,19 +117,21 @@ public func updateFavourites() {
     let team_localURL = cacheDirectoryPath.appendingPathComponent(FileManagerFiles.favourite_teams.rawValue)
     let player_localURL = cacheDirectoryPath.appendingPathComponent(FileManagerFiles.favourite_players.rawValue)
     
-    FileManager.default.createFile(atPath: team_localURL.path, contents: team_data, attributes: [:])
+    FileManager.default.createFile(atPath: team_localURL.path, contents: team_data, attributes: [:]) // store updated user data
     FileManager.default.createFile(atPath: player_localURL.path, contents: player_data, attributes: [:])
 }
 
 /// Update or retrieve the current status of the user's notification settings.
 ///
 /// If an update on these settings has occured, the files will be updated, otherwise the current data is checked to ensure up to date settings.
+/// The notifcation setting are stored as an array of 0s or 1s, where a 0 indicates false and 1 indicates true. Currently the data is stored as
+/// [game alerts, favourites only].
 /// - Parameters:
 ///     - update: Boolean value determining whether an update has occured or not.
 public func getNotificationSettings(update: Bool) {
     let fileName = FileManagerFiles.game_alert_notifications.rawValue
     if doesFileExist(name: fileName) && !update {
-        if let data = getFileData(name: fileName) {
+        if let data = getFileData(name: fileName) { // get notification settings
             appDelegate.gameAlertNotifcations = Bool(exactly: data[0] as NSNumber)!
             appDelegate.favouritesOnlyNotifications = Bool(exactly: data[1] as NSNumber)!
         }

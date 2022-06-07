@@ -76,7 +76,7 @@ class GamesTableViewController: UITableViewController {
         var indicator = UIActivityIndicatorView()
         indicator.style = UIActivityIndicatorView.Style.large
         indicator.translatesAutoresizingMaskIntoConstraints = false
-        self.refreshToolbar.addSubview(indicator)
+        self.refreshToolbar.addSubview(indicator) // set indicator in middle of the toolbar
         NSLayoutConstraint.activate([ indicator.centerXAnchor.constraint(equalTo: refreshToolbar.centerXAnchor), indicator.centerYAnchor.constraint(equalTo: refreshToolbar.centerYAnchor) ])
         return indicator
     }()
@@ -88,7 +88,7 @@ class GamesTableViewController: UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        getGameData(reload: false)
+        getGameData(reload: false) // reload the games quietly in the background each time user enters this page
     }
     
     // MARK: Notification Handling
@@ -107,21 +107,24 @@ class GamesTableViewController: UITableViewController {
                     }
                 }
             }
-            guard let status = game.status else { continue }
+            
+            guard let status = game.status else { continue }  // if game is not in the future skip over it
             if !status.hasSuffix("ET") { continue }
-            let timeString = convertTo24HourTime(string: status)
+            
+            let timeString = convertTo24HourTime(string: status) // get the date of the game in local time in order to create notification
             let time = convertTimeZones(string: timeString, from: TimeZoneIdentifiers.usa_nyk.rawValue, to: appDelegate.currentTimeZoneIdentifier, format: .time24hr)
             let formatter = DateFormatter()
             formatter.dateFormat = DateFormats.API.rawValue
             let date = formatter.date(from: selectedDate)!
             
-            var dateComponents = DateComponents()
+            var dateComponents = DateComponents() // use the date to create date components to pass into notification
             dateComponents.year = formatter.calendar.component(.year, from: date)
             dateComponents.month = formatter.calendar.component(.month, from: date)
             dateComponents.day = formatter.calendar.component(.day, from: date)
             dateComponents.hour = formatter.calendar.component(.hour, from: time)
             dateComponents.minute = formatter.calendar.component(.minute, from: time)
             
+            // title for the notification
             let title = "\(game.homeTeam.abbreviation!) vs \(game.awayTeam.abbreviation!)"
             
             createGameNotification(date: dateComponents, title: title)
@@ -133,17 +136,17 @@ class GamesTableViewController: UITableViewController {
     ///     - date: The specific date to get the notification.
     ///     - title: The title game to add to the notification.
     private func createGameNotification(date: DateComponents, title: String) {
-        let content = UNMutableNotificationContent()
+        let content = UNMutableNotificationContent() // create notification content
         content.title = NSLocalizedString("Game Alert", comment: "game_alert")
         content.body = title + NSLocalizedString(" starting soon", comment: "starting_soon")
         
-        let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: false)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: date, repeats: false) // set notification date trigger
         
         let identifier = "\(title) - \(selectedDate)"
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
         
-        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
-        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier]) // remove any requests with the same identifier
+        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil) // add the new request
     }
     
     // MARK: - Retrieving and Decoding Data
@@ -154,10 +157,10 @@ class GamesTableViewController: UITableViewController {
     private func getGameData(reload: Bool) {
         dateLabel.text = getNewDateText(date: selectedDate)
         
-        // determines whether file exists or whether the user has selected to reload
+        // determines whether file exists, display information (might be outdated quickly)
         let fileName = selectedDate + FileManagerFiles.date_game_collection_suffix.rawValue
         if doesFileExist(name: fileName) {
-            // if file exists (and user hasn't reloaded) retrieve data, decode it and update views
+            // if file exists retrieve data, decode it and update views
             guard let data = getFileData(name: fileName) else {
                 return displaySimpleMessage(title: FILE_MANAGER_DATA_ERROR_TITLE, message: FILE_MANAGER_DATA_ERROR_MESSAGE)
             }
@@ -167,6 +170,7 @@ class GamesTableViewController: UITableViewController {
             indicator.startAnimating() // call noisily if no file exists
         }
         
+        // now update/create the data that either didn't exist or could be outdated
         // call silently if user hasn't selected to reload
         if reload { indicator.startAnimating() }
         
@@ -176,10 +180,9 @@ class GamesTableViewController: UITableViewController {
         formatter.dateFormat = DateFormats.API.rawValue
         let API_date_string = formatter.string(from: API_date)
         
-        
         Task {
-            let (data, error) = await requestData(path: .games, queries: [.dates : API_date_string])
-            guard let data = data else {
+            let (data, error) = await requestData(path: .games, queries: [.dates : API_date_string]) // get data
+            guard let data = data else { // deal with any errors
                 displaySimpleMessage(title: error!.title, message: error!.message)
                 indicator.stopAnimating()
                 return
@@ -194,20 +197,20 @@ class GamesTableViewController: UITableViewController {
     /// Decode the game data retrieved from the API.
     /// - Parameters:
     ///     - data: The data to decode.
-    private func decodeGameData(data: Data){ // decodes data of all games and updates view
-        selectedDateGames.removeAll()
+    private func decodeGameData(data: Data){
+        selectedDateGames.removeAll() // clear the current games found
         do {
             let decoder = JSONDecoder()
-            let collection = try decoder.decode(GameCollection.self, from: data)
+            let collection = try decoder.decode(GameCollection.self, from: data) // decode data
             if let games = collection.games {
-                selectedDateGames.append(contentsOf: games)
+                selectedDateGames.append(contentsOf: games) // add games
                 tableView.reloadData()
                 changeBadgeNumber()
-                indicator.stopAnimating() // stop the indicator if it is active
+                indicator.stopAnimating()
                 addNotifications()
             }
         }
-        catch let error {
+        catch let error { // catch any errors
             displaySimpleMessage(title: JSON_DECODER_ERROR_TITLE, message: error.localizedDescription)
             indicator.stopAnimating()
         }
@@ -271,6 +274,7 @@ class GamesTableViewController: UITableViewController {
     ///
     /// Code source found [here.](https://developer.apple.com/forums/thread/683700)
     private func defaultMenuBuild() {
+        // update the selected date
         let optionsClosure = { (action: UIAction) in
             let year = Int.init(action.title.split(separator: "/")[0])! + 1
             let selectedDateSplit = self.selectedDate.split(separator: "-")
@@ -281,7 +285,7 @@ class GamesTableViewController: UITableViewController {
             }
         }
         
-        menuButton.menu = UIMenu(children: [
+        menuButton.menu = UIMenu(children: [ // build the menu
              UIAction(title: "2021/22", state: .on, handler: optionsClosure),
              UIAction(title: "2020/21", handler: optionsClosure)
         ])
@@ -298,13 +302,15 @@ class GamesTableViewController: UITableViewController {
         var numberOfLiveGames = 0
         if selectedDate == getTodaysDate() {
             for game in selectedDateGames {
-                if game.status! != "Final", !game.status!.hasSuffix("ET") { numberOfLiveGames += 1 }
+                if game.status! != "Final", !game.status!.hasSuffix("ET") { // check if game is live
+                    numberOfLiveGames += 1
+                }
             }
             
-            if numberOfLiveGames != 0 {
+            if numberOfLiveGames != 0 { // display the number of live games on the badge of the tab item
                 navigationController?.tabBarItem.badgeValue = String(describing: numberOfLiveGames)
             }
-            else {
+            else { // if there are no live games, don't display anything on badge
                 navigationController?.tabBarItem.badgeValue = .none
             }
         }
@@ -336,7 +342,7 @@ class GamesTableViewController: UITableViewController {
             guard let time = game.time, let status = game.status  else { return cell }
             guard let awayAbb = game.awayTeam.abbreviation, let homeAbb = game.homeTeam.abbreviation else { return cell }
             
-            if time == "" && status.hasSuffix("T"){ // if game has not started yet
+            if time == "" && status.hasSuffix("T"){ // if game has not started yet, set everything to default
                 cell.awayTeamScore.text = awayAbb
                 cell.homeTeamScore.text = homeAbb
                 cell.timeLabel.text = "@"
@@ -347,7 +353,7 @@ class GamesTableViewController: UITableViewController {
                 cell.awayTeamScore.font = UIFont.systemFont(ofSize: cell.awayTeamScore.font.pointSize)
                 cell.homeTeamScore.font = UIFont.systemFont(ofSize: cell.homeTeamScore.font.pointSize)
             }
-            else {
+            else { // winning team has bolded and system blue colour to their score
                 cell.awayTeamScore.text = "\(awayAbb) - \(game.awayScore)"
                 cell.homeTeamScore.text = "\(game.homeScore) - \(homeAbb)"
                 if game.homeScore > game.awayScore { // if home team is winnning
@@ -368,6 +374,7 @@ class GamesTableViewController: UITableViewController {
                     cell.homeTeamScore.textColor = UILabel().textColor
                     cell.awayTeamScore.textColor = UILabel().textColor
                 }
+                
                 if time == "" && status.hasSuffix("Qtr") { // if the game is at the start/end of a quarter
                     if game.awayScore == 0 && game.homeScore == 0 { // if game is at start of first quarter
                         cell.timeLabel.text = NSLocalizedString("Start", comment: "Start")
@@ -376,7 +383,8 @@ class GamesTableViewController: UITableViewController {
                         cell.timeLabel.text = NSLocalizedString("End", comment: "End")
                     }
                     
-                } else {
+                }
+                else { // if game is live, show the time with a systemGreen background
                     cell.timeLabel.text = time
                     cell.timeLabel.backgroundColor = UIColor.systemGreen
                 }
@@ -388,22 +396,19 @@ class GamesTableViewController: UITableViewController {
             
             return cell
         }
-        else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: INFO_CELL_IDENTIFIER, for: indexPath)
-            if selectedDateGames.count == 0 {
-                cell.textLabel?.text = NSLocalizedString("No games on this date", comment: "no_games")
-            }
-            return cell
-        }
+        
+        // otherwise there are no games, so display a cell accordingly
+        let cell = tableView.dequeueReusableCell(withIdentifier: INFO_CELL_IDENTIFIER, for: indexPath)
+        cell.textLabel?.text = NSLocalizedString("No games on this date", comment: "no_games")
+        return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == INFO_SECTION { return }
         let game = selectedDateGames[indexPath.row]
         selectedGame = game
         selectedGameTitle = game.awayTeam.abbreviation! + " vs " + game.homeTeam.abbreviation!
         tableView.deselectRow(at: indexPath, animated: true)
-        performSegue(withIdentifier: selectedGameSegue , sender: self)
+        performSegue(withIdentifier: selectedGameSegue , sender: self) // segue to show detailed information about game
     }
     
     // MARK: - Navigation
@@ -412,7 +417,7 @@ class GamesTableViewController: UITableViewController {
         if segue.identifier == selectedGameSegue {
             let destination = segue.destination as! DetailedGameTableViewController
             destination.game = selectedGame
-            destination.gameTitle = selectedGameTitle
+            destination.gameTitle = selectedGameTitle // give destination some information about the game
         }
     }
 }

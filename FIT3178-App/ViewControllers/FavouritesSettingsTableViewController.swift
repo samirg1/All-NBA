@@ -28,7 +28,7 @@ class FavouritesSettingsTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         getFavourites()
-        tableView.reloadData()
+        tableView.reloadData() // reload the favourites each time user enters this page
     }
 
     // MARK: - Table view data source
@@ -38,17 +38,16 @@ class FavouritesSettingsTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         if section == playersSection {
             return appDelegate.favouritePlayers.count
         }
         else if section == teamSection {
             return appDelegate.favouriteTeams.count
         }
-        if appDelegate.favouritePlayers.count > 0 || appDelegate.favouriteTeams.count > 0 {
-            return 0
+        if appDelegate.favouritePlayers.isEmpty && appDelegate.favouriteTeams.isEmpty {
+            return 1
         }
-        return 1
+        return 0
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

@@ -65,9 +65,9 @@ class PlayersGameStatsCollectionViewController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        sortPlayerGameStats(clicked: SortFilters.points)
-        collectionView.setCollectionViewLayout(configureLayout(), animated: false)
-        collectionView.backgroundColor = .systemGray3
+        sortPlayerGameStats(clicked: SortFilters.points) // initially sort by points
+        collectionView.setCollectionViewLayout(configureLayout(), animated: false) // configure the layout
+        collectionView.backgroundColor = .systemGray3 // default background colours
         navigationController?.navigationBar.backgroundColor = .systemBackground
     }
     
@@ -106,10 +106,10 @@ class PlayersGameStatsCollectionViewController: UICollectionViewController {
     /// - Parameters:
     ///     - clicked: The sort filter that was clicked.
     private func sortPlayerGameStats(clicked: SortFilters) {
-        if sortingKey == clicked {
+        if sortingKey == clicked { // if user reclicks a sorter, reverse the order
             sortedGameStats.reverse()
         }
-        else {
+        else { // otherwise sort the data container
             switch clicked {
             case .points, .none:
                 sortedGameStats = playerGameStats.sorted(){ $0.pts > $1.pts }
@@ -145,11 +145,11 @@ class PlayersGameStatsCollectionViewController: UICollectionViewController {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: statIdentifier, for: indexPath) as! PlayerGameStatsCollectionViewCell
         cell.label.leadingAnchor.constraint(equalTo: cell.leadingAnchor, constant: 5).isActive = false
         if indexPath.item / cellHeaders.count == HEADER_SECTION {
-            cell.backgroundColor = .systemGray4
+            cell.backgroundColor = .systemGray4 // cell headers have different background colour
             
             if let sort = SortFilters(rawValue: cellHeaders[indexPath.item].lowercased()), sort == sortingKey {
                 cell.label.attributedText =  NSAttributedString(string: cellHeaders[indexPath.item], attributes: [.underlineStyle: NSUnderlineStyle.single.rawValue, .font: UIFont.boldSystemFont(ofSize: cell.label.font.pointSize)])
-            }
+            } // underline cell header if it is currently the sorting filter
             else {
                 cell.label.attributedText =  NSAttributedString(string: cellHeaders[indexPath.item], attributes: [.font: UIFont.systemFont(ofSize: cell.label.font.pointSize)])
             }
@@ -197,10 +197,10 @@ class PlayersGameStatsCollectionViewController: UICollectionViewController {
         if indexPath.item / cellHeaders.count == HEADER_SECTION {
             let selectedSort = SortFilters(rawValue: cellHeaders[indexPath.item % cellHeaders.count].lowercased())
             if let selectedSort = selectedSort {
-                sortPlayerGameStats(clicked: selectedSort)
+                sortPlayerGameStats(clicked: selectedSort) // sort when user clicks on header section
             }
         }
-        else {
+        else { // otherwise take user to a detailed player summary
             let player = sortedGameStats[(indexPath.item / cellHeaders.count) - 1]
             print(player.playerFirstName + " " + player.playerLastName)
             selectedPlayer = player

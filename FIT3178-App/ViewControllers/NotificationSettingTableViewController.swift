@@ -73,7 +73,7 @@ class NotificationSettingTableViewController: UITableViewController {
             var content = cell.defaultContentConfiguration()
             content.text = rows[indexPath.section][indexPath.row]
             
-            if indexPath.row == settingsRow {
+            if indexPath.row == settingsRow { // show user the current notification status
                 var subtitle = NSLocalizedString("Notifcations are currently: ", comment: "notifcation_currently")
                 subtitle += appDelegate.notificationsEnabled ? NSLocalizedString("On", comment: "on") : NSLocalizedString("Off", comment: "off")
                 content.secondaryText = subtitle

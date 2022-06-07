@@ -733,7 +733,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <toolbar key="tableFooterView" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="LP7-aE-T90">
-                            <rect key="frame" x="0.0" y="205.5" width="414" height="44"/>
+                            <rect key="frame" x="0.0" y="206" width="414" height="44"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                             <items>
                                 <barButtonItem systemItem="refresh" id="a1Q-sx-t0R">

@@ -8,7 +8,7 @@
 import UIKit
 
 /// Custom table cell that provides framework to display one of the user's favourite players.
-public class FavouritePlayerTableCell: UITableViewCell {
+class FavouritePlayerTableCell: UITableViewCell {
     /// The label of the name of the player.
     @IBOutlet weak var nameLabel: UILabel!
     /// The label describing the player's season stats.
@@ -64,7 +64,7 @@ class FavouritesTableViewController: UITableViewController {
         var indicator = UIActivityIndicatorView()
         indicator.style = UIActivityIndicatorView.Style.large
         indicator.translatesAutoresizingMaskIntoConstraints = false
-        self.tableView.addSubview(indicator)
+        self.tableView.addSubview(indicator) // add indicator to center of tableview
         NSLayoutConstraint.activate([ indicator.centerXAnchor.constraint(equalTo: tableView.centerXAnchor), indicator.centerYAnchor.constraint(equalTo: tableView.centerYAnchor) ])
         return indicator
     }()
@@ -74,21 +74,21 @@ class FavouritesTableViewController: UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        getFavourites()
+        getFavourites() // update the favourites each time user enters the page, ensures up-to-date info
         updateFavouriteContainers()
     }
     
     /// Update the containers that house the user's favourite teams and players data.
     private func updateFavouriteContainers() {
-        playerData.removeAll()
+        playerData.removeAll() // clear current containers
         teamData.removeAll()
         
-        for player in appDelegate.favouritePlayers {
+        for player in appDelegate.favouritePlayers { // for each player in the user's favourite players, create a new class for them
             let newPlayer = FavouritePlayer(player.id)
             getPlayerSeasonStats(player: newPlayer)
             getPlayersLastGame(player: newPlayer)
         }
-        for team in appDelegate.favouriteTeams {
+        for team in appDelegate.favouriteTeams { // for each team in the user's favourite teams, create a new class for them
             let newTeam = FavouriteTeam(team.id)
             getTeamsLastGame(team: newTeam)
         }
@@ -100,8 +100,8 @@ class FavouritesTableViewController: UITableViewController {
     private func getPlayerSeasonStats(player: FavouritePlayer) {
         indicator.startAnimating()
         Task {
-            let (data, error) = await requestData(path: .averages, queries: [.player_ids : "\(player.id)"])
-            guard let data = data else {
+            let (data, error) = await requestData(path: .averages, queries: [.player_ids : "\(player.id)"]) // request data
+            guard let data = data else { // if data is not found an error is present
                 displaySimpleMessage(title: error!.title, message: error!.message)
                 indicator.stopAnimating()
                 return
@@ -109,15 +109,15 @@ class FavouritesTableViewController: UITableViewController {
             
             do {
                 let decoder = JSONDecoder()
-                let collection = try decoder.decode(PlayerSeasonStatCollection.self, from: data)
+                let collection = try decoder.decode(PlayerSeasonStatCollection.self, from: data) // decode data
                 if let players = collection.players {
-                    player.seasonStats = players[0]
-                    if !player.isNil(){ playerData.append(player) }
+                    player.seasonStats = players[0] // add the player's season stats to the FavouritePlayer object
+                    if !player.isNil(){ playerData.append(player) } // if the player is now ready to be displayed, append to the playerData container
                 }
                 tableView.reloadData()
                 indicator.stopAnimating()
             }
-            catch let error {
+            catch let error { // catch any errors
                 displaySimpleMessage(title: JSON_DECODER_ERROR_TITLE, message: error.localizedDescription)
                 indicator.stopAnimating()
             }
@@ -130,28 +130,24 @@ class FavouritesTableViewController: UITableViewController {
     private func getPlayersLastGame(player: FavouritePlayer) {
         indicator.startAnimating()
         Task {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "YYYY"
-            let year = formatter.string(from: Date())
-            
-            let (data, error) = await requestData(path: .stats, queries: [.player_ids: "\(player.id)", .start_date: year+"-01-01", .per_page: "100"])
-            guard let data = data else {
+            let (data, error) = await requestData(path: .stats, queries: [.player_ids: "\(player.id)", .start_date: getCurrentYear(), .per_page: "100"]) // request data
+            guard let data = data else { // if no data present then there was an error
                 displaySimpleMessage(title: error!.title, message: error!.message)
                 indicator.stopAnimating()
                 return
             }
             do {
                 let decoder = JSONDecoder()
-                let collection = try decoder.decode(PlayerGameStatsCollection.self, from: data)
+                let collection = try decoder.decode(PlayerGameStatsCollection.self, from: data) // decode data
                 if let playerStats = collection.playersGameStats {
-                    let sortedGames = playerStats.sorted { p1, p2 in return p1.gameDate < p2.gameDate }
-                    player.recentGame = sortedGames.last!
-                    if !player.isNil(){ playerData.append(player) }
+                    let sortedGames = playerStats.sorted { p1, p2 in return p1.gameDate < p2.gameDate } // sort games returned by date
+                    player.recentGame = sortedGames.last! // add the most recent game to the FavouritePlayer object
+                    if !player.isNil(){ playerData.append(player) } // if the player is now ready to be displayed, add to playerData container
                 }
                 tableView.reloadData()
                 indicator.stopAnimating()
             }
-            catch let error {
+            catch let error { // catch any errors
                 displaySimpleMessage(title: JSON_DECODER_ERROR_TITLE, message: error.localizedDescription)
                 indicator.stopAnimating()
             }
@@ -164,32 +160,37 @@ class FavouritesTableViewController: UITableViewController {
     private func getTeamsLastGame(team: FavouriteTeam) {
         indicator.startAnimating()
         Task {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "YYYY"
-            let year = formatter.string(from: Date())
-            
-            let (data, error) = await requestData(path: .games, queries: [.team_ids: "\(team.id)", .start_date: year+"-01-01", .per_page: "100"])
-            guard let data = data else {
+            let (data, error) = await requestData(path: .games, queries: [.team_ids: "\(team.id)", .start_date: getCurrentYear(), .per_page: "100"]) // get data
+            guard let data = data else { // if no data is present there was an error
                 displaySimpleMessage(title: error!.title, message: error!.message)
                 indicator.stopAnimating()
                 return
             }
             do {
                 let decoder = JSONDecoder()
-                let collection = try decoder.decode(GameCollection.self, from: data)
+                let collection = try decoder.decode(GameCollection.self, from: data) // decode data
                 if let games = collection.games {
-                    let sortedGames = games.sorted { p1, p2 in return p1.date < p2.date }
-                    team.recentGame = sortedGames.last!
-                    teamData.append(team)
+                    let sortedGames = games.sorted { p1, p2 in return p1.date < p2.date } // sort the games by date
+                    team.recentGame = sortedGames.last! // add the most recent game to the FavouriteTeam object
+                    teamData.append(team) // add FavouriteTeam to container
                 }
                 tableView.reloadData()
                 indicator.stopAnimating()
             }
-            catch let error {
+            catch let error { // catch any error
                 displaySimpleMessage(title: JSON_DECODER_ERROR_TITLE, message: error.localizedDescription)
                 indicator.stopAnimating()
             }
         }
+    }
+    
+    /// Get a stringed date of the current year.
+    /// - Returns: The stringed date of the start current year in the format "YYYY-MM-DD".
+    private func getCurrentYear() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "YYYY"
+        let year = formatter.string(from: Date())
+        return year+"-01-01"
     }
     
     // MARK: - Table view data source
@@ -213,7 +214,7 @@ class FavouritesTableViewController: UITableViewController {
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == infoSection {
+        if indexPath.section == infoSection { // if no favourites are available yet
             let cell = tableView.dequeueReusableCell(withIdentifier: infoCellIdentifier, for: indexPath)
             var content = cell.defaultContentConfiguration()
             content.text = NSLocalizedString("No favourites yet.", comment: "no_favourites_yet")
@@ -221,7 +222,7 @@ class FavouritesTableViewController: UITableViewController {
             cell.contentConfiguration = content
             return cell
         }
-        else if indexPath.section == playerSection {
+        else if indexPath.section == playerSection { // favourite players
             let cell = tableView.dequeueReusableCell(withIdentifier: playerCellIdentifier, for: indexPath) as! FavouritePlayerTableCell
             
             let stats = playerData[indexPath.row].seasonStats!
@@ -232,7 +233,7 @@ class FavouritesTableViewController: UITableViewController {
             cell.recentGameLabel.text = "\(lastGame.pts) PTS - \(lastGame.ast) AST - \(lastGame.reb) REB"
             return cell
         }
-        
+        // otherwise favourite teams
         let cell = tableView.dequeueReusableCell(withIdentifier: teamCellIdentifier, for: indexPath) as! FavouriteTeamTableCell
         let team = teamData[indexPath.row]
         guard let game = team.recentGame else {
