@@ -223,7 +223,7 @@ class AddFavouritesTableViewController: UITableViewController, UISearchBarDelega
         else { // team cell
             let team = teams[indexPath.row]
             content.text = team.fullName
-            content.secondaryText = NSLocalizedString(team.conference!, comment: "")
+            content.secondaryText = NSLocalizedString(team.conference, comment: "")
         }
         
         cell.contentConfiguration = content

@@ -14,9 +14,9 @@ class FavouritePlayer {
     /// The ID of the player.
     var id: Int
     /// The season stat averages of the player.
-    var seasonStats: PlayerSeasonStats? = nil
+    var seasonStats: PlayerSeasonStats?
     /// The most recent game of the player.
-    var recentGame: PlayerGameStats? = nil
+    var recentGame: PlayerGameStats?
     
     /// Determine if any part of the section of this player is not yet determined.
     ///

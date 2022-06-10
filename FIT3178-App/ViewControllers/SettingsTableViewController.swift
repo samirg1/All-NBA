@@ -21,6 +21,7 @@ private enum SettingSections: String {
     static var settings = [favourties, notifications]
     /// Variable to hold all the rows in the 'Other' section.
     static var other = [about, help]
+    /// Variable to hold each section.
     static var all = [settings, other]
     
     /// Function to return a localised string of the enum raw value.
@@ -52,12 +53,10 @@ class SettingsTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return SettingSections.all.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return SettingSections.all[section].count
     }
 

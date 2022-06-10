@@ -1122,7 +1122,7 @@
                     <navigationItem key="navigationItem" title="Favourites" id="WrU-08-M6h">
                         <barButtonItem key="rightBarButtonItem" systemItem="edit" id="B3I-mp-rLG">
                             <connections>
-                                <segue destination="4jw-fY-qGD" kind="show" id="1GM-AF-dUZ"/>
+                                <segue destination="4jw-fY-qGD" kind="show" identifier="editFavouriteSegue" id="1GM-AF-dUZ"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -1524,7 +1524,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="jKg-Rs-aXz"/>
+        <segue reference="1GM-AF-dUZ"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="ATL" width="300" height="300"/>

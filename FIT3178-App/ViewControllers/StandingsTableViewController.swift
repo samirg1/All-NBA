@@ -267,9 +267,6 @@ class StandingsTableViewController: UITableViewController {
     ///     - data: The data to decode
     ///     - team: The team that's data is being decoded.
     private func decodeTeamGames(data: Data, team: Team) {
-        guard let division = team.division, let conference = team.conference else {
-            return
-        }
         do {
             let decoder = JSONDecoder()
             let collection = try decoder.decode(GameCollection.self, from: data) // decode data
@@ -278,8 +275,8 @@ class StandingsTableViewController: UITableViewController {
                 for game in games {
                     teamData.addGame(game: game)
                 }
-                self.divisionTeams[Divisions.init(rawValue: division)!]!.append(teamData)
-                self.conferenceTeams[Conferences.init(rawValue: conference)!]!.append(teamData)
+                self.divisionTeams[Divisions.init(rawValue: team.division)!]!.append(teamData)
+                self.conferenceTeams[Conferences.init(rawValue: team.conference)!]!.append(teamData)
                 self.teamsData.append(teamData) // add the team to the containers
                 self.teamsData.sort(){ $0.pct > $1.pct } // sort the teams based on their win percentage
                 for (divi, div_teams) in self.divisionTeams {
@@ -308,10 +305,10 @@ class StandingsTableViewController: UITableViewController {
     ///     - teamToFind: The team to find positions for.
     /// - Returns: Key/value pairs matching the team filter to the position the team is in this subsection of the league.
     private func findPositions(teamToFind: TeamSeasonStats) -> [TeamFilter: Int]{ // find the positions in the league, division and conference for display
-        let div = divisionTeams[Divisions.init(rawValue: teamToFind.team.division!)!]!.firstIndex { team in
+        let div = divisionTeams[Divisions.init(rawValue: teamToFind.team.division)!]!.firstIndex { team in
             team.team.abbreviation == teamToFind.team.abbreviation
         }! + 1
-        let conf = conferenceTeams[Conferences.init(rawValue: teamToFind.team.conference!)!]!.firstIndex { team in
+        let conf = conferenceTeams[Conferences.init(rawValue: teamToFind.team.conference)!]!.firstIndex { team in
             team.team.abbreviation == teamToFind.team.abbreviation
         }! + 1
         let league = teamsData.firstIndex { team in team.team.abbreviation == teamToFind.team.abbreviation }! + 1
@@ -380,9 +377,9 @@ class StandingsTableViewController: UITableViewController {
         var pct = "\(team.pct)"
         for _ in 0..<(5-string_pct.count) { pct += "0" }
         
-        cell.teamImage.image = UIImage(named: team.team.abbreviation!)
+        cell.teamImage.image = UIImage(named: team.team.abbreviation)
         cell.numberLabel.text = "\(indexPath.row + 1)"
-        cell.abbreviationLabel.text = team.team.abbreviation!
+        cell.abbreviationLabel.text = team.team.abbreviation
         cell.seasonRecordLabel.text = "\(team.wins)-\(team.losses)"
         cell.percentageLabel.text = "\(pct)"
         cell.homeRecordLabel.text = "H\(team.homeWins)-\(team.homeLosses)"

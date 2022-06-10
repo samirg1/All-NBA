@@ -71,8 +71,6 @@ class StatsTableViewCell: UITableViewCell {
 /// This class displays the teams statistics side by side for a simplistic and easily readable analysis of the game.
 class DetailedGameTableViewController: UITableViewController {
     
-    /// The game title of the game being displayed.
-    public var gameTitle : String?
     /// The game being displayed.
     public var game : Game?
     /// The away team's stats from the game.
@@ -107,7 +105,9 @@ class DetailedGameTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = gameTitle
+        if let game = game {
+            navigationItem.title = game.awayTeam.abbreviation + " vs " + game.homeTeam.abbreviation
+        }
         futureGameCheck() // check if game is in future
     }
     
@@ -200,8 +200,8 @@ class DetailedGameTableViewController: UITableViewController {
     /// Determine if the current game is in the future or not.
     /// - Returns: Whether or not the game is in the future.
     private func isGameInFuture() -> Bool {
-        if let game = game, let status = game.status {
-            return status.hasSuffix("ET")
+        if let game = game {
+            return game.status.hasSuffix("ET")
         }
         return false
     }
@@ -248,21 +248,21 @@ class DetailedGameTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let game = game, let homeAbbr = game.homeTeam.abbreviation, let awayAbbr = game.awayTeam.abbreviation, let status = game.status, let time = game.time else {
+        guard let game = game else {
             return tableView.dequeueReusableCell(withIdentifier: SCORES_CELL_IDENTIFIER, for: indexPath)
         }
         if indexPath.section == SECTION_SCORES { // main section
             let cell = tableView.dequeueReusableCell(withIdentifier: SCORES_CELL_IDENTIFIER, for: indexPath) as! ScoreTableViewCell
-            cell.awayImage.image = UIImage(named: awayAbbr)
-            cell.homeImage.image = UIImage(named: homeAbbr)
+            cell.awayImage.image = UIImage(named: game.awayTeam.abbreviation)
+            cell.homeImage.image = UIImage(named: game.homeTeam.abbreviation)
             cell.scoreLabel.text = "\(game.awayScore) - \(game.homeScore)"
-            cell.timeLabel.text = time
+            cell.timeLabel.text = game.time
             
-            if status.hasSuffix("T"){
-                cell.statusLabel.text = APItoCurrentTimeZoneDisplay(string: status)
+            if game.status.hasSuffix("T"){
+                cell.statusLabel.text = APItoCurrentTimeZoneDisplay(string: game.status)
             }
             else {
-                cell.statusLabel.text = NSLocalizedString(status, comment: "")
+                cell.statusLabel.text = NSLocalizedString(game.status, comment: "")
             }
             
             return cell

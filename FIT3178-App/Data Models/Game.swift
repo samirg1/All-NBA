@@ -22,11 +22,11 @@ class Game: NSObject, Decodable {
     /// The visiting team's score.
     var awayScore : Int
     /// The current period of the game.
-    var period : Int?
+    var period : Int
     /// The current time left in the current period of the game.
-    var time : String?
+    var time : String
     /// The status of the game.
-    var status : String?
+    var status : String
     
     /// The coding keys required to decode.
     private enum DataKeys: String, CodingKey {
@@ -49,9 +49,9 @@ class Game: NSObject, Decodable {
         awayTeam = try container.decode(Team.self, forKey: .awayTeam)
         homeScore = try container.decode(Int.self, forKey: .homeScore)
         awayScore = try container.decode(Int.self, forKey: .awayScore)
-        period = try container.decode(Int?.self, forKey: .period)
-        time = try container.decode(String?.self, forKey: .time)
-        status = try container.decode(String?.self, forKey: .status)
+        period = try container.decode(Int.self, forKey: .period)
+        time = try container.decode(String.self, forKey: .time)
+        status = try container.decode(String.self, forKey: .status)
         date = try container.decode(String.self, forKey: .date)
     }
 }

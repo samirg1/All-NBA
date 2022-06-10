@@ -12,13 +12,13 @@ class Team: NSObject, Codable {
     /// The ID of the team.
     var id : Int
     /// The 3 character abbreviation of the team.
-    var abbreviation : String?
+    var abbreviation : String
     /// The team's full name.
-    var fullName : String?
+    var fullName : String
     /// The team's conference.
-    var conference : String?
+    var conference : String
     /// The team's division.
-    var division : String?
+    var division : String
     
     /// The coding keys required for decoding and encoding.
     private enum CodingKeys: String, CodingKey {
@@ -33,10 +33,10 @@ class Team: NSObject, Codable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         id = try container.decode(Int.self, forKey: .id)
-        abbreviation = try container.decode(String?.self, forKey: .abbreviation)
-        fullName = try container.decode(String?.self, forKey: .fullName)
-        conference = try container.decode(String?.self, forKey: .conference)
-        division = try container.decode(String?.self, forKey: .division)
+        abbreviation = try container.decode(String.self, forKey: .abbreviation)
+        fullName = try container.decode(String.self, forKey: .fullName)
+        conference = try container.decode(String.self, forKey: .conference)
+        division = try container.decode(String.self, forKey: .division)
     }
     
     func encode(to encoder: Encoder) throws {

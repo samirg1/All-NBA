@@ -62,7 +62,7 @@ class FavouritesSettingsTableViewController: UITableViewController {
         case teamSection:
             let team = appDelegate.favouriteTeams[indexPath.row]
             content.text = team.fullName
-            content.secondaryText = NSLocalizedString(team.conference!, comment: "")
+            content.secondaryText = NSLocalizedString(team.conference, comment: "")
         default:
             content.text = NSLocalizedString("No favourites yet.", comment: "no_favs_yet")
             content.secondaryText = NSLocalizedString("Click the '+' to add some.", comment: "click_+_to_add")

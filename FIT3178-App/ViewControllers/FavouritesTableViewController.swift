@@ -241,12 +241,12 @@ class FavouritesTableViewController: UITableViewController {
             return cell
         }
         cell.teamNameLabel.text = team.id == game.homeTeam.id ? game.homeTeam.fullName : game.awayTeam.fullName
-        cell.recentGameScoreLabel.text = "\(game.homeTeam.abbreviation!) \(game.homeScore) vs \(game.awayScore) \(game.awayTeam.abbreviation!)"
-        if game.status!.hasSuffix("T") {
-            cell.recentGameStatusLabel.text = APItoCurrentTimeZoneDisplay(string: game.status!)
+        cell.recentGameScoreLabel.text = "\(game.homeTeam.abbreviation) \(game.homeScore) vs \(game.awayScore) \(game.awayTeam.abbreviation)"
+        if game.status.hasSuffix("T") {
+            cell.recentGameStatusLabel.text = APItoCurrentTimeZoneDisplay(string: game.status)
         }
         else {
-            cell.recentGameStatusLabel.text = NSLocalizedString(game.status!, comment: "")
+            cell.recentGameStatusLabel.text = NSLocalizedString(game.status, comment: "")
         }
         return cell
     }

@@ -50,8 +50,6 @@ class GamesTableViewController: UITableViewController {
     private let gamesToCheck = 14
     /// The game that the user has selected.
     private var selectedGame : Game?
-    /// The title of the game the user has selected.
-    private var selectedGameTitle : String?
     /// The segue identifer of the segue to perform once a game is selected.
     private var selectedGameSegue = "gameSelectSegue"
     
@@ -94,7 +92,7 @@ class GamesTableViewController: UITableViewController {
     /// Add local notifications of upcoming games once the user has seen them.
     private func addNotifications() {
         if !appDelegate.notificationsEnabled || !appDelegate.gameAlertNotifcations {
-            return // user needs to have notifications enables and have game alert notification activated
+            return // user needs to have notifications enabled and have game alert notification activated
         }
         
         for game in selectedDateGames {
@@ -106,10 +104,9 @@ class GamesTableViewController: UITableViewController {
                 }
             }
             
-            guard let status = game.status else { continue }  // if game is not in the future skip over it
-            if !status.hasSuffix("ET") { continue }
+            if !game.status.hasSuffix("ET") { continue }  // if game is not in the future skip over it
             
-            let timeString = convertTo24HourTime(string: status) // get the date of the game in local time in order to create notification
+            let timeString = convertTo24HourTime(string: game.status) // get the date of the game in local time in order to create notification
             let time = convertTimeZones(string: timeString, from: TimeZoneIdentifiers.usa_nyk.rawValue, to: appDelegate.currentTimeZoneIdentifier, format: .time24hr)
             let formatter = DateFormatter()
             formatter.dateFormat = DateFormats.API.rawValue
@@ -123,7 +120,7 @@ class GamesTableViewController: UITableViewController {
             dateComponents.minute = formatter.calendar.component(.minute, from: time)
             
             // title for the notification
-            let title = "\(game.homeTeam.abbreviation!) vs \(game.awayTeam.abbreviation!)"
+            let title = "\(game.homeTeam.abbreviation) vs \(game.awayTeam.abbreviation)"
             
             createGameNotification(date: dateComponents, title: title)
         }
@@ -147,7 +144,7 @@ class GamesTableViewController: UITableViewController {
         UNUserNotificationCenter.current().add(request, withCompletionHandler: nil) // add the new request
     }
     
-    // MARK: - Updating Date Changers
+    // MARK: - Dealing with Dates
     
     /// Outlet for the rewind button.
     @IBOutlet weak private var rewindOutlet: UIBarButtonItem!
@@ -178,6 +175,16 @@ class GamesTableViewController: UITableViewController {
         }
     }
     
+    /// Change a stringed date in the API format by adding a certain amount of days to it.
+    /// - Parameters:
+    ///     - date: The stringed date to change.
+    ///     - change: The amount of days to change by.
+    private func changeDateByDays(date: String, change: Int) -> String {
+        let oldDate = DateFormatter().stringToDate(string: date, format: DateFormats.API, timezone: appDelegate.currentTimeZoneIdentifier)
+        let newDate = Calendar.current.date(byAdding: .day, value: change, to: oldDate)!
+        return  DateFormatter().dateToString(date: newDate, format: DateFormats.API, timezone: appDelegate.currentTimeZoneIdentifier)
+    }
+    
     // MARK: - Retrieving and Decoding Data
     
     /// Get all the games on the selected date.
@@ -189,16 +196,12 @@ class GamesTableViewController: UITableViewController {
         
         var queries: [(API_QUERIES, String)] = []
         for change in -gamesToCheck...gamesToCheck { // find available games
-            let oldDate = DateFormatter().stringToDate(string: selectedDate, format: DateFormats.API, timezone: appDelegate.currentTimeZoneIdentifier)
-            let newDate = Calendar.current.date(byAdding: .day, value: change, to: oldDate)!
-            let newDateString = DateFormatter().dateToString(date: newDate, format: DateFormats.API, timezone: appDelegate.currentTimeZoneIdentifier)
-            
-            let API_date = convertTimeZones(string: newDateString, from: appDelegate.currentTimeZoneIdentifier, to: TimeZoneIdentifiers.usa_nyk.rawValue, format: DateFormats.API)
+            let API_date = convertTimeZones(string: changeDateByDays(date: selectedDate, change: change), from: appDelegate.currentTimeZoneIdentifier, to: TimeZoneIdentifiers.usa_nyk.rawValue, format: DateFormats.API)
             let formatter = DateFormatter()
             formatter.dateFormat = DateFormats.API.rawValue
             let API_date_string = formatter.string(from: API_date)
             
-            queries.append((.dates, API_date_string)) // add to queries to search for
+            queries.append((.dates, API_date_string)) // add to dates to search for
             availableGameDates[API_date_string] = false // initialise the availability as false
         }
         
@@ -302,18 +305,14 @@ class GamesTableViewController: UITableViewController {
         }
         
         // get the current date and edit it
-        var oldDate = DateFormatter().stringToDate(string: selectedDate, format: DateFormats.API, timezone: appDelegate.currentTimeZoneIdentifier)
-        var newDate = Calendar.current.date(byAdding: .day, value: change, to: oldDate)!
-        var newDateString = DateFormatter().dateToString(date: newDate, format: DateFormats.API, timezone: appDelegate.currentTimeZoneIdentifier)
+        var newDateString = changeDateByDays(date: selectedDate, change: change)
         
         while true { // keep going to find an date with a game
             if let available = availableGameDates[newDateString] {
                 if available || newDateString == getTodaysDate() { break }
-                oldDate = DateFormatter().stringToDate(string: newDateString, format: DateFormats.API, timezone: appDelegate.currentTimeZoneIdentifier)
-                newDate = Calendar.current.date(byAdding: .day, value: change, to: oldDate)!
-                newDateString = DateFormatter().dateToString(date: newDate, format: DateFormats.API, timezone: appDelegate.currentTimeZoneIdentifier)
+                newDateString = changeDateByDays(date: newDateString, change: change)
             }
-            else {
+            else { // shouldn't get to here, so if it does an exepected error has occured
                 return displaySimpleMessage(title: NSLocalizedString("Unexpected error occurred", comment: ""), message: NSLocalizedString("No games found past/before this date.", comment: ""))
             }
         }
@@ -343,7 +342,7 @@ class GamesTableViewController: UITableViewController {
         var numberOfLiveGames = 0
         if selectedDate == getTodaysDate() {
             for game in selectedDateGames {
-                if game.status! != "Final", !game.status!.hasSuffix("ET") { // check if game is live
+                if game.status != "Final", !game.status.hasSuffix("ET") { // check if game is live
                     numberOfLiveGames += 1
                 }
             }
@@ -380,14 +379,11 @@ class GamesTableViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: GAME_CELL_IDENTIFIER, for: indexPath) as! GamesTableViewCell
             let game = selectedDateGames[indexPath.row]
             
-            guard let time = game.time, let status = game.status  else { return cell }
-            guard let awayAbb = game.awayTeam.abbreviation, let homeAbb = game.homeTeam.abbreviation else { return cell }
-            
-            if time == "" && status.hasSuffix("T"){ // if game has not started yet, set everything to default
-                cell.awayTeamScore.text = awayAbb
-                cell.homeTeamScore.text = homeAbb
+            if game.time == "" && game.status.hasSuffix("T"){ // if game has not started yet, set everything to default
+                cell.awayTeamScore.text = game.awayTeam.abbreviation
+                cell.homeTeamScore.text = game.homeTeam.abbreviation
                 cell.timeLabel.text = "@"
-                cell.statusLabel.text = APItoCurrentTimeZoneDisplay(string: status)
+                cell.statusLabel.text = APItoCurrentTimeZoneDisplay(string: game.status)
                 cell.timeLabel.backgroundColor = UIColor.secondarySystemBackground
                 cell.homeTeamScore.textColor = UILabel().textColor
                 cell.awayTeamScore.textColor = UILabel().textColor
@@ -395,8 +391,8 @@ class GamesTableViewController: UITableViewController {
                 cell.homeTeamScore.font = UIFont.systemFont(ofSize: cell.homeTeamScore.font.pointSize)
             }
             else { // winning team has bolded and system blue colour to their score
-                cell.awayTeamScore.text = "\(awayAbb) - \(game.awayScore)"
-                cell.homeTeamScore.text = "\(game.homeScore) - \(homeAbb)"
+                cell.awayTeamScore.text = "\(game.awayTeam.abbreviation) - \(game.awayScore)"
+                cell.homeTeamScore.text = "\(game.homeScore) - \(game.homeTeam.abbreviation)"
                 if game.homeScore > game.awayScore { // if home team is winnning
                     cell.homeTeamScore.font = UIFont.boldSystemFont(ofSize: cell.homeTeamScore.font.pointSize)
                     cell.homeTeamScore.textColor = UIColor.systemBlue
@@ -416,24 +412,24 @@ class GamesTableViewController: UITableViewController {
                     cell.awayTeamScore.textColor = UILabel().textColor
                 }
                 
-                if time == "" && status.hasSuffix("Qtr") { // if the game is at the start/end of a quarter
+                if game.time == "" && game.status.hasSuffix("Qtr") { // if the game is at the start/end of a quarter
                     if game.awayScore == 0 && game.homeScore == 0 { // if game is at start of first quarter
                         cell.timeLabel.text = NSLocalizedString("Start", comment: "Start")
                     }
-                    else { // otherwise game is at end of quater
+                    else { // otherwise game is at end of quarter
                         cell.timeLabel.text = NSLocalizedString("End", comment: "End")
                     }
                     
                 }
                 else { // if game is live, show the time with a systemGreen background
-                    cell.timeLabel.text = time
+                    cell.timeLabel.text = game.time
                     cell.timeLabel.backgroundColor = UIColor.systemGreen
                 }
-                cell.statusLabel.text = NSLocalizedString(status, comment: "")
+                cell.statusLabel.text = NSLocalizedString(game.status, comment: "")
             }
             
-            cell.awayTeamImage.image = UIImage(named: awayAbb)
-            cell.homeTeamImage.image = UIImage(named: homeAbb)
+            cell.awayTeamImage.image = UIImage(named: game.awayTeam.abbreviation)
+            cell.homeTeamImage.image = UIImage(named: game.homeTeam.abbreviation)
             
             return cell
         }
@@ -447,7 +443,6 @@ class GamesTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let game = selectedDateGames[indexPath.row]
         selectedGame = game
-        selectedGameTitle = game.awayTeam.abbreviation! + " vs " + game.homeTeam.abbreviation!
         tableView.deselectRow(at: indexPath, animated: true)
         performSegue(withIdentifier: selectedGameSegue , sender: self) // segue to show detailed information about game
     }
@@ -457,8 +452,7 @@ class GamesTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == selectedGameSegue {
             let destination = segue.destination as! DetailedGameTableViewController
-            destination.game = selectedGame
-            destination.gameTitle = selectedGameTitle // give destination some information about the game
+            destination.game = selectedGame // give destination some information about the game
         }
     }
 }

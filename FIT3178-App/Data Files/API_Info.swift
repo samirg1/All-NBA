@@ -49,7 +49,7 @@ public enum API_QUERIES: String {
 // MARK: - API Error Handling
 
 /// Stores the HTTP error codes that come as a response to calling the API.
-public enum HTTP_ERROR_CODES: Int {
+fileprivate enum HTTP_ERROR_CODES: Int {
     /// API response code when the request is successful.
     case success = 200
     /// API response when the request is invalid.
@@ -67,7 +67,7 @@ public enum HTTP_ERROR_CODES: Int {
 }
 
 /// A dictionary storing key value pairs of the error codes returned by the API, and appropriate error messages to display to the user in response to the error code.
-public let API_ERROR_CODE_MESSAGES = [
+fileprivate let API_ERROR_CODE_MESSAGES = [
     HTTP_ERROR_CODES.bad_request.rawValue: NSLocalizedString("Invalid server request.", comment: "bad_request"),
     HTTP_ERROR_CODES.not_found.rawValue: NSLocalizedString("Server request was not found.", comment: "not_found" ),
     HTTP_ERROR_CODES.not_acceptable.rawValue: NSLocalizedString("Invalid server request format.", comment: "not_acceptable"),
