@@ -17,13 +17,13 @@ class AboutTableViewController: UITableViewController {
         NSLocalizedString("Contact", comment: "contact")
     ]
     /// The details of each row to show in this view controller.
-    let TABLE_DETAILS = [
+    private let TABLE_DETAILS = [
         NSLocalizedString("All-NBA was designed as part of a University project to deliver a personalised and effective way to keep up to date in the NBA. Live scores and stats with options for personalisations to enable a quick and easy use of the App to find the information you desire.", comment: "about_info"),
         NSLocalizedString( "- Monash University", comment: "credit_info"),
         NSLocalizedString("For any feedback and enquires feel free to make contact.\nEmail: srgupta@bigpond.com\nSocials: samir.g1", comment: "contact_info")
     ]
     /// The cell identifer.
-    let CELL_IDENTIFIER = "aboutCell"
+    private let CELL_IDENTIFIER = "aboutCell"
 
     override func viewDidLoad() {
         super.viewDidLoad()

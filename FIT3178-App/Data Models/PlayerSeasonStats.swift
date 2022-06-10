@@ -38,6 +38,7 @@ class PlayerSeasonStats: NSObject, Decodable {
 
 /// Class used to house a collection of player's season stat averages.
 class PlayerSeasonStatCollection: NSObject, Decodable {
+    /// The collection of players' season stats.
     var players: [PlayerSeasonStats]?
     
     /// The coding keys required for decoding.

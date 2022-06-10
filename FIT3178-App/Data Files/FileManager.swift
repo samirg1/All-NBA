@@ -73,7 +73,7 @@ public func setFileData(name: String, data: Data) {
     FileManager.default.createFile(atPath: localURL.path, contents: data, attributes: [:])
 }
 
-/// Update the ``AppDelegate`` to have the current versions of user favourites.
+/// Update the ``AppDelegate-swift.class`` to have the current versions of user favourites.
 public func getFavourites() {
     let teamFileName = FileManagerFiles.favourite_teams.rawValue
     if doesFileExist(name: teamFileName)
@@ -105,7 +105,7 @@ public func getFavourites() {
     }
 }
 
-/// Update the user favourites in stored files to match the ``AppDelegate``.
+/// Update the user favourites in stored files to match the ``AppDelegate-swift.class``.
 public func updateFavourites() {
     let encoder = JSONEncoder()
     guard let team_data = try? encoder.encode(appDelegate.favouriteTeams), let player_data = try? encoder.encode(appDelegate.favouritePlayers) else {

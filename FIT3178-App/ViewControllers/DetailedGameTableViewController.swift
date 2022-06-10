@@ -207,9 +207,9 @@ class DetailedGameTableViewController: UITableViewController {
     }
     
     /// The button that segues to  ``PlayersGameStatsCollectionViewController``.
-    @IBOutlet weak var playersButton: UIButton!
+    @IBOutlet weak private var playersButton: UIButton!
     /// The gesture outlet to segue to ``PlayersGameStatsCollectionViewController``.
-    @IBOutlet var playersGestureAction: UISwipeGestureRecognizer!
+    @IBOutlet private var playersGestureAction: UISwipeGestureRecognizer!
     
     /// Check if the game being displayed is in the future and make necessary changes.
     private func futureGameCheck() {
