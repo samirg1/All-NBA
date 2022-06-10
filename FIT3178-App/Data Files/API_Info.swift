@@ -42,8 +42,6 @@ public enum API_QUERIES: String {
     case team_ids = "team_ids[]"
     /// The query of the API to specify specifc players to find results for.
     case player_ids = "player_ids[]"
-    /// The query of the API to specify the required page number of the results to find.
-    case page = "page"
 }
 
 // MARK: - API Error Handling

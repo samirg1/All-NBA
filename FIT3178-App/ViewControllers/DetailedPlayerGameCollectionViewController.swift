@@ -8,7 +8,7 @@
 import UIKit
 
 /// The stat sections to display in this view.
-private enum PlayerStatSections: String {
+fileprivate enum PlayerStatSections: String {
     /// The points scored.
     case points = "Points"
     /// The amounts of rebounds secured.
@@ -34,7 +34,7 @@ private enum PlayerStatSections: String {
     /// The amount of free throws shot.
     case ft = "Free Throws"
     /// Collection of all of the statistical categories to display.
-    static var allItems = [points, rebounds, assists, steals, blocks, minutes, turnovers, fouls, twos, threes, fg, ft]
+    static let allItems = [points, rebounds, assists, steals, blocks, minutes, turnovers, fouls, twos, threes, fg, ft]
     
     /// Function to return a localised string of the enum raw value.
     /// - Returns: The localised string.
@@ -48,21 +48,21 @@ private enum PlayerStatSections: String {
 /// Custom class to provide a header for this page.
 class PlayerHeaderCollectionViewCell: UICollectionViewCell {
     /// The first image of the player's team's logo.
-    @IBOutlet weak var firstImage: UIImageView!
+    @IBOutlet weak fileprivate var firstImage: UIImageView!
     /// The second image of the player's team's logo.
-    @IBOutlet weak var secondImage: UIImageView!
+    @IBOutlet weak fileprivate var secondImage: UIImageView!
     /// The name label of the player.
-    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak fileprivate var nameLabel: UILabel!
 }
 
 /// Custom class representing a cell for each major statistical category.
 class PlayerStatCollectionViewCell: UICollectionViewCell {
     /// The label for the numerical value of the stat.
-    @IBOutlet weak var numberLabel: UILabel!
+    @IBOutlet weak fileprivate var numberLabel: UILabel!
     /// The title of this stat.
-    @IBOutlet weak var statTitleLabel: UILabel!
+    @IBOutlet weak fileprivate var statTitleLabel: UILabel!
     /// Label for any extra detail of this stat.
-    @IBOutlet weak var statDetailLabel: UILabel!
+    @IBOutlet weak fileprivate var statDetailLabel: UILabel!
 }
 
 /// Class to display a detailed look at a single player's performance in a game.
@@ -70,9 +70,9 @@ class DetailedPlayerGameCollectionViewController: UICollectionViewController {
     /// The section housing the header of this view.
     private let HEADER_SECTION = 0
     /// The cell identifier of the header cell.
-    private let headerCell = "headerCell"
+    private let HEADER_CELL_IDENTIFIER = "headerCell"
     /// The cell identifier of the stat cell.
-    private let statCell = "statCell"
+    private let STAT_CELL_IDENTIFIER = "statCell"
     /// The player to display the performance of.
     public var player: PlayerGameStats?
     
@@ -138,11 +138,11 @@ class DetailedPlayerGameCollectionViewController: UICollectionViewController {
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let player = player else {
-            return collectionView.dequeueReusableCell(withReuseIdentifier: statCell, for: indexPath)
+            return collectionView.dequeueReusableCell(withReuseIdentifier: STAT_CELL_IDENTIFIER, for: indexPath)
         }
 
         if indexPath.item == HEADER_SECTION { // the header section with player name and images
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: headerCell, for: indexPath) as! PlayerHeaderCollectionViewCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HEADER_CELL_IDENTIFIER, for: indexPath) as! PlayerHeaderCollectionViewCell
             cell.nameLabel.text = player.playerFirstName + " " + player.playerLastName
             cell.firstImage.image = UIImage(named: player.teamAbbreviation)
             cell.secondImage.image = UIImage(named: player.teamAbbreviation)
@@ -150,7 +150,7 @@ class DetailedPlayerGameCollectionViewController: UICollectionViewController {
             return cell
         }
         // otherwise a stat cell
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: statCell, for: indexPath) as! PlayerStatCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: STAT_CELL_IDENTIFIER, for: indexPath) as! PlayerStatCollectionViewCell
         cell.backgroundColor = .systemBackground
         let header = PlayerStatSections.allItems[indexPath.item-1]
         cell.statTitleLabel.text = header.localizedString()

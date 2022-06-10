@@ -29,7 +29,7 @@ public enum TeamFilter: String {
 }
 
 /// Stores the conferences of the NBA.
-private enum Conferences: String {
+fileprivate enum Conferences: String {
     /// The eastern conference.
     case EAST = "East"
     /// The western conference.
@@ -39,13 +39,13 @@ private enum Conferences: String {
     /// - Returns: The localised string.
     ///
     /// Source found [here.](https://stackoverflow.com/questions/28213693/enum-with-localized-string-in-swift)
-    public func localizedString() -> String {
+    fileprivate func localizedString() -> String {
         return NSLocalizedString(self.rawValue, comment: "")
     }
 }
 
 /// Stores the divisions of the NBA.
-private enum Divisions: String {
+fileprivate enum Divisions: String {
     /// The Atlantic division.
     case ATLANTIC = "Atlantic"
     /// The Central division.
@@ -63,7 +63,7 @@ private enum Divisions: String {
     /// - Returns: The localised string.
     ///
     /// Source found [here.](https://stackoverflow.com/questions/28213693/enum-with-localized-string-in-swift)
-    public func localizedString() -> String {
+    fileprivate func localizedString() -> String {
         return NSLocalizedString(self.rawValue, comment: "")
     }
 }
@@ -81,21 +81,21 @@ public enum Season2021_2022: String {
 /// Custom cell depicting a team's main information.
 class StandingsTeamCell: UITableViewCell {
     /// The team's logo.
-    @IBOutlet weak var teamImage: UIImageView!
+    @IBOutlet weak fileprivate var teamImage: UIImageView!
     /// The position of the team.
-    @IBOutlet weak var numberLabel: UILabel!
+    @IBOutlet weak fileprivate var numberLabel: UILabel!
     /// The abbreviation of the team.
-    @IBOutlet weak var abbreviationLabel: UILabel!
+    @IBOutlet weak fileprivate var abbreviationLabel: UILabel!
     /// The season record of the team.
-    @IBOutlet weak var seasonRecordLabel: UILabel!
+    @IBOutlet weak fileprivate var seasonRecordLabel: UILabel!
     /// The percentage wins of the team.
-    @IBOutlet weak var percentageLabel: UILabel!
+    @IBOutlet weak fileprivate var percentageLabel: UILabel!
     /// The home record of the team.
-    @IBOutlet weak var homeRecordLabel: UILabel!
+    @IBOutlet weak fileprivate var homeRecordLabel: UILabel!
     /// The away record of the team.
-    @IBOutlet weak var awayRecordLabel: UILabel!
+    @IBOutlet weak fileprivate var awayRecordLabel: UILabel!
     /// The label of how many games behind the front the team is.
-    @IBOutlet weak var gamesBehindLabel: UILabel!
+    @IBOutlet weak fileprivate var gamesBehindLabel: UILabel!
 }
 
 class StandingsTableViewController: UITableViewController {
@@ -108,7 +108,7 @@ class StandingsTableViewController: UITableViewController {
     /// The collection of teams.
     private var teamsData: [TeamSeasonStats] = []
     /// The cell identifier of the cell that houses the team's stats.
-    private let teamCellIdentifier = "teamCell"
+    private let TEAM_CELL_IDENTIFIER = "teamCell"
     /// The selected team (if any).
     private var selectedTeam: TeamSeasonStats?
     /// The collection of teams, split up by division.
@@ -345,7 +345,7 @@ class StandingsTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: teamCellIdentifier, for: indexPath) as! StandingsTeamCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: TEAM_CELL_IDENTIFIER, for: indexPath) as! StandingsTeamCell
         let team: TeamSeasonStats
         if teamFilter == TeamFilter.CONFERENCE {
             team = conferenceTeams[Array(conferenceTeams.keys)[indexPath.section]]![indexPath.row]

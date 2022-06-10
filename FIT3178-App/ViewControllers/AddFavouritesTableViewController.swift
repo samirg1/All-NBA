@@ -9,14 +9,12 @@ import UIKit
 
 /// Custom class used to add user favourites.
 class AddFavouritesTableViewController: UITableViewController, UISearchBarDelegate {
-    /// Variable to access the ``AppDelegate`` for this App.
-    private let appDelegate = UIApplication.shared.delegate as! AppDelegate
     /// The segment that is used to add players.
-    private let playerSegment = 0
+    private let PLAYER_SEGMENT = 0
     /// The segment that is used to add teams.
-    private let teamSegment = 1
+    private let TEAM_SEGMENT = 1
     /// The identifier of the result cell.
-    private let cellIdentifier = "resultCell"
+    private let CELL_IDENTIFIER = "resultCell"
     /// The default title of the 'Add' button.
     private let DEFAULT_ADD_BUTTON_TITLE = NSLocalizedString("Add", comment: "add")
     /// The collection of players returned by the search.
@@ -62,7 +60,7 @@ class AddFavouritesTableViewController: UITableViewController, UISearchBarDelega
     /// Check if the player segmenet is selected.
     /// - Returns: boolean determining whether the player segment is selected.
     private func isPlayerSelected() -> Bool {
-        return favouriteType.selectedSegmentIndex == playerSegment
+        return favouriteType.selectedSegmentIndex == PLAYER_SEGMENT
     }
     
     /// Action when the user changes the type of favourite they want to add.
@@ -212,7 +210,7 @@ class AddFavouritesTableViewController: UITableViewController, UISearchBarDelega
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: CELL_IDENTIFIER, for: indexPath)
         var content = cell.defaultContentConfiguration()
 
         if isPlayerSelected() { // player cell

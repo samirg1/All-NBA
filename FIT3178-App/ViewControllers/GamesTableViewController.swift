@@ -9,10 +9,10 @@
 
 import UIKit
 
-/// Dealing with how to change the date once a gesture is recognised
+/// Dealing with how to change the date once a gesture is recognised.
 ///
 /// The raw value of this enumeration represents the amount of days to add to the current date when the gesture is recognised.
-private enum GestureDateChanges: Int {
+fileprivate enum GestureDateChanges: Int {
     /// The date change on a left swipe.
     case left = 1
     /// The date change on a right swipe.
@@ -22,24 +22,21 @@ private enum GestureDateChanges: Int {
 /// Custom table cell class to house the main game information.
 class GamesTableViewCell: UITableViewCell {
     /// The logo of the away team.
-    @IBOutlet weak var awayTeamImage: UIImageView!
+    @IBOutlet weak fileprivate var awayTeamImage: UIImageView!
     /// The score of the away team.
-    @IBOutlet weak var awayTeamScore: UILabel!
+    @IBOutlet weak fileprivate var awayTeamScore: UILabel!
     /// The logo of the home team.
-    @IBOutlet weak var homeTeamImage: UIImageView!
+    @IBOutlet weak fileprivate var homeTeamImage: UIImageView!
     /// The score of the home team.
-    @IBOutlet weak var homeTeamScore: UILabel!
+    @IBOutlet weak fileprivate var homeTeamScore: UILabel!
     /// The time label of the game.
-    @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet weak fileprivate var timeLabel: UILabel!
     /// The status label of the game.
-    @IBOutlet weak var statusLabel: UILabel!
+    @IBOutlet weak fileprivate var statusLabel: UILabel!
 }
 
 /// Custom table class to display a date's live, past and future games to the user.
 class GamesTableViewController: UITableViewController {
-    /// Variable to access the ``AppDelegate`` of this App.
-    private let appDelegate = UIApplication.shared.delegate as! AppDelegate
-    
     /// The selected date to show games for.
     private var selectedDate = String()
     /// The games on the selected data.
@@ -47,11 +44,11 @@ class GamesTableViewController: UITableViewController {
     /// List of dates with available games.
     private var availableGameDates = [String:Bool]()
     /// The amount of days to check each side of the `selectedDate` for games.
-    private let gamesToCheck = 14
+    private let GAMES_TO_CHECK = 14
     /// The game that the user has selected.
     private var selectedGame : Game?
     /// The segue identifer of the segue to perform once a game is selected.
-    private var selectedGameSegue = "gameSelectSegue"
+    private let SELECTED_GAME_SEGUE = "gameSelectSegue"
     
     /// The cell identifer of the game cell.
     private let GAME_CELL_IDENTIFIER = "gamesCell"
@@ -189,13 +186,13 @@ class GamesTableViewController: UITableViewController {
     
     /// Get all the games on the selected date.
     /// - Parameters:
-    ///     - reload: Whether or not data should be reloaded regardless of whether a file exists or not.
+    ///     - reload: Whether or not the data should be updated noisily (with indicator) or not.
     private func getGameData(reload: Bool) {
         dateLabel.text = getNewDateText(date: selectedDate)
         availableGameDates.removeAll()
         
         var queries: [(API_QUERIES, String)] = []
-        for change in -gamesToCheck...gamesToCheck { // find available games
+        for change in -GAMES_TO_CHECK...GAMES_TO_CHECK { // find available games
             let API_date = convertTimeZones(string: changeDateByDays(date: selectedDate, change: change), from: appDelegate.currentTimeZoneIdentifier, to: TimeZoneIdentifiers.usa_nyk.rawValue, format: DateFormats.API)
             let formatter = DateFormatter()
             formatter.dateFormat = DateFormats.API.rawValue
@@ -444,13 +441,13 @@ class GamesTableViewController: UITableViewController {
         let game = selectedDateGames[indexPath.row]
         selectedGame = game
         tableView.deselectRow(at: indexPath, animated: true)
-        performSegue(withIdentifier: selectedGameSegue , sender: self) // segue to show detailed information about game
+        performSegue(withIdentifier: SELECTED_GAME_SEGUE , sender: self) // segue to show detailed information about game
     }
     
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == selectedGameSegue {
+        if segue.identifier == SELECTED_GAME_SEGUE {
             let destination = segue.destination as! DetailedGameTableViewController
             destination.game = selectedGame // give destination some information about the game
         }

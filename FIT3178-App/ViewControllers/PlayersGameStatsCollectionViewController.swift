@@ -8,7 +8,7 @@
 import UIKit
 
 /// The different sorting filters to be applied to the players.
-private enum SortFilters: String {
+fileprivate enum SortFilters: String {
     /// No sorting mechanism (initial value).
     case none = "none"
     /// Sorting by points scored.
@@ -30,23 +30,23 @@ private enum SortFilters: String {
 /// Custom cell to display a statstic or header for the major statistics.
 class PlayerGameStatsCollectionViewCell: UICollectionViewCell {
     /// The label housing a statistic or header.
-    @IBOutlet weak var label: UILabel!
+    @IBOutlet weak fileprivate var label: UILabel!
 }
 
 /// Custom cell to display the names of the players and the header for this column.
 class PlayerGameNameCollectionViewCell: UICollectionViewCell {
     /// The label housing the name or header for names.
-    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak fileprivate var nameLabel: UILabel!
 }
 
 /// Custom collection view to display a simplistic overview of the players statistics from a particular game.
 class PlayersGameStatsCollectionViewController: UICollectionViewController {
     /// The column headers of the view.
-    private let cellHeaders = [NSLocalizedString("NAME", comment: "name"), "PTS", "REB", "AST", "STL", "BLK", "TOV", "PCT"]
+    private let CELL_HEADERS = [NSLocalizedString("NAME", comment: "name"), "PTS", "REB", "AST", "STL", "BLK", "TOV", "PCT"]
     /// The cell identifier of the cell that houses a stat.
-    private let statIdentifier = "statCell"
+    private let STAT_CELL_IDENTIFIER = "statCell"
     /// The cell identifier of the cell that houses a name.
-    private let nameIdentifier = "nameCell"
+    private let NAME_CELL_IDENTIFIER = "nameCell"
     /// The section housing the headers.
     private let HEADER_SECTION = 0
     /// The items that house the names.
@@ -61,7 +61,7 @@ class PlayersGameStatsCollectionViewController: UICollectionViewController {
     /// The current sorting key.
     private var sortingKey : SortFilters = SortFilters.none
     /// The segue identifier to segue to ``DetailedPlayerGameCollectionViewController``.
-    private let detailedSegue = "playerGameDetail"
+    private let DETAILED_SEGUE = "playerGameDetail"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -138,31 +138,31 @@ class PlayersGameStatsCollectionViewController: UICollectionViewController {
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return cellHeaders.count * (playerGameStats.count + 1)
+        return CELL_HEADERS.count * (playerGameStats.count + 1)
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: statIdentifier, for: indexPath) as! PlayerGameStatsCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: STAT_CELL_IDENTIFIER, for: indexPath) as! PlayerGameStatsCollectionViewCell
         cell.label.leadingAnchor.constraint(equalTo: cell.leadingAnchor, constant: 5).isActive = false
-        if indexPath.item / cellHeaders.count == HEADER_SECTION {
+        if indexPath.item / CELL_HEADERS.count == HEADER_SECTION {
             cell.backgroundColor = .systemGray4 // cell headers have different background colour
             
-            if let sort = SortFilters(rawValue: cellHeaders[indexPath.item].lowercased()), sort == sortingKey {
-                cell.label.attributedText =  NSAttributedString(string: cellHeaders[indexPath.item], attributes: [.underlineStyle: NSUnderlineStyle.single.rawValue, .font: UIFont.boldSystemFont(ofSize: cell.label.font.pointSize)])
+            if let sort = SortFilters(rawValue: CELL_HEADERS[indexPath.item].lowercased()), sort == sortingKey {
+                cell.label.attributedText =  NSAttributedString(string: CELL_HEADERS[indexPath.item], attributes: [.underlineStyle: NSUnderlineStyle.single.rawValue, .font: UIFont.boldSystemFont(ofSize: cell.label.font.pointSize)])
             } // underline cell header if it is currently the sorting filter
             else {
-                cell.label.attributedText =  NSAttributedString(string: cellHeaders[indexPath.item], attributes: [.font: UIFont.systemFont(ofSize: cell.label.font.pointSize)])
+                cell.label.attributedText =  NSAttributedString(string: CELL_HEADERS[indexPath.item], attributes: [.font: UIFont.systemFont(ofSize: cell.label.font.pointSize)])
             }
                 
         }
         else {
             cell.backgroundColor = .systemBackground
             
-            let player = sortedGameStats[(indexPath.item / cellHeaders.count) - 1]
+            let player = sortedGameStats[(indexPath.item / CELL_HEADERS.count) - 1]
             var text = ""
-            switch indexPath.item % cellHeaders.count {
+            switch indexPath.item % CELL_HEADERS.count {
             case NAME_ITEM:
-                let nameCell = collectionView.dequeueReusableCell(withReuseIdentifier: nameIdentifier, for: indexPath) as! PlayerGameNameCollectionViewCell
+                let nameCell = collectionView.dequeueReusableCell(withReuseIdentifier: NAME_CELL_IDENTIFIER, for: indexPath) as! PlayerGameNameCollectionViewCell
                 nameCell.backgroundColor = .systemBackground
                 let fname = player.playerFirstName
                 let stringFname = "\(fname[fname.startIndex])"
@@ -194,17 +194,17 @@ class PlayersGameStatsCollectionViewController: UICollectionViewController {
     // MARK: UICollectionViewDelegate
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.item / cellHeaders.count == HEADER_SECTION {
-            let selectedSort = SortFilters(rawValue: cellHeaders[indexPath.item % cellHeaders.count].lowercased())
+        if indexPath.item / CELL_HEADERS.count == HEADER_SECTION {
+            let selectedSort = SortFilters(rawValue: CELL_HEADERS[indexPath.item % CELL_HEADERS.count].lowercased())
             if let selectedSort = selectedSort {
                 sortPlayerGameStats(clicked: selectedSort) // sort when user clicks on header section
             }
         }
         else { // otherwise take user to a detailed player summary
-            let player = sortedGameStats[(indexPath.item / cellHeaders.count) - 1]
+            let player = sortedGameStats[(indexPath.item / CELL_HEADERS.count) - 1]
             print(player.playerFirstName + " " + player.playerLastName)
             selectedPlayer = player
-            performSegue(withIdentifier: detailedSegue, sender: self)
+            performSegue(withIdentifier: DETAILED_SEGUE, sender: self)
         }
     }
 
@@ -215,7 +215,7 @@ class PlayersGameStatsCollectionViewController: UICollectionViewController {
     // MARK: Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == detailedSegue {
+        if segue.identifier == DETAILED_SEGUE {
             let destination = segue.destination as! DetailedPlayerGameCollectionViewController
             destination.player = selectedPlayer
         }

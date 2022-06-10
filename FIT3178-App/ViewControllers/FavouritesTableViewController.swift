@@ -10,23 +10,23 @@ import UIKit
 /// Custom table cell that provides framework to display one of the user's favourite players.
 class FavouritePlayerTableCell: UITableViewCell {
     /// The label of the name of the player.
-    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak fileprivate var nameLabel: UILabel!
     /// The label describing the player's season stats.
-    @IBOutlet weak var seasonStatsLabel: UILabel!
+    @IBOutlet weak fileprivate var seasonStatsLabel: UILabel!
     /// The label describing the outcome of the player's most recent game.
-    @IBOutlet weak var recentGameScoreLabel: UILabel!
+    @IBOutlet weak fileprivate var recentGameScoreLabel: UILabel!
     /// The label describing the player's statistics in their most recent game.
-    @IBOutlet weak var recentGameLabel: UILabel!
+    @IBOutlet weak fileprivate var recentGameLabel: UILabel!
 }
 
 /// Custome table cell that provides framework to display one of the user's favourite teams.
 class FavouriteTeamTableCell: UITableViewCell {
     /// The label housing the name of the team.
-    @IBOutlet weak var teamNameLabel: UILabel!
+    @IBOutlet weak fileprivate var teamNameLabel: UILabel!
     /// The label describing the outcome of the team's most recent game.
-    @IBOutlet weak var recentGameScoreLabel: UILabel!
+    @IBOutlet weak fileprivate var recentGameScoreLabel: UILabel!
     /// The label describing the status of the team's most recent game.
-    @IBOutlet weak var recentGameStatusLabel: UILabel!
+    @IBOutlet weak fileprivate var recentGameStatusLabel: UILabel!
 }
 
 /// Custom Table View Controller for the 'Favourites' page of the App.
@@ -35,24 +35,20 @@ class FavouriteTeamTableCell: UITableViewCell {
 /// The players and teams are presented in a way that simplistically summarises the current status of the team or player.
 /// This page was created to allow the user to have easy access to the information that they want to know.
 class FavouritesTableViewController: UITableViewController {
-    
-    /// Variable for accessing the ``AppDelegate``.
-    private let appDelegate = UIApplication.shared.delegate as! AppDelegate
-    
     /// The cell identifier for the favourite player cell.
-    private let playerCellIdentifier = "playerCell"
+    private let PLAYER_CELL_IDENTIFIER = "playerCell"
     /// The cell identifier for the favourite team cell.
-    private let teamCellIdentifier = "teamCell"
+    private let TEAM_CELL_IDENTIFIER = "teamCell"
     /// The cell identifier for the info cell.
-    private let infoCellIdentifier = "infoCell"
+    private let INFO_CELL_IDENTIFIER = "infoCell"
     /// The section of the table that houses the players.
-    private let playerSection = 0
+    private let PLAYER_SECTION = 0
     /// The section of the table that houses the teams.
-    private let teamSection = 1
+    private let TEAM_SECTION = 1
     /// The sections of the table that houses other information.
-    private let infoSection = 2
+    private let INFO_SECTION = 2
     /// The section headers of the table.
-    private let sectionHeaders = [NSLocalizedString("PLAYERS", comment: "players_header"), NSLocalizedString("TEAMS", comment: "teams_header"), ""]
+    private let TABLE_SECTION_HEADERS = [NSLocalizedString("PLAYERS", comment: "players_header"), NSLocalizedString("TEAMS", comment: "teams_header"), ""]
     
     /// The current player data that has been retrieved.
     private var playerData: [FavouritePlayer] = []
@@ -201,10 +197,10 @@ class FavouritesTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == playerSection {
+        if section == PLAYER_SECTION {
             return playerData.count
         }
-        else if section == teamSection {
+        else if section == TEAM_SECTION {
             return teamData.count
         }
         if playerData.isEmpty && teamData.isEmpty {
@@ -215,16 +211,16 @@ class FavouritesTableViewController: UITableViewController {
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == infoSection { // if no favourites are available yet
-            let cell = tableView.dequeueReusableCell(withIdentifier: infoCellIdentifier, for: indexPath)
+        if indexPath.section == INFO_SECTION { // if no favourites are available yet
+            let cell = tableView.dequeueReusableCell(withIdentifier: INFO_CELL_IDENTIFIER, for: indexPath)
             var content = cell.defaultContentConfiguration()
             content.text = NSLocalizedString("No favourites yet.", comment: "no_favourites_yet")
             content.secondaryText = NSLocalizedString("Click 'Edit' to add some.", comment: "edit_to_add_favourites")
             cell.contentConfiguration = content
             return cell
         }
-        else if indexPath.section == playerSection { // favourite players
-            let cell = tableView.dequeueReusableCell(withIdentifier: playerCellIdentifier, for: indexPath) as! FavouritePlayerTableCell
+        else if indexPath.section == PLAYER_SECTION { // favourite players
+            let cell = tableView.dequeueReusableCell(withIdentifier: PLAYER_CELL_IDENTIFIER, for: indexPath) as! FavouritePlayerTableCell
             
             let stats = playerData[indexPath.row].seasonStats!
             let lastGame = playerData[indexPath.row].recentGame!
@@ -235,7 +231,7 @@ class FavouritesTableViewController: UITableViewController {
             return cell
         }
         // otherwise favourite teams
-        let cell = tableView.dequeueReusableCell(withIdentifier: teamCellIdentifier, for: indexPath) as! FavouriteTeamTableCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: TEAM_CELL_IDENTIFIER, for: indexPath) as! FavouriteTeamTableCell
         let team = teamData[indexPath.row]
         guard let game = team.recentGame else {
             return cell
@@ -252,12 +248,12 @@ class FavouritesTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == playerSection && playerData.isEmpty {
+        if section == PLAYER_SECTION && playerData.isEmpty {
             return nil
         }
-        if section == teamSection && teamData.isEmpty {
+        if section == TEAM_SECTION && teamData.isEmpty {
             return nil
         }
-        return sectionHeaders[section]
+        return TABLE_SECTION_HEADERS[section]
     }
 }

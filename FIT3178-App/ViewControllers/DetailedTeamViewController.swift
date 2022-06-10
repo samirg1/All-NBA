@@ -52,27 +52,17 @@ class DetailedTeamViewController: UIViewController {
     }
 }
 
-extension Int {
+fileprivate extension Int {
     /// Get ordinal values from integers (1st, 2nd, 3rd .. etc).   [Source found here.]( https://stackoverflow.com/questions/3312935/nsnumberformatter-and-th-st-nd-rd-ordinal-number-endings)
     var ordinal: String {
         var suffix = ""
         let ones: Int = self % 10
         let tens: Int = (self/10) % 10
-        if tens == 1 {
-            suffix += "th"
-        }
-        else if ones == 1 {
-            suffix += "st"
-        }
-        else if ones == 2 {
-            suffix += "nd"
-        }
-        else if ones == 3 {
-            suffix += "rd"
-        }
-        else {
-            suffix += "th"
-        }
+        if tens == 1 { suffix += "th" }
+        else if ones == 1 { suffix += "st" }
+        else if ones == 2 { suffix += "nd" }
+        else if ones == 3 { suffix += "rd" }
+        else { suffix += "th" }
         return "\(self)\(suffix)"
     }
 }

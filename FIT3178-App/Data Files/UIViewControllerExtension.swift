@@ -11,6 +11,10 @@ public extension UIViewController {
     
     /// Displays a simple message to the user with a single 'Dismiss' button.
     ///
+    /// - Parameters:
+    ///     - title: The title of the message.
+    ///     - message: The message to display.
+    ///
     /// Setup is as follows:
     ///
     ///              Title

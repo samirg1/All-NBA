@@ -24,8 +24,6 @@ public enum DateFormats: String {
 
 /// Holds the indentifiers for the App's commonly used timezones.
 public enum TimeZoneIdentifiers: String {
-    /// The App's origin timezone identifier.
-    case aus_melb = "Australia/Melbourne"
     /// The App's API's timezone identifier.
     case usa_nyk = "America/New_York"
 }

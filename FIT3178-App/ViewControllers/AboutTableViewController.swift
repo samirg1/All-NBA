@@ -11,19 +11,19 @@ import UIKit
 class AboutTableViewController: UITableViewController {
     
     /// The row titles to show in this view controller.
-    private let rows = [
+    private let TABLE_ROWS = [
         NSLocalizedString("About", comment: "about"),
         NSLocalizedString("Credits", comment: "credits"),
         NSLocalizedString("Contact", comment: "contact")
     ]
     /// The details of each row to show in this view controller.
-    let details = [
+    let TABLE_DETAILS = [
         NSLocalizedString("All-NBA was designed as part of a University project to deliver a personalised and effective way to keep up to date in the NBA. Live scores and stats with options for personalisations to enable a quick and easy use of the App to find the information you desire.", comment: "about_info"),
         NSLocalizedString( "- Monash University", comment: "credit_info"),
         NSLocalizedString("For any feedback and enquires feel free to make contact.\nEmail: srgupta@bigpond.com\nSocials: samir.g1", comment: "contact_info")
     ]
     /// The cell identifer.
-    let cellIdentifier = "aboutCell"
+    let CELL_IDENTIFIER = "aboutCell"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,14 +36,14 @@ class AboutTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return rows.count
+        return TABLE_ROWS.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: CELL_IDENTIFIER, for: indexPath)
         var content = cell.defaultContentConfiguration()
-        content.text = rows[indexPath.row]
-        content.secondaryText = details[indexPath.row]
+        content.text = TABLE_ROWS[indexPath.row]
+        content.secondaryText = TABLE_DETAILS[indexPath.row]
         cell.contentConfiguration = content
         return cell
     }

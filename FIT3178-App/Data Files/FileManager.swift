@@ -8,11 +8,11 @@
 import Foundation
 import UIKit
 
-/// Variable to access the ``AppDelegate`` of this App.
-private let appDelegate = UIApplication.shared.delegate as! AppDelegate
+/// Variable to access the ``AppDelegate-swift.class`` of this app.
+let appDelegate = UIApplication.shared.delegate as! AppDelegate
 
 /// Variable to access the cache directory path for the `FileManager` of the App.
-private var cacheDirectoryPath: URL = {
+fileprivate var cacheDirectoryPath: URL = {
     let cacheDirectoryPaths = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
     return cacheDirectoryPaths[0]
 }()
@@ -75,11 +75,10 @@ public func setFileData(name: String, data: Data) {
 
 /// Update the ``AppDelegate`` to have the current versions of user favourites.
 public func getFavourites() {
-    let favourile_teams_URL = cacheDirectoryPath.appendingPathComponent(FileManagerFiles.favourite_teams.rawValue)
-    if FileManager.default.fileExists(atPath: favourile_teams_URL.path)
+    let teamFileName = FileManagerFiles.favourite_teams.rawValue
+    if doesFileExist(name: teamFileName)
     {
-        let data = FileManager.default.contents(atPath: favourile_teams_URL.path)
-        if let data = data {
+        if let data = getFileData(name: teamFileName) {
             do {
                 let decoder = JSONDecoder()
                 let collection = try decoder.decode([Team].self, from: data) // decode file data
@@ -90,11 +89,10 @@ public func getFavourites() {
             }
         }
     }
-    let favourile_players_URL = cacheDirectoryPath.appendingPathComponent(FileManagerFiles.favourite_players.rawValue)
-    if FileManager.default.fileExists(atPath: favourile_players_URL.path)
+    let playerFileName = FileManagerFiles.favourite_players.rawValue
+    if doesFileExist(name: playerFileName)
     {
-        let data = FileManager.default.contents(atPath: favourile_players_URL.path)
-        if let data = data {
+        if let data = getFileData(name: playerFileName) {
             do {
                 let decoder = JSONDecoder()
                 let collection = try decoder.decode([Player].self, from: data) // decode file data
@@ -113,12 +111,9 @@ public func updateFavourites() {
     guard let team_data = try? encoder.encode(appDelegate.favouriteTeams), let player_data = try? encoder.encode(appDelegate.favouritePlayers) else {
         return
     }
-
-    let team_localURL = cacheDirectoryPath.appendingPathComponent(FileManagerFiles.favourite_teams.rawValue)
-    let player_localURL = cacheDirectoryPath.appendingPathComponent(FileManagerFiles.favourite_players.rawValue)
     
-    FileManager.default.createFile(atPath: team_localURL.path, contents: team_data, attributes: [:]) // store updated user data
-    FileManager.default.createFile(atPath: player_localURL.path, contents: player_data, attributes: [:])
+    setFileData(name: FileManagerFiles.favourite_teams.rawValue, data: team_data) // store updated user data
+    setFileData(name: FileManagerFiles.favourite_players.rawValue, data: player_data)
 }
 
 /// Update or retrieve the current status of the user's notification settings.

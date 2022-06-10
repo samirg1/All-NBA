@@ -11,7 +11,7 @@
 import UIKit
 
 /// Storage of major statistical categories of NBA games to be displayed by this view controller.
-private enum StatSections: String {
+fileprivate enum StatSections: String {
     /// The amount of points scored.
     case pts = "Points"
     /// The amount of rebounds secured.
@@ -47,23 +47,23 @@ private enum StatSections: String {
 /// Custom table cell to show a summary of the game.
 class ScoreTableViewCell: UITableViewCell {
     /// The logo of the home team.
-    @IBOutlet weak var homeImage: UIImageView!
+    @IBOutlet weak fileprivate var homeImage: UIImageView!
     /// The label describing the current score of the game.
-    @IBOutlet weak var scoreLabel: UILabel!
+    @IBOutlet weak fileprivate var scoreLabel: UILabel!
     /// The logo of the away team.
-    @IBOutlet weak var awayImage: UIImageView!
+    @IBOutlet weak fileprivate var awayImage: UIImageView!
     /// The label describing the current time left in the game.
-    @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet weak fileprivate var timeLabel: UILabel!
     /// The label describing the current status of the game.
-    @IBOutlet weak var statusLabel: UILabel!
+    @IBOutlet weak fileprivate var statusLabel: UILabel!
 }
 
 /// Custom table cell to show game stats of each team.
 class StatsTableViewCell: UITableViewCell {
     /// The label for the away team's stats.
-    @IBOutlet weak var awayTeamData: UILabel!
+    @IBOutlet weak fileprivate var awayTeamData: UILabel!
     /// The label for the home team's stats.
-    @IBOutlet weak var homeTeamData: UILabel!
+    @IBOutlet weak fileprivate var homeTeamData: UILabel!
 }
 
 /// Custom table class to display a detailed view of a game the user has selected from ``GamesTableViewController``.
@@ -89,9 +89,9 @@ class DetailedGameTableViewController: UITableViewController {
     /// The cell identifier of the cell used to house stats.
     private let STATS_CELL_IDENTIFIER = "statsCell"
     /// The maximum amount of players deemed to play in a particular game.
-    private let maxAmountOfPlayers = "40"
+    private let MAX_AMOUNT_OF_PLAYERS = "50"
     /// The segue identifier for the segue to view the player's detailed breakdown in ``PlayersGameStatsCollectionViewController``.
-    private let playerGameStatsSegue = "playersGameStatsSegue"
+    private let PLAYER_GAME_STATS_SEGUE = "playersGameStatsSegue"
     
     /// Indicator used to indicate if there are any asynchronous tasks active.
     private lazy var indicator: UIActivityIndicatorView = {
@@ -143,7 +143,7 @@ class DetailedGameTableViewController: UITableViewController {
             
         // call the API to create/update data
         Task {
-            let (data, error) = await requestData(path: .stats, queries: [(.game_ids, "\(game.id)"), (.per_page, maxAmountOfPlayers)]) // get data
+            let (data, error) = await requestData(path: .stats, queries: [(.game_ids, "\(game.id)"), (.per_page, MAX_AMOUNT_OF_PLAYERS)]) // get data
             guard let data = data else {
                 displaySimpleMessage(title: error!.title, message: error!.message)
                 indicator.stopAnimating()
@@ -235,7 +235,7 @@ class DetailedGameTableViewController: UITableViewController {
     // MARK: Gesture Actions
     
     /// Gesture action to segue to ``PlayersGameStatsCollectionViewController``.
-    @IBAction private func playerGameStatsSelection(_ sender: Any) { performSegue(withIdentifier: playerGameStatsSegue, sender: self) }
+    @IBAction private func playerGameStatsSelection(_ sender: Any) { performSegue(withIdentifier: PLAYER_GAME_STATS_SEGUE, sender: self) }
     
     // MARK: - Table view data source
 
@@ -323,7 +323,7 @@ class DetailedGameTableViewController: UITableViewController {
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == playerGameStatsSegue {
+        if segue.identifier == PLAYER_GAME_STATS_SEGUE {
             let destination = segue.destination as! PlayersGameStatsCollectionViewController
             destination.playerGameStats = players
         }
