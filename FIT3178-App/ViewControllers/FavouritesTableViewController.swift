@@ -80,12 +80,14 @@ class FavouritesTableViewController: UITableViewController {
         teamData.removeAll()
         
         for player in appDelegate.favouritePlayers { // for each player in the user's favourite players, create a new class for them
-            let newPlayer = FavouritePlayer(player.id)
+            let newPlayer = FavouritePlayer(player.id, player.firstName, player.lastName)
+            playerData.append(newPlayer)
             getPlayerSeasonStats(player: newPlayer)
             getPlayersLastGame(player: newPlayer)
         }
         for team in appDelegate.favouriteTeams { // for each team in the user's favourite teams, create a new class for them
-            let newTeam = FavouriteTeam(team.id)
+            let newTeam = FavouriteTeam(team.id, team.fullName)
+            teamData.append(newTeam)
             getTeamsLastGame(team: newTeam)
         }
         tableView.reloadData()
@@ -108,8 +110,7 @@ class FavouritesTableViewController: UITableViewController {
                 let decoder = JSONDecoder()
                 let collection = try decoder.decode(PlayerSeasonStatCollection.self, from: data) // decode data
                 if let players = collection.players {
-                    player.seasonStats = players[0] // add the player's season stats to the FavouritePlayer object
-                    if !player.isNil(){ playerData.append(player) } // if the player is now ready to be displayed, append to the playerData container
+                    if !players.isEmpty { player.seasonStats = players[0] } // add the player's season stats to the FavouritePlayer object
                 }
                 tableView.reloadData()
                 indicator.stopAnimating()
@@ -138,8 +139,7 @@ class FavouritesTableViewController: UITableViewController {
                 let collection = try decoder.decode(PlayerGameStatsCollection.self, from: data) // decode data
                 if let playerStats = collection.playersGameStats {
                     let sortedGames = playerStats.sorted { p1, p2 in return p1.gameDate < p2.gameDate } // sort games returned by date
-                    player.recentGame = sortedGames.last! // add the most recent game to the FavouritePlayer object
-                    if !player.isNil(){ playerData.append(player) } // if the player is now ready to be displayed, add to playerData container
+                    player.recentGame = sortedGames.last // add the most recent game to the FavouritePlayer object
                 }
                 tableView.reloadData()
                 indicator.stopAnimating()
@@ -168,8 +168,7 @@ class FavouritesTableViewController: UITableViewController {
                 let collection = try decoder.decode(GameCollection.self, from: data) // decode data
                 if let games = collection.games {
                     let sortedGames = games.sorted { p1, p2 in return p1.date < p2.date } // sort the games by date
-                    team.recentGame = sortedGames.last! // add the most recent game to the FavouriteTeam object
-                    teamData.append(team) // add FavouriteTeam to container
+                    team.recentGame = sortedGames.last // add the most recent game to the FavouriteTeam object
                 }
                 tableView.reloadData()
                 indicator.stopAnimating()
@@ -220,19 +219,37 @@ class FavouritesTableViewController: UITableViewController {
             return cell
         }
         else if indexPath.section == PLAYER_SECTION { // favourite players
+            let player = playerData[indexPath.row]
+            if player.isNil() {
+                let cell = tableView.dequeueReusableCell(withIdentifier: INFO_CELL_IDENTIFIER, for: indexPath)
+                var content = cell.defaultContentConfiguration()
+                content.text = "\(player.firstName) \(player.lastName)"
+                content.secondaryText = NSLocalizedString("Stats are unavailable", comment: "unavailable stats")
+                cell.contentConfiguration = content
+                return cell
+            }
             let cell = tableView.dequeueReusableCell(withIdentifier: PLAYER_CELL_IDENTIFIER, for: indexPath) as! FavouritePlayerTableCell
             
-            let stats = playerData[indexPath.row].seasonStats!
-            let lastGame = playerData[indexPath.row].recentGame!
-            cell.nameLabel.text = lastGame.playerFirstName + " " + lastGame.playerLastName
+            let stats = player.seasonStats!
+            let lastGame = player.recentGame!
+            cell.nameLabel.text = player.firstName + " " + player.lastName
             cell.seasonStatsLabel.text = "\(stats.pts) PPG - \(stats.ast) APG - \(stats.reb) RPG"
             cell.recentGameScoreLabel.text = "\(teamIdToAbbreviations[lastGame.gameHomeTeamId]!) \(lastGame.gameHomeScore) vs \(lastGame.gameAwayScore) \(teamIdToAbbreviations[lastGame.gameAwayTeamId]!)"
             cell.recentGameLabel.text = "\(lastGame.pts) PTS - \(lastGame.ast) AST - \(lastGame.reb) REB"
             return cell
         }
         // otherwise favourite teams
-        let cell = tableView.dequeueReusableCell(withIdentifier: TEAM_CELL_IDENTIFIER, for: indexPath) as! FavouriteTeamTableCell
         let team = teamData[indexPath.row]
+        if team.isNil() {
+            let cell = tableView.dequeueReusableCell(withIdentifier: INFO_CELL_IDENTIFIER, for: indexPath)
+            var content = cell.defaultContentConfiguration()
+            content.text = team.fullName
+            content.secondaryText = NSLocalizedString("Stats are unavailable", comment: "unavailable stats")
+            cell.contentConfiguration = content
+            return cell
+        }
+        let cell = tableView.dequeueReusableCell(withIdentifier: TEAM_CELL_IDENTIFIER, for: indexPath) as! FavouriteTeamTableCell
+        
         guard let game = team.recentGame else {
             return cell
         }

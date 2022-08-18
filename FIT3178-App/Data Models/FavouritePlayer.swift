@@ -13,6 +13,10 @@ import Foundation
 class FavouritePlayer {
     /// The ID of the player.
     var id: Int
+    /// The player's first name.
+    var firstName : String
+    /// The player's last name.
+    var lastName : String
     /// The season stat averages of the player.
     var seasonStats: PlayerSeasonStats?
     /// The most recent game of the player.
@@ -32,7 +36,9 @@ class FavouritePlayer {
     /// Constructor for the favourite player.
     /// - Parameters:
     ///     - id: The ID of the player.
-    init(_ id: Int){
+    init(_ id: Int, _ fname: String, _ lname: String){
         self.id = id
+        self.firstName = fname
+        self.lastName = lname
     }
 }

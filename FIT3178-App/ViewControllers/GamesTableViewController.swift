@@ -438,10 +438,12 @@ class GamesTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let game = selectedDateGames[indexPath.row]
-        selectedGame = game
-        tableView.deselectRow(at: indexPath, animated: true)
-        performSegue(withIdentifier: SELECTED_GAME_SEGUE , sender: self) // segue to show detailed information about game
+        if indexPath.section == GAMES_SECTION {
+            let game = selectedDateGames[indexPath.row]
+            selectedGame = game
+            tableView.deselectRow(at: indexPath, animated: true)
+            performSegue(withIdentifier: SELECTED_GAME_SEGUE , sender: self) // segue to show detailed information about game
+        }
     }
     
     // MARK: - Navigation
