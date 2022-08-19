@@ -78,6 +78,7 @@ class GamesTableViewController: UITableViewController {
         super.viewDidLoad()
         todayButtonOutlet.isEnabled = false // as initial screen is "Today", disable the button
         resetToday(self) // retrieve the required data from today
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -170,6 +171,24 @@ class GamesTableViewController: UITableViewController {
                 rewindGestureOutlet.isEnabled = true
             }
         }
+        if !forwardOutlet.isEnabled && !rewindOutlet.isEnabled {
+            // give users option to go to last available game during season breaks
+            displayOption(
+                title: NSLocalizedString("No recent games available", comment: "no_recent_games"),
+                message: NSLocalizedString("Current season has not started yet. Go to the last available game?", comment: "no_season_games"),
+                optionName: NSLocalizedString("Go", comment: "go"))
+            {
+                action in self.goToLastAvailableGame(action: action)
+            }
+        }
+    }
+    
+    /// Changes the date to the date of the last available game.
+    /// - Parameters:
+    ///     - action: The action that caused this change.
+    private func goToLastAvailableGame(action: UIAlertAction) -> Void {
+        selectedDate = "2022-06-17" // hard coded at the moment as date of the last game in 2021/22 season
+        viewWillAppear(true)
     }
     
     /// Change a stringed date in the API format by adding a certain amount of days to it.

@@ -25,4 +25,11 @@ public extension UIViewController {
         alertController.addAction(UIAlertAction(title: NSLocalizedString("Dismiss", comment: "dismiss"), style: .default, handler: nil))
         self.present(alertController, animated: true, completion: nil)
     }
+    
+    func displayOption(title: String, message: String, optionName: String, callback: @escaping (UIAlertAction) -> Void){
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: optionName, style: .default, handler: callback))
+        alertController.addAction(UIAlertAction(title: NSLocalizedString("Dismiss", comment: "dismiss"), style: .default, handler: nil))
+        self.present(alertController, animated: true, completion: nil)
+    }
 }

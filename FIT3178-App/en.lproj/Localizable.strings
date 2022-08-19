@@ -107,3 +107,7 @@
 "Unexpected error occurred"="Unexpected error occurred";
 "No games found past/before this date."="No games found past/before this date.";
 "Stats are unavailable"="Stats are unavailable";
+
+"No recent games available"="No recent games available";
+"Current season has not started yet. Go to the last available game?"="Current season has not started yet. Go to the last available game?";
+"Go"="Go";
