@@ -44,7 +44,7 @@ class GamesTableViewController: UITableViewController {
     /// List of dates with available games.
     private var availableGameDates = [String:Bool]()
     /// The amount of days to check each side of the `selectedDate` for games.
-    private let GAMES_TO_CHECK = 14
+    private let GAMES_TO_CHECK = 7
     /// The game that the user has selected.
     private var selectedGame : Game?
     /// The segue identifer of the segue to perform once a game is selected.
@@ -220,6 +220,7 @@ class GamesTableViewController: UITableViewController {
             queries.append((.dates, API_date_string)) // add to dates to search for
             availableGameDates[API_date_string] = false // initialise the availability as false
         }
+        queries.append((.per_page, "100"))
         
         // determines whether file exists, display information (might be outdated quickly)
         let fileName = selectedDate + FileManagerFiles.date_game_collection_suffix.rawValue
