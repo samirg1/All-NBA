@@ -50,6 +50,10 @@ class TeamSeasonStats {
             fatalError("Game is invalid")
         }
         
+        if game.homeScore == 0 && game.awayScore == 0 {
+            return
+        }
+        
         if game.homeTeam.abbreviation == team.abbreviation {
             if game.homeScore > game.awayScore {
                 wins += 1

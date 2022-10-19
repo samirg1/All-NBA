@@ -19,7 +19,7 @@ public enum DateFormats: String {
     /// The format used for 24-hour time (e.g. 08:00 or 20:00).
     case time24hr = "HH:mm"
     /// The format used for 12-hour time (e.g. 08:00AM or 08:00PM).
-    case time12hr = "HH:mma"
+    case time12hr = "h:mma"
 }
 
 /// Holds the indentifiers for the App's commonly used timezones.

@@ -22,7 +22,7 @@ class AddFavouritesTableViewController: UITableViewController, UISearchBarDelega
     /// The collection of all teams to choose from.
     private var teams: [Team] = []
     /// The current season to search teams for.
-    private let season = Season2021_2022.self
+    private let season = Season2022_2023.self
     
     /// Outlet to the segmented control that controls whether to add players or teams.
     @IBOutlet weak private var favouriteType: UISegmentedControl!

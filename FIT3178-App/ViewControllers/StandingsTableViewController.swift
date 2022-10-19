@@ -69,13 +69,13 @@ fileprivate enum Divisions: String {
 }
 
 /// Stores the 2021/22 season info
-public enum Season2021_2022: String {
+public enum Season2022_2023: String {
     /// The year this season started.
-    case YEAR = "2021"
+    case YEAR = "2022"
     /// The start date of this season.
-    case START = "2021-10-19"
+    case START = "2022-10-18"
     /// The end date of this season.
-    case END = "2022-04-10"
+    case END = "2023-04-10"
 }
 
 /// Custom cell depicting a team's main information.
@@ -102,7 +102,7 @@ class StandingsTableViewController: UITableViewController {
     /// The maximum amount of games in a regular season.
     private let MAX_GAMES_IN_SEASON = "82"
     /// The current season.
-    private var season = Season2021_2022.self
+    private var season = Season2022_2023.self
     /// The current team filter.
     private var teamFilter: TeamFilter = TeamFilter.LEAGUE
     /// The collection of teams.
