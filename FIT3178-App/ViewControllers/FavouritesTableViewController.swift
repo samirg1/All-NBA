@@ -27,6 +27,8 @@ class FavouriteTeamTableCell: UITableViewCell {
     @IBOutlet weak fileprivate var recentGameScoreLabel: UILabel!
     /// The label describing the status of the team's most recent game.
     @IBOutlet weak fileprivate var recentGameStatusLabel: UILabel!
+    /// The label describing the time of the game ('Recent Game', 'Next Game')
+    @IBOutlet weak var recentGameLabel: UILabel!
 }
 
 /// Custom Table View Controller for the 'Favourites' page of the App.
@@ -128,7 +130,8 @@ class FavouritesTableViewController: UITableViewController {
     private func getPlayersLastGame(player: FavouritePlayer) {
         indicator.startAnimating()
         Task {
-            let (data, error) = await requestData(path: .stats, queries: [(.player_ids, "\(player.id)"), (.start_date, getCurrentYear()), (.per_page, "100")]) // request data
+            let date = getStartAndEnd()
+            let (data, error) = await requestData(path: .stats, queries: [(.player_ids, "\(player.id)"), (.start_date, date.start), (.end_date, date.end), (.per_page, "100")]) // request data
             guard let data = data else { // if no data present then there was an error
                 displaySimpleMessage(title: error!.title, message: error!.message)
                 indicator.stopAnimating()
@@ -157,7 +160,8 @@ class FavouritesTableViewController: UITableViewController {
     private func getTeamsLastGame(team: FavouriteTeam) {
         indicator.startAnimating()
         Task {
-            let (data, error) = await requestData(path: .games, queries: [(.team_ids, "\(team.id)"), (.start_date, getCurrentYear()), (.per_page, "100")]) // get data
+            let date = getStartAndEnd()
+            let (data, error) = await requestData(path: .games, queries: [(.team_ids, "\(team.id)"), (.start_date, date.start), (.end_date, date.end), (.per_page, "100")]) // get data
             guard let data = data else { // if no data is present there was an error
                 displaySimpleMessage(title: error!.title, message: error!.message)
                 indicator.stopAnimating()
@@ -180,13 +184,14 @@ class FavouritesTableViewController: UITableViewController {
         }
     }
     
-    /// Get a stringed date of the current year.
-    /// - Returns: The stringed date of the start current year in the format "YYYY-MM-DD".
-    private func getCurrentYear() -> String {
+    /// Get a stringed date of the period of time to search for a game in.
+    /// - Returns: Two dates, the start and end in the format  "YYYY-MM-DD".
+    private func getStartAndEnd() -> (start: String, end: String) {
         let formatter = DateFormatter()
-        formatter.dateFormat = "YYYY"
-        let year = formatter.string(from: Date())
-        return year+"-01-01"
+        formatter.dateFormat = "YYYY-MM-dd"
+        let start = formatter.string(from: Date()-14)
+        let end = formatter.string(from: Date())
+        return (start, end)
     }
     
     // MARK: - Table view data source
@@ -254,12 +259,20 @@ class FavouritesTableViewController: UITableViewController {
             return cell
         }
         cell.teamNameLabel.text = team.id == game.homeTeam.id ? game.homeTeam.fullName : game.awayTeam.fullName
-        cell.recentGameScoreLabel.text = "\(game.homeTeam.abbreviation) \(game.homeScore) vs \(game.awayScore) \(game.awayTeam.abbreviation)"
+        
+        let localDate = convertTimeZones(string: game.date, from: TimeZoneIdentifiers.usa_nyk.rawValue, to: appDelegate.currentTimeZoneIdentifier, format: .fullAPI)
+        let formatter = DateFormatter()
+        formatter.dateFormat = DateFormats.shortenedDate.rawValue
+        let localDateString = formatter.string(from: localDate)
         if game.status.hasSuffix("T") {
-            cell.recentGameStatusLabel.text = APItoCurrentTimeZoneDisplay(string: game.status)
+            cell.recentGameStatusLabel.text = "\(localDateString) \(APItoCurrentTimeZoneDisplay(string: game.status))"
+            cell.recentGameLabel.text = NSLocalizedString("Next Game", comment: "")
+            cell.recentGameScoreLabel.text = "\(game.homeTeam.abbreviation) vs \(game.awayTeam.abbreviation)"
         }
         else {
             cell.recentGameStatusLabel.text = NSLocalizedString(game.status, comment: "")
+            cell.recentGameLabel.text = NSLocalizedString("Recent Game", comment: "")
+            cell.recentGameScoreLabel.text = "\(game.homeTeam.abbreviation) \(game.homeScore) vs \(game.awayScore) \(game.awayTeam.abbreviation)"
         }
         return cell
     }

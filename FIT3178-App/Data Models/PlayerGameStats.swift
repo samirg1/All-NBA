@@ -45,8 +45,8 @@ class PlayerGameStats : NSObject, Decodable {
     var fta: Int
     /// The amount of free throws the player has made in the game.
     var ftm: Int
-    /// The amount of minutes the player has played in the game. Stored as 'MM:ss'.
-    var min: String
+    /// The amount of minutes the player has played in the game.
+    var min: Int
     /// The amount of fouls the player has in the game.
     var pf: Int
     /// The player's ID
@@ -137,16 +137,16 @@ class PlayerGameStats : NSObject, Decodable {
         turnover = try container.decode(Int.self, forKey: .turnover)
         dreb = try container.decode(Int.self, forKey: .dreb)
         oreb = try container.decode(Int.self, forKey: .oreb)
-        pct3 = try container.decode(Float.self, forKey: .pct3)
+        pct3 = decimalToPercentageConversion(try container.decode(Float.self, forKey: .pct3))
         fgm3 = try container.decode(Int.self, forKey: .fgm3)
         fga3 = try container.decode(Int.self, forKey: .fga3)
-        pct = try container.decode(Float.self, forKey: .pct)
+        pct = decimalToPercentageConversion(try container.decode(Float.self, forKey: .pct))
         fgm = try container.decode(Int.self, forKey: .fgm)
         fga = try container.decode(Int.self, forKey: .fga)
-        pct1 = try container.decode(Float.self, forKey: .pct1)
+        pct1 = decimalToPercentageConversion(try container.decode(Float.self, forKey: .pct1))
         fta = try container.decode(Int.self, forKey: .fta)
         ftm = try container.decode(Int.self, forKey: .ftm)
-        min = try container.decode(String.self, forKey: .min)
+        min = Int(try container.decode(String.self, forKey: .min))!
         pf = try container.decode(Int.self, forKey: .pf)
         playerId = try playerContainer.decode(Int.self, forKey: .playerId)
         playerFirstName = try playerContainer.decode(String.self, forKey: .playerFirstName)

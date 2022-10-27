@@ -18,8 +18,10 @@ public enum DateFormats: String {
     case display = "EEEE, d MMM"
     /// The format used for 24-hour time (e.g. 08:00 or 20:00).
     case time24hr = "HH:mm"
-    /// The format used for 12-hour time (e.g. 08:00AM or 08:00PM).
+    /// The format used for 12-hour time (e.g. 8:00AM or 8:00PM).
     case time12hr = "h:mma"
+    /// Format used for 12 hours time with an abbreviated date (e.g. 12/04)
+    case shortenedDate = "dd/MM"
 }
 
 /// Holds the indentifiers for the App's commonly used timezones.
@@ -111,4 +113,20 @@ func APItoCurrentTimeZoneDisplay(string: String) -> String {
     formatter.pmSymbol = "PM"
     formatter.dateFormat = DateFormats.time12hr.rawValue
     return formatter.string(from: newTime)
+}
+
+extension Date {
+    
+    static func -(lhs: Date, rhs: Int) -> Date {
+        return Calendar.current.date(byAdding: .day, value: -rhs, to: lhs)!
+    }
+}
+
+/// Convert a decimal into a percentage with one decimal place.
+///
+/// - Parameters:
+///     - dec: The decimal to convert.
+/// - Returns: The converted percentage to one decimal place.
+func decimalToPercentageConversion(_ dec: Float) -> Float {
+    return Float(Int(dec * 100 * 10)) / Float(10)
 }

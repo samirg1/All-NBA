@@ -49,8 +49,8 @@ class Game: NSObject, Decodable {
         awayTeam = try container.decode(Team.self, forKey: .awayTeam)
         homeScore = try container.decode(Int.self, forKey: .homeScore)
         awayScore = try container.decode(Int.self, forKey: .awayScore)
-        period = try container.decode(Int.self, forKey: .period)
         time = try container.decode(String.self, forKey: .time)
+        period = time == "" ? -1 : time == "Final" ? 5 : try container.decode(Int.self, forKey: .period)
         status = try container.decode(String.self, forKey: .status)
         date = try container.decode(String.self, forKey: .date)
     }

@@ -93,8 +93,8 @@ class DetailedPlayerGameCollectionViewController: UICollectionViewController {
         if fga - fga3 == 0 {
             return "0.0%"
         }
-        let pct = Float(fgm - fgm3)/Float(fga - fga3)*100
-        let rounded_pct = Float(Int(pct * 10)) / Float(10)
+        let decimal = Float(fgm - fgm3)/Float(fga - fga3)
+        let rounded_pct = decimalToPercentageConversion(decimal)
         return "\(rounded_pct)%"
     }
 
@@ -171,7 +171,7 @@ class DetailedPlayerGameCollectionViewController: UICollectionViewController {
             cell.numberLabel.text = "\(player.blk)"
             cell.statDetailLabel.text = ""
         case .minutes:
-            cell.numberLabel.text = player.min
+            cell.numberLabel.text = "\(player.min)"
             cell.statDetailLabel.text = ""
         case .turnovers:
             cell.numberLabel.text = "\(player.turnover)"

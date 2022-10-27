@@ -256,13 +256,38 @@ class DetailedGameTableViewController: UITableViewController {
             cell.awayImage.image = UIImage(named: game.awayTeam.abbreviation)
             cell.homeImage.image = UIImage(named: game.homeTeam.abbreviation)
             cell.scoreLabel.text = "\(game.awayScore) - \(game.homeScore)"
-            cell.timeLabel.text = game.time
             
             if game.status.hasSuffix("T"){
                 cell.statusLabel.text = APItoCurrentTimeZoneDisplay(string: game.status)
             }
             else {
-                cell.statusLabel.text = NSLocalizedString(game.status, comment: "")
+                if game.time == "Final" {
+                    cell.timeLabel.text = ""
+                    cell.statusLabel.text = NSLocalizedString(game.status, comment: "")
+                }
+                else if game.time == "pregame" {
+                    cell.timeLabel.text = ""
+                    cell.statusLabel.text = NSLocalizedString("Pre-Game", comment: "Pre game" )
+                }
+                else if game.time == "Half" {
+                    cell.timeLabel.text = "Halftime"
+                    cell.timeLabel.backgroundColor = UIColor.systemGreen
+                    cell.statusLabel.text = ""
+                }
+                else if game.time == "" && game.status.hasSuffix("Qtr") { // if the game is at the start/end of a quarter
+                    if game.awayScore == 0 && game.homeScore == 0 { // if game is at start of first quarter
+                        cell.timeLabel.text = NSLocalizedString("Start", comment: "Start")
+                    }
+                    else { // otherwise game is at end of quarter
+                        cell.timeLabel.text = NSLocalizedString("End", comment: "End")
+                    }
+                    cell.statusLabel.text = NSLocalizedString(game.status, comment: "")
+                }
+                else { // if game is live, show the time with a systemGreen background
+                    cell.timeLabel.text = String(game.time.split(separator: " ")[1])
+                    cell.timeLabel.backgroundColor = UIColor.systemGreen
+                    cell.statusLabel.text = NSLocalizedString(game.status, comment: "")
+                }
             }
             
             return cell

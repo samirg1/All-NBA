@@ -50,7 +50,7 @@ class TeamSeasonStats {
             fatalError("Game is invalid")
         }
         
-        if game.homeScore == 0 && game.awayScore == 0 {
+        if game.status != "Final" {
             return
         }
         

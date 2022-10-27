@@ -278,11 +278,14 @@ class StandingsTableViewController: UITableViewController {
                 self.divisionTeams[Divisions.init(rawValue: team.division)!]!.append(teamData)
                 self.conferenceTeams[Conferences.init(rawValue: team.conference)!]!.append(teamData)
                 self.teamsData.append(teamData) // add the team to the containers
+                self.teamsData.sort() { $0.seasonScore > $1.seasonScore }
                 self.teamsData.sort(){ $0.pct > $1.pct } // sort the teams based on their win percentage
                 for (divi, div_teams) in self.divisionTeams {
+                    self.divisionTeams[divi] = div_teams.sorted() { $0.seasonScore > $1.seasonScore }
                     self.divisionTeams[divi] = div_teams.sorted() { $0.pct > $1.pct }
                 }
                 for (conf, conf_teams) in self.conferenceTeams {
+                    self.conferenceTeams[conf] = conf_teams.sorted() { $0.seasonScore > $1.seasonScore }
                     self.conferenceTeams[conf] = conf_teams.sorted() { $0.pct > $1.pct }
                 }
                 self.tableView.reloadData()

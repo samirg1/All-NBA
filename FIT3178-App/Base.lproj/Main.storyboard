@@ -1080,6 +1080,7 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="recentGameLabel" destination="r95-0z-cwX" id="8p5-0O-zbO"/>
                                     <outlet property="recentGameScoreLabel" destination="QdH-YB-10X" id="KYG-g4-KjL"/>
                                     <outlet property="recentGameStatusLabel" destination="5S6-KM-i1I" id="gCc-eU-cUA"/>
                                     <outlet property="teamNameLabel" destination="WpJ-N4-OTt" id="sSg-q4-ESL"/>

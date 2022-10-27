@@ -44,7 +44,7 @@ class GamesTableViewController: UITableViewController {
     /// List of dates with available games.
     private var availableGameDates = [String:Bool]()
     /// The amount of days to check each side of the `selectedDate` for games.
-    private let GAMES_TO_CHECK = 7
+    private let GAMES_TO_CHECK = 3
     /// The game that the user has selected.
     private var selectedGame : Game?
     /// The segue identifer of the segue to perform once a game is selected.
@@ -79,7 +79,12 @@ class GamesTableViewController: UITableViewController {
         todayButtonOutlet.isEnabled = false // as initial screen is "Today", disable the button
         resetToday(self) // retrieve the required data from today
         
+        // add reloading when app gets relaunched
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(appBecameActive), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
+    
+    @objc func appBecameActive() { viewWillAppear(false) }
     
     override func viewWillAppear(_ animated: Bool) {
         getGameData(reload: false) // reload the games quietly in the background each time user enters this page
@@ -272,6 +277,21 @@ class GamesTableViewController: UITableViewController {
                     }
                     availableGameDates[localDateString] = true // we know now that there are available games on this date
                 }
+                selectedDateGames.sort(by: {p1, p2 in // sort games
+                    if p1.status.hasSuffix("ET") && p2.status.hasSuffix("ET") {
+                        let split1 = p1.status.split(separator: ":")
+                        let split2 = p2.status.split(separator: ":")
+                        let hour1 = Int(String(split1[0]))!
+                        let hour2 = Int(String(split2[0]))!
+                        let min1 = Int(String(String(split1[1]).split(separator: " ")[0]))!
+                        let min2 = Int(String(String(split2[1]).split(separator: " ")[0]))!
+                        if hour1 < hour2 { return true }
+                        else if hour1 > hour2 { return false }
+                        else { return min1 < min2 }
+                    }
+                    return p1.period > p2.period
+                    
+                })
                 updateDateChangers()
                 tableView.reloadData()
                 changeBadgeNumber()
@@ -359,7 +379,7 @@ class GamesTableViewController: UITableViewController {
         var numberOfLiveGames = 0
         if selectedDate == getTodaysDate() {
             for game in selectedDateGames {
-                if game.status != "Final", !game.status.hasSuffix("ET") { // check if game is live
+                if game.status != "Final", game.time != "pregame", !game.status.hasSuffix("ET") { // check if game is live
                     numberOfLiveGames += 1
                 }
             }
@@ -429,20 +449,32 @@ class GamesTableViewController: UITableViewController {
                     cell.awayTeamScore.textColor = UILabel().textColor
                 }
                 
-                if game.time == "" && game.status.hasSuffix("Qtr") { // if the game is at the start/end of a quarter
-                    if game.awayScore == 0 && game.homeScore == 0 { // if game is at start of first quarter
-                        cell.timeLabel.text = NSLocalizedString("Start", comment: "Start")
-                    }
-                    else { // otherwise game is at end of quarter
-                        cell.timeLabel.text = NSLocalizedString("End", comment: "End")
-                    }
-                    
+                if game.time == "Final" {
+                    cell.timeLabel.text = ""
+                    cell.timeLabel.backgroundColor = UIColor.secondarySystemBackground
+                    cell.statusLabel.text = NSLocalizedString(game.status, comment: "")
                 }
-                else { // if game is live, show the time with a systemGreen background
-                    cell.timeLabel.text = game.time
+                else if game.time == "pregame" {
+                    cell.timeLabel.text = ""
+                    cell.timeLabel.backgroundColor = UIColor.secondarySystemBackground
+                    cell.statusLabel.text = NSLocalizedString("Pre-Game", comment: "Pre game" )
+                }
+                else if game.time == "Half" {
+                    cell.timeLabel.text = NSLocalizedString("Halftime", comment: "Halftime")
+                    cell.timeLabel.backgroundColor = UIColor.systemGreen
+                    cell.statusLabel.text = ""
+                }
+                else if game.time.hasPrefix("Q") { // if game is live, show the time with a systemGreen background
+                    cell.timeLabel.text = String(game.time.split(separator: " ")[1])
+                    cell.timeLabel.backgroundColor = UIColor.systemGreen
+                    cell.statusLabel.text = NSLocalizedString(game.status, comment: "")
+                }
+                else {
+                    cell.timeLabel.text = String(game.time.split(separator: " ")[0])
+                    cell.statusLabel.text = NSLocalizedString(game.status, comment: "")
                     cell.timeLabel.backgroundColor = UIColor.systemGreen
                 }
-                cell.statusLabel.text = NSLocalizedString(game.status, comment: "")
+                
             }
             
             cell.awayTeamImage.image = UIImage(named: game.awayTeam.abbreviation)
